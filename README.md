@@ -9,7 +9,7 @@ Planning universal vi emulation that works across windows, OSX and linux, focusi
 
 eg `ahk` (Windows), `sxhkd` (Linux), `hammerspoon` or `shkd` (OSX).
 
-Keys sent to program. Program tells what keys to send out the other end. Maybe have adapter that takes command like "goEndOfLine" and sends appropriate keys
+Keys sent to program. Program tells what keys to send out the other end. Maybe have adapter that takes command like "goEndOfLine" and sends appropriate keys. This could be a simple .json that maps the command to the necessary key strokes for an OS.
 
 ###### Main script takes window info, and keys
 
