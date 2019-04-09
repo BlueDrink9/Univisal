@@ -26,3 +26,30 @@ UI box
 Mode
 
 Allow click to disable
+
+## Server/daemon running in background to listen for responses?
+
+## Language for main logic 
+
+Needs to be universal/easily ported.
+
+#### c/c++
+
+Use gtk for gui
+
+* Fast (! need responsiveness !)
+* The norm for such programs (eg sxhkd)
+
+* Trickier to code in/learn/maintain (lots of people know python, easy to pick up and learn)
+* Needs to be compiled
+* Servers/daemon programs may be trickier
+* Way harder to multi-thread
+
+#### Python
+
+Tk for gui?
+
+* Easy to learn and pick up
+* Widely available, easily installed
+* Can just drop in script and run
+* Relatively simple to multi-thread and do complex logic and data storage with
