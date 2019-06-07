@@ -19,6 +19,7 @@ Does vi logic, maintains mode/stated, handles graphical interfcae
 
 UI box that pops up. Esc or return to exit.
 
+
 ###### Interface
 
 UI box
@@ -42,7 +43,7 @@ Use gtk for gui
 
 * Trickier to code in/learn/maintain (lots of people know python, easy to pick up and learn)
 * Needs to be compiled
-* Servers/daemon programs may be trickier
+* Servers/daemon programs may be trickier? (While loop listening? Check out bspwm for easy example - `bspc [cmd]`.
 * Way harder to multi-thread
 
 #### Python
@@ -53,3 +54,15 @@ Tk for gui?
 * Widely available, easily installed
 * Can just drop in script and run
 * Relatively simple to multi-thread and do complex logic and data storage with
+
+#### Rust
+
+Is this just trendy or is it a viable replacement for c in this case? Incl. MS Windows?
+
+## Feature list
+
+Key to enable/disable for a given window/all over system (make this an option).
+
+Alternatively, always active but single hotkey always enters cmd mode? I don't prefer this option, but maybe this can apply for whitelisted apps.
+
+White/black list for always/never enable. Title matching, optionally with regex?
