@@ -1,15 +1,26 @@
 # Univisal
 Planning universal vi emulation that works across windows, OSX and linux, focusing on linux and portability.
 
+This readme is currently just an ideas dump. Feel free to open issues with suggestions.
+
 # Plan
 
-###### Separate map of os-specific key combos for text actions
+## Sending and receiving keys/OS interaction handled by separate programs
 
-###### Sending and recioving keys handled by separate program
+#### Separate map of os-specific key combos for text actions
 
 eg `ahk` (Windows), `sxhkd` (Linux), `hammerspoon` or `shkd` (OSX).
 
 Keys sent to program. Program tells what keys to send out the other end. Maybe have adapter that takes command like "goEndOfLine" and sends appropriate keys. This could be a simple .json that maps the command to the necessary key strokes for an OS.
+
+###### implemtenation ideas
+
+* Keybind program: map every key such that it calls univisal like `univi handleKey('d')`, and then send the key returned (if any).
+An skhd example: `d : skhd -k "$(univi handleKey('d'))"`
+I feel like this has the most promise atm, but I'd like to get a proof-of-concept on each OS first.
+As part of this, could write script to generate this sort of command for every letter/key I want to handle. Maybe take input in stringformat/printf format, eg `%s : skhd -k "$(univi handleKey('%s'))", letter, letter`.
+* Write script for program that contains calls for current mode
+* Call keybinding program from univisal (won't work with AHK, since it doesn't have an interface to run a single send from a command).
 
 ###### Main script takes window info, and keys
 
@@ -53,6 +64,7 @@ Tk for gui?
 * Easy to learn and pick up
 * Widely available, easily installed
 * Can just drop in script and run
+* Plugins would be trivial to implement (can source at runtime, unlike compiled langs).
 * Relatively simple to multi-thread and do complex logic and data storage with
 
 #### Rust
@@ -66,3 +78,8 @@ Key to enable/disable for a given window/all over system (make this an option).
 Alternatively, always active but single hotkey always enters cmd mode? I don't prefer this option, but maybe this can apply for whitelisted apps.
 
 White/black list for always/never enable. Title matching, optionally with regex?
+
+
+## Misc
+
+[This has notes at the bottom about what emulators often miss](https://reversed.top/2016-08-13/big-list-of-vim-like-software/)
