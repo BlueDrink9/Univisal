@@ -1,5 +1,5 @@
 # Univisal
-Planning universal vi emulation that works across windows, OSX and linux, focusing on linux and portability.
+Planning universal vi emulation that works across windows, OSX and linux/X, focusing on linux and portability.
 
 This readme is currently just an ideas dump. Feel free to open issues with suggestions.
 
@@ -9,15 +9,17 @@ This readme is currently just an ideas dump. Feel free to open issues with sugge
 
 #### Separate map of os-specific key combos for text actions
 
-eg `ahk` (Windows), `sxhkd` (Linux), `hammerspoon` or `shkd` (OSX).
+eg `ahk` (Windows), `sxhkd` (Linux/X input) + `xdotool` (Linux/X output), `hammerspoon` or `shkd` (OSX).
 
 Keys sent to program. Program tells what keys to send out the other end. Maybe have adapter that takes command like "goEndOfLine" and sends appropriate keys. This could be a simple .json that maps the command to the necessary key strokes for an OS.
 
 ###### implemtenation ideas
 
 * Keybind program: map every key such that it calls univisal like `univi handleKey('d')`, and then send the key returned (if any).
-An skhd example: `d : skhd -k "$(univi handleKey('d'))"`
+An skhd example: `d : skhd -k "$(univi handleKey('d'))"`  
+An sxhkd+xdotool example: `d \n xdotool key $(univi handleKey('d'))`
 I feel like this has the most promise atm, but I'd like to get a proof-of-concept on each OS first.
+Would still need a way to map desired output to a key/command in format the OS tool can use, which brings back the json. But if using [autopilot-rs](https://github.com/autopilot-rs/autopilot-rs), could skip this. (Ie rust or python).
 As part of this, could write script to generate this sort of command for every letter/key I want to handle. Maybe take input in stringformat/printf format, eg `%s : skhd -k "$(univi handleKey('%s'))", letter, letter`.
 * Write script for program that contains calls for current mode
 * Call keybinding program from univisal (won't work with AHK, since it doesn't have an interface to run a single send from a command).
@@ -66,11 +68,13 @@ Tk for gui?
 * Can just drop in script and run
 * Plugins would be trivial to implement (can source at runtime, unlike compiled langs).
 * Relatively simple to multi-thread and do complex logic and data storage with
-* [Potentially can do OS-independent keypress simulation](https://rosettacode.org/wiki/Simulate_input/Keyboard#Python)
+* [Potentially can do OS-independent keypress simulation](https://rosettacode.org/wiki/Simulate_input/Keyboard#Python), which would be especially convinient for linux/X.
 
 #### Rust
 
 Is this just trendy or is it a viable replacement for c in this case? Incl. MS Windows?
+
+* [Potentially can do OS-independent keypress simulation](https://rosettacode.org/wiki/Simulate_input/Keyboard#Rust)
 
 ## Feature list
 
