@@ -66,6 +66,7 @@ Tk for gui?
 * Can just drop in script and run
 * Plugins would be trivial to implement (can source at runtime, unlike compiled langs).
 * Relatively simple to multi-thread and do complex logic and data storage with
+* [Potentially can do OS-independent keypress simulation](https://rosettacode.org/wiki/Simulate_input/Keyboard#Python)
 
 #### Rust
 
