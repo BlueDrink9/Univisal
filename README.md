@@ -19,7 +19,8 @@ Keys sent to program. Program tells what keys to send out the other end. Maybe h
 An skhd example: `d : skhd -k "$(univi handleKey('d'))"`  
 An sxhkd+xdotool example: `d \n xdotool key $(univi handleKey('d'))`
 I feel like this has the most promise atm, but I'd like to get a proof-of-concept on each OS first.
-Would still need a way to map desired output to a key/command in format the OS tool can use, which brings back the json. But if using [autopilot-rs](https://github.com/autopilot-rs/autopilot-rs), could skip this. (Ie rust or python).
+Would still need a way to map desired output to a key/command in format the OS tool can use, which brings back the json.
+But if using [autopilot-rs](https://github.com/autopilot-rs/autopilot-rs), only need to handle OS-specific behaviour, not tool-specific. (Ie rust or python).
 As part of this, could write script to generate this sort of command for every letter/key I want to handle. Maybe take input in stringformat/printf format, eg `%s : skhd -k "$(univi handleKey('%s'))", letter, letter`.
 * Write script for program that contains calls for current mode
 * Call keybinding program from univisal (won't work with AHK, since it doesn't have an interface to run a single send from a command).
