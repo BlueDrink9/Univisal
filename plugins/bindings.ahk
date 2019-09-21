@@ -1,4 +1,4 @@
-#If Process, Exist, %univisalPID%
+#If univisalRunning()
 Esc::univiResultFromKey("Esc")
 ^[::univiResultFromKey("Esc")
 a::univiResultFromKey("a")
@@ -63,3 +63,4 @@ z::univiResultFromKey("z")
 7::univiResultFromKey("7")
 8::univiResultFromKey("8")
 9::univiResultFromKey("9")
+space::univiResultFromKey("Space")
