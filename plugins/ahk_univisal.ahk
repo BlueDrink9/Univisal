@@ -11,14 +11,36 @@ global srcDir
 srcDir=%A_ScriptDir%\..\src
 
 run %srcDir%\univisal.py,, hide, univisalPID
+global univisalPID
+runUnivisal(){
+    global univisalPID
+    run %srcDir%\univisal.py,, hide, univisalPID
+    Process, Priority, %univisalPID%, H
+    msgbox, run %univisalPID%
+}
 exitFunc(){
+    global univisalPID
     process, Close, %univisalPID%
 }
 OnExit("exitFunc")
 
 univiResultFromKey(key){
-    result := StdOutToVar("python " . srcDir . "\univi.py " . key)
+    result := StdOutToVar("python3 " . srcDir . "\univi.py " . key)
     send %result%
 }
 
+toggleUnivisal(){
+msgbox, toggle
+    if Process, Exist, %univisalPID% {
+        msgbox, exists
+        ; process, Close, %univisalPID%
+        exitFunc()
+    } else {
+        msgbox, No exist
+        runUnivisal()
+    }
+}
+
+F12::toggleUnivisal()
+F11::exitapp
 #include %A_ScriptDir%/bindings.ahk
