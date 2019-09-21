@@ -22,6 +22,6 @@ if len(sys.argv) != 2:
 # print "The arguments are: " , str(sys.argv)
 s.send(str(sys.argv[1]))
 result = s.recv(MAX_LENGTH)
-print(result)
+sys.stdout.write(result)
 s.close()
 sys.exit(0)
