@@ -3,6 +3,12 @@ Planning universal vi emulation that works across windows, OSX and linux/X, focu
 
 This readme is currently just an ideas dump. Feel free to open issues with suggestions.
 
+# PoC Python ahk
+
+Python initial proof of concept gives unusable typing speeds.
+
+Will keep trying with different priorities, maybe other communication methods for a bit, then change langs.
+
 # Plan
 
 ## Sending and receiving keys/OS interaction handled by separate programs
