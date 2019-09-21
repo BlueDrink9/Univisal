@@ -23,15 +23,18 @@ def close(sock):
 
 def handle(clientsocket):
   while True:
-    buf = clientsocket.recv(MAX_LENGTH)
+    buf = clientsocket.recv(MAX_LENGTH).decode()
     # if buf == '': return #client terminated connection
-    if buf == "HUP": return
+    if buf == "HUP":
+        close(serversocket)
+        # Doesn't work in multithreaded environment.
+        sys.exit(0)
         # close(serversocket)
     # We only handle one key at a time. Several characters is bad input.
     # if len(buf) != 1: return
     output = handleKey(buf)
     print(output)
-    clientsocket.send(output)
+    clientsocket.send(output.encode())
     return
 
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
