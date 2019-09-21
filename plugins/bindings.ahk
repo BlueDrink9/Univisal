@@ -1,4 +1,4 @@
-#If Process, Exist, univisalPID
+#If Process, Exist, %univisalPID%
 Esc::univiResultFromKey("Esc")
 ^[::univiResultFromKey("Esc")
 a::univiResultFromKey("a")
