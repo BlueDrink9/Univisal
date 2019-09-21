@@ -12,7 +12,7 @@ PORT = 10000
 s = socket.socket()
 s.connect((HOST, PORT))
 
-import sys
+MAX_LENGTH = 1024
 # print "This is the name of the script: ", sys.argv[0]
 # print "Number of arguments: ", len(sys.argv)
 # print "The arguments are: " , str(sys.argv)
@@ -21,5 +21,7 @@ if len(sys.argv) != 2:
     sys.exit(1)
 # print "The arguments are: " , str(sys.argv)
 s.send(str(sys.argv[1]))
+result = s.recv(MAX_LENGTH)
+print(result)
 s.close()
 sys.exit(0)

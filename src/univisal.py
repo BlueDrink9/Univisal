@@ -3,6 +3,7 @@
 
 import socket
 from threading import Thread
+import sys
 
 PORT = 10000
 HOST = '127.0.0.1'
@@ -18,9 +19,10 @@ def handleKey(key):
     else:
         return key
 
-MAX_LENGTH = 4096
+MAX_LENGTH = 1024
 def handle(clientsocket):
-  while 1:
+  # sys.stdout.write("hi")
+  while True:
     buf = clientsocket.recv(MAX_LENGTH)
     # if buf == '': return #client terminated connection
     # We only handle one key at a time. Several characters is bad input.
@@ -28,16 +30,17 @@ def handle(clientsocket):
     # TODO: make modes enum.
     if mode == "insert":
         print(buf)
+        clientsocket.send(buf)
     else:
         output = handleKey(buf)
         print(output)
+        clientsocket.send(output)
     return
 
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 serversocket.bind((HOST, PORT))
 serversocket.listen(10)
-
 while 1:
     #accept connections from outside
     (clientsocket, address) = serversocket.accept()
