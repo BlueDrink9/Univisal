@@ -3,10 +3,12 @@ from motion import *
 from operators import *
 
 def handleKey(key):
-    if getMode() == Mode.insert:
-        return key
     if key.lower() == "esc":
         setMode(Mode.normal)
+        # No op. Need to send something back via socket.
+        return "NOP"
+    if getMode() == Mode.insert:
+        return key
     if key == "0":
         return getPluginBinding("goLineStart")
     if key == "$":
@@ -17,8 +19,8 @@ def handleKey(key):
         # TODO: Add motion
         setMode(Mode.insert)
     elif key == "I":
-        return getPluginBinding("goLineStart")
         setMode(Mode.insert)
+        return getPluginBinding("goLineStart")
     elif key == "A":
         setMode(Mode.insert)
         return getPluginBinding("goLineEnd")

@@ -21,7 +21,8 @@ if len(sys.argv) != 2:
     sys.exit(1)
 # print "The arguments are: " , str(sys.argv)
 s.send(str(sys.argv[1]).encode())
-result = s.recv(MAX_LENGTH)
-sys.stdout.write(result)
+result = s.recv(MAX_LENGTH).decode()
+if result != "NOP":
+    sys.stdout.write(result)
 s.close()
 sys.exit(0)

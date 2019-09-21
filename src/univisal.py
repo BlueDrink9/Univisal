@@ -28,7 +28,8 @@ def handle(clientsocket):
     if buf == "HUP":
         close(serversocket)
         # Doesn't work in multithreaded environment.
-        sys.exit(0)
+        # sys.exit(0)
+        # os.kill(os.getpid(), 9)
         # close(serversocket)
     # We only handle one key at a time. Several characters is bad input.
     # if len(buf) != 1: return
