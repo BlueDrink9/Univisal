@@ -20,6 +20,5 @@ univiResultFromKey(key){
     result := StdOutToVar("python " . srcDir . "\univi.py " . key)
     send %result%
 }
-m::univiResultFromKey("m")
-d::univiResultFromKey("d")
-0::univiResultFromKey("d")
+
+#include %A_ScriptDir%/bindings.ahk
