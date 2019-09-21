@@ -1,12 +1,27 @@
 import importlib
 importlib.import_module("model")
+importlib.import_module("motion")
+importlib.import_module("operator")
 
 def handleKey(key):
-    if mode == mode.Insert:
+    if getMode() == Mode.insert:
         return key
-    if key == "m":
-        return "m"
-    elif key == "d":
-        return "d"
+    if key.lower() == "esc":
+        setMode(Mode.normal)
+    if key == "0":
+        return getPluginBinding("goLineStart")
+    if key == "$":
+        return getPluginBinding("goLineEnd")
+    elif key == "i":
+        setMode(Mode.insert)
+    elif key == "a":
+        # TODO: Add motion
+        setMode(Mode.insert)
+    elif key == "I":
+        return getPluginBinding("goLineStart")
+        setMode(Mode.insert)
+    elif key == "A":
+        setMode(Mode.insert)
+        return getPluginBinding("goLineEnd")
     else:
         return key
