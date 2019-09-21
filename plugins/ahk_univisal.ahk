@@ -10,19 +10,41 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 global srcDir
 srcDir=%A_ScriptDir%\..\src
 
-run %srcDir%\univisal.py,, hide, univisalPID
-global univisalPID
-runUnivisal(){
+global univisalPID = 0
+getUnivisalPID(){
     global univisalPID
-    run %srcDir%\univisal.py,, hide, univisalPID
+    return univisalPID
+}
+setUnivisalPID(pid){
+    global univisalPID
+    univisalPID := pid
+}
+
+runUnivisal(){
+    run python3 %srcDir%\univisal.py,, hide, PID
+    setUnivisalPID(PID)
+    univisalPID := getUnivisalPID()
     Process, Priority, %univisalPID%, H
-    msgbox, run %univisalPID%
 }
 exitFunc(){
-    global univisalPID
+    univisalPID := getUnivisalPID()
     process, Close, %univisalPID%
 }
 OnExit("exitFunc")
+
+pidExists(pid){
+    Process, Exist, %pid%
+    exists := ErrorLevel
+    if (exists == 0){
+        return False
+    } else {
+        return True
+    }
+}
+
+univisalRunning(){
+    return pidExists(getUnivisalPID())
+}
 
 univiResultFromKey(key){
     result := StdOutToVar("python3 " . srcDir . "\univi.py " . key)
@@ -30,13 +52,10 @@ univiResultFromKey(key){
 }
 
 toggleUnivisal(){
-msgbox, toggle
-    if Process, Exist, %univisalPID% {
-        msgbox, exists
+    if (univisalRunning()) {
         ; process, Close, %univisalPID%
         exitFunc()
     } else {
-        msgbox, No exist
         runUnivisal()
     }
 }
