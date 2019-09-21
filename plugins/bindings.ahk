@@ -1,3 +1,6 @@
+#If Process, Exist, univisalPID
+Esc::univiResultFromKey("Esc")
+^[::univiResultFromKey("Esc")
 a::univiResultFromKey("a")
 b::univiResultFromKey("b")
 c::univiResultFromKey("c")
