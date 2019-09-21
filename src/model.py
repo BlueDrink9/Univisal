@@ -9,6 +9,15 @@ class Mode(enum):
     visual  = 2
     command = 3
 
+def setMode(m):
+    global mode
+    mode = m
+
+def getMode(m):
+    global mode
+    return mode
+
+# TODO: Refresh memory of python global usage.
 global mode
 global repeat_count
 global registers
