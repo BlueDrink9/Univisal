@@ -1,7 +1,6 @@
-# import importlib
-# importlib.import_module("model")
-# importlib.import_module("motion")
-# importlib.import_module("operators")
+from model import *
+from motion import *
+from operators import *
 
 def handleKey(key):
     if getMode() == Mode.insert:

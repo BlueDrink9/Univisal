@@ -11,7 +11,7 @@ def setMode(m):
     global mode
     mode = m
 
-def getMode(m):
+def getMode():
     global mode
     return mode
 

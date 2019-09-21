@@ -4,13 +4,13 @@
 import socket
 from threading import Thread
 import sys
+import os
 # Available since 3.1
-import importlib
+# import importlib
+def get_script_path():
+    return os.path.dirname(os.path.realpath(sys.argv[0]))
 
-importlib.import_module("handleKey")
-importlib.import_module("model")
-importlib.import_module("motion")
-importlib.import_module("operators")
+from handleKey import *
 
 PORT = 10000
 HOST = '127.0.0.1'
