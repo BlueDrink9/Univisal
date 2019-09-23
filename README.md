@@ -107,3 +107,7 @@ Have a function/command callable from univi that returns current mode?
 ## Misc
 
 [This has notes at the bottom about what emulators often miss](https://reversed.top/2016-08-13/big-list-of-vim-like-software/)
+
+[Article about latency measurements](https://pavelfatin.com/typing-with-pleasure/)
+
+[Use typometer to benchmark/measure latency](https://pavelfatin.com/typometer/)
