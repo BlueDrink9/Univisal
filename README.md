@@ -9,6 +9,10 @@ Python initial proof of concept gives unusable typing speeds.
 
 Will keep trying with different priorities, maybe other communication methods for a bit, then change langs.
 
+Try UDP instead of TCP?
+
+Try subprocess with writable stdin?
+
 # Plan
 
 ## Sending and receiving keys/OS interaction handled by separate programs
@@ -30,6 +34,11 @@ But if using [autopilot-rs](https://github.com/autopilot-rs/autopilot-rs), only 
 As part of this, could write script to generate this sort of command for every letter/key I want to handle. Maybe take input in stringformat/printf format, eg `%s : skhd -k "$(univi handleKey('%s'))", letter, letter`.
 * Write script for program that contains calls for current mode
 * Call keybinding program from univisal (won't work with AHK, since it doesn't have an interface to run a single send from a command).
+* Spin off a subprocess/backgrounded 'server' univisal, and have a function 'univi' that writes to its stdin and reads its stdout. Might only work for root though... May have to create own pipe.
+https://serverfault.com/questions/178457/can-i-send-some-text-to-the-stdin-of-an-active-process-running-in-a-screen-sessi 
+https://wiki.wireshark.org/CaptureSetup/Pipes#Way_3:_Python_on_Windows
+https://stackoverflow.com/questions/48542644/python-and-windows-named-pipes
+
 
 ###### Main script takes window info, and keys
 
