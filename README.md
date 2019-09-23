@@ -100,6 +100,9 @@ Alternatively, always active but single hotkey always enters cmd mode? I don't p
 
 White/black list for always/never enable. Title matching, optionally with regex?
 
+For speed, potentially have an option where the key grab software passes key straight back if it is insert mode, only enables maps in normal mode. Would mean insert mappings aren't possible, but not everyone uses.
+Have a function/command callable from univi that returns current mode?
+
 
 ## Misc
 
