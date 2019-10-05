@@ -1,0 +1,190 @@
+a
+	xdotool key $(univi_handleKey a)
+b
+	xdotool key $(univi_handleKey b)
+c
+	xdotool key $(univi_handleKey c)
+d
+	xdotool key $(univi_handleKey d)
+e
+	xdotool key $(univi_handleKey e)
+f
+	xdotool key $(univi_handleKey f)
+g
+	xdotool key $(univi_handleKey g)
+h
+	xdotool key $(univi_handleKey h)
+i
+	xdotool key $(univi_handleKey i)
+j
+	xdotool key $(univi_handleKey j)
+k
+	xdotool key $(univi_handleKey k)
+l
+	xdotool key $(univi_handleKey l)
+m
+	xdotool key $(univi_handleKey m)
+n
+	xdotool key $(univi_handleKey n)
+o
+	xdotool key $(univi_handleKey o)
+p
+	xdotool key $(univi_handleKey p)
+q
+	xdotool key $(univi_handleKey q)
+r
+	xdotool key $(univi_handleKey r)
+s
+	xdotool key $(univi_handleKey s)
+t
+	xdotool key $(univi_handleKey t)
+u
+	xdotool key $(univi_handleKey u)
+v
+	xdotool key $(univi_handleKey v)
+w
+	xdotool key $(univi_handleKey w)
+x
+	xdotool key $(univi_handleKey x)
+y
+	xdotool key $(univi_handleKey y)
+z
+	xdotool key $(univi_handleKey z)
+A
+	xdotool key $(univi_handleKey A)
+B
+	xdotool key $(univi_handleKey B)
+C
+	xdotool key $(univi_handleKey C)
+D
+	xdotool key $(univi_handleKey D)
+E
+	xdotool key $(univi_handleKey E)
+F
+	xdotool key $(univi_handleKey F)
+G
+	xdotool key $(univi_handleKey G)
+H
+	xdotool key $(univi_handleKey H)
+I
+	xdotool key $(univi_handleKey I)
+J
+	xdotool key $(univi_handleKey J)
+K
+	xdotool key $(univi_handleKey K)
+L
+	xdotool key $(univi_handleKey L)
+M
+	xdotool key $(univi_handleKey M)
+N
+	xdotool key $(univi_handleKey N)
+O
+	xdotool key $(univi_handleKey O)
+P
+	xdotool key $(univi_handleKey P)
+Q
+	xdotool key $(univi_handleKey Q)
+R
+	xdotool key $(univi_handleKey R)
+S
+	xdotool key $(univi_handleKey S)
+T
+	xdotool key $(univi_handleKey T)
+U
+	xdotool key $(univi_handleKey U)
+V
+	xdotool key $(univi_handleKey V)
+W
+	xdotool key $(univi_handleKey W)
+X
+	xdotool key $(univi_handleKey X)
+Y
+	xdotool key $(univi_handleKey Y)
+Z
+	xdotool key $(univi_handleKey Z)
+0
+	xdotool key $(univi_handleKey 0)
+1
+	xdotool key $(univi_handleKey 1)
+2
+	xdotool key $(univi_handleKey 2)
+3
+	xdotool key $(univi_handleKey 3)
+4
+	xdotool key $(univi_handleKey 4)
+5
+	xdotool key $(univi_handleKey 5)
+6
+	xdotool key $(univi_handleKey 6)
+7
+	xdotool key $(univi_handleKey 7)
+8
+	xdotool key $(univi_handleKey 8)
+9
+	xdotool key $(univi_handleKey 9)
+!
+	xdotool key $(univi_handleKey !)
+"
+	xdotool key $(univi_handleKey ")
+#
+	xdotool key $(univi_handleKey #)
+$
+	xdotool key $(univi_handleKey $)
+%
+	xdotool key $(univi_handleKey %)
+&
+	xdotool key $(univi_handleKey &)
+'
+	xdotool key $(univi_handleKey ')
+(
+	xdotool key $(univi_handleKey ()
+)
+	xdotool key $(univi_handleKey ))
+*
+	xdotool key $(univi_handleKey *)
++
+	xdotool key $(univi_handleKey +)
+,
+	xdotool key $(univi_handleKey ,)
+-
+	xdotool key $(univi_handleKey -)
+.
+	xdotool key $(univi_handleKey .)
+slash
+	xdotool key $(univi_handleKey /)
+:
+	xdotool key $(univi_handleKey :)
+;
+	xdotool key $(univi_handleKey ;)
+<
+	xdotool key $(univi_handleKey <)
+=
+	xdotool key $(univi_handleKey =)
+>
+	xdotool key $(univi_handleKey >)
+?
+	xdotool key $(univi_handleKey ?)
+@
+	xdotool key $(univi_handleKey @)
+[
+	xdotool key $(univi_handleKey [)
+\
+	xdotool key $(univi_handleKey \)
+]
+	xdotool key $(univi_handleKey ])
+^
+	xdotool key $(univi_handleKey ^)
+_
+	xdotool key $(univi_handleKey _)
+`
+	xdotool key $(univi_handleKey `)
+{
+	xdotool key $(univi_handleKey {)
+|
+	xdotool key $(univi_handleKey |)
+}
+	xdotool key $(univi_handleKey })
+~
+	xdotool key $(univi_handleKey ~)
+Escape
+	xdotool key $(univi_handleKey esc)
