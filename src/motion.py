@@ -1,6 +1,6 @@
 plugin = "ahk"
 pluginBindings = {}
 pluginBindings["goLineStart"] = "{Home}"
-pluginBindings["goLineEnd"] = "{End}"
+pluginBindings["goLineEnd"] = "<end>"
 def getPluginBinding(action):
     return pluginBindings[action]

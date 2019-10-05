@@ -6,7 +6,7 @@ def handleKey(key):
     if key.lower() == "esc":
         setMode(Mode.normal)
         # No op. Need to send something back via socket.
-        return "NOP"
+        return "nop"
     if getMode() == Mode.insert:
         return key
     if key == "0":
@@ -15,11 +15,11 @@ def handleKey(key):
         return getPluginBinding("goLineEnd")
     elif key == "i":
         setMode(Mode.insert)
-        return "NOP"
+        return "nop"
     elif key == "a":
         # TODO: Add motion
         setMode(Mode.insert)
-        return "NOP"
+        return "nop"
     elif key == "I":
         setMode(Mode.insert)
         return getPluginBinding("goLineStart")

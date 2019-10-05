@@ -55,4 +55,9 @@ while reading:
                 reading = False
                 break
             output = handleKey(key)
+            if output is None:
+                if DEBUG:
+                    output = "Error: No key sent"
+                else:
+                    output = key
             outpt_write(output)

@@ -38,9 +38,8 @@ if len(sys.argv) != 3:
           """)
     sys.exit(1)
 
-cmdformat = expand_escapes(str(sys.argv[1]))
-
-program = expand_escapes(str(sys.argv[2]))
+program = expand_escapes(str(sys.argv[1]))
+cmdformat = expand_escapes(str(sys.argv[2]))
 
 # Can dump a dict in python with `json.dumps(dict, sort_keys=True, indent=2)`
 try:
