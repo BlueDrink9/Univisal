@@ -70,3 +70,6 @@ for key in keys:
     # Actually creates a phrase, apparently.
     # engine.create_hotkey(folder, description, modifiers, key, contents)
     engine.create_hotkey(folder, key, modifiers, hotkey, phrase)
+
+phrase = "<script name=univi args={}>".format("esc")
+engine.create_hotkey(folder, "^[", ["<ctrl>"], "[", phrase)
