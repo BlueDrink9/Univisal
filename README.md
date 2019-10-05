@@ -39,7 +39,6 @@ https://serverfault.com/questions/178457/can-i-send-some-text-to-the-stdin-of-an
 https://wiki.wireshark.org/CaptureSetup/Pipes#Way_3:_Python_on_Windows
 https://stackoverflow.com/questions/48542644/python-and-windows-named-pipes
 
-
 ###### Main script takes window info, and keys
 
 Does vi logic, maintains mode/stated, handles graphical interfcae
