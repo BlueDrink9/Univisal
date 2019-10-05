@@ -23,12 +23,18 @@ try:
     os.mkfifo(readpipe)
     os.mkfifo(writepipe)
 except OSError as oe:
+    errmsg="""
+    Error opening IO pipes {} or {}. They may need to be removed manually, or
+    univisal may not have read permissions to the temp directory.
+    """.format(readpipe, writepipe)
     if oe.errno != errno.EEXIST:
+        sys.stderr.write(errmsg)
         raise
 
 # handle(readpipe)
 #
 def outpt_write(key):
+    print(key)
     outpt = open(writepipe, "w")
     outpt.write(key)
     outpt.close()
