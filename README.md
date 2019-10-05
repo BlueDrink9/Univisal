@@ -102,6 +102,17 @@ White/black list for always/never enable. Title matching, optionally with regex?
 For speed, potentially have an option where the key grab software passes key straight back if it is insert mode, only enables maps in normal mode. Would mean insert mappings aren't possible, but not everyone uses.
 Have a function/command callable from univi that returns current mode?
 
+## Benchmarking
+
+In one terminal: `f(){ echo "h" > /tmp/univisal.in.fifo; cat /tmp/univisal.out.fifo ; }`
+In another: `while true; do cat /tmp/univisal.in.fifo > /tmp/uni; done`
+In first term again: `time f`
+
+> real	0m0.004s
+> user	0m0.004s
+> sys	0m0.000s
+
+This remains broadly the same when running `univisal.py` in the second terminal instead, version at this commit.
 
 ## Misc
 
