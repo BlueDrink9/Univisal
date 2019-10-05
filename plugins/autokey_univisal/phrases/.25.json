@@ -17,7 +17,7 @@
     },
     "hotkey": {
         "modifiers": [],
-        "hotKey": null
+        "hotKey": "<"
     },
     "filter": {
         "regex": null,

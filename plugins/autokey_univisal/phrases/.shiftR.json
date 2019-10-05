@@ -1,7 +1,9 @@
 {
     "type": "phrase",
     "description": "shiftR",
-    "modes": [],
+    "modes": [
+        3
+    ],
     "usageCount": 0,
     "prompt": false,
     "omitTrigger": false,
@@ -16,8 +18,10 @@
         "wordChars": "[\\w]"
     },
     "hotkey": {
-        "modifiers": [],
-        "hotKey": null
+        "modifiers": [
+            "<shift>"
+        ],
+        "hotKey": "R"
     },
     "filter": {
         "regex": null,

@@ -1,4 +1,5 @@
 import string
+import json
 script_maps = { "alt": "<alt>",
                 "alt_gr": "<alt_gr>",
                 "backspace": "<backspace>",
@@ -42,6 +43,9 @@ script_maps = { "alt": "<alt>",
                 "tab": "<tab>"
                 }
 
+def get_script_path():
+    return os.path.dirname(os.path.realpath(sys.argv[0]))
+
 def mapPluginInputKey(key):
     if key in script_maps:
         return script_maps[key]
@@ -53,13 +57,18 @@ keys = list(string.ascii_letters + \
     string.punctuation)
 keys.append("esc")
 
-def get_script_path():
-    return os.path.dirname(os.path.realpath(sys.argv[0]))
-
 # Plugin folder needs to be added in autokey first.
 folder = engine.get_folder("phrases")
 for key in keys:
+    modifiers = []
+    origKey = key
     if key.upper() != key.lower():
         if key.upper() == key:
             key = "shift" + key
-    engine.create_phrase(folder, key, "<script name=univi args={}>".format(mapPluginInputKey(key)))
+    if "shift" in key:
+        modifiers.append("<shift>")
+    phrase = "<script name=univi args={}>".format(mapPluginInputKey(origKey))
+    # Actually creates a phrase, apparently.
+    # engine.create_hotkey(folder, description, modifiers, key, contents)
+    engine.create_hotkey(folder, key, modifiers, mapPluginInputKey(origKey),
+                         phrase)

@@ -1,7 +1,9 @@
 {
     "type": "phrase",
     "description": "$",
-    "modes": [],
+    "modes": [
+        3
+    ],
     "usageCount": 0,
     "prompt": false,
     "omitTrigger": false,
@@ -17,7 +19,7 @@
     },
     "hotkey": {
         "modifiers": [],
-        "hotKey": null
+        "hotKey": "$"
     },
     "filter": {
         "regex": null,

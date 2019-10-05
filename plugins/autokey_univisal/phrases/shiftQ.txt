@@ -1,1 +1,1 @@
-<script name=univi args=shiftQ>
+<script name=univi args=Q>
