@@ -53,7 +53,13 @@ keys = list(string.ascii_letters + \
     string.punctuation)
 keys.append("esc")
 
+def get_script_path():
+    return os.path.dirname(os.path.realpath(sys.argv[0]))
+
 # Plugin folder needs to be added in autokey first.
 folder = engine.get_folder("phrases")
 for key in keys:
+    if key.upper() != key.lower():
+        if key.upper() == key:
+            key = "shift" + key
     engine.create_phrase(folder, key, "<script name=univi args={}>".format(mapPluginInputKey(key)))
