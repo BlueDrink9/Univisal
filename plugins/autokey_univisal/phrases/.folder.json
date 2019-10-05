@@ -1,13 +1,8 @@
 {
-    "type": "phrase",
-    "description": "shiftL",
-    "modes": [
-        3
-    ],
+    "type": "folder",
+    "title": "phrases",
+    "modes": [],
     "usageCount": 0,
-    "prompt": false,
-    "omitTrigger": false,
-    "matchCase": false,
     "showInTrayMenu": false,
     "abbreviation": {
         "abbreviations": [],
@@ -18,14 +13,11 @@
         "wordChars": "[\\w]"
     },
     "hotkey": {
-        "modifiers": [
-            "<shift>"
-        ],
-        "hotKey": "L"
+        "modifiers": [],
+        "hotKey": null
     },
     "filter": {
         "regex": null,
         "isRecursive": false
-    },
-    "sendMode": "kb"
+    }
 }

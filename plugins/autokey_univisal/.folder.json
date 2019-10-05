@@ -1,13 +1,8 @@
 {
-    "type": "phrase",
-    "description": "shiftZ",
-    "modes": [
-        3
-    ],
-    "usageCount": 0,
-    "prompt": false,
-    "omitTrigger": false,
-    "matchCase": false,
+    "type": "folder",
+    "title": "autokey_univisal",
+    "modes": [],
+    "usageCount": 4,
     "showInTrayMenu": false,
     "abbreviation": {
         "abbreviations": [],
@@ -18,14 +13,11 @@
         "wordChars": "[\\w]"
     },
     "hotkey": {
-        "modifiers": [
-            "<shift>"
-        ],
-        "hotKey": "Z"
+        "modifiers": [],
+        "hotKey": "<f10>"
     },
     "filter": {
         "regex": null,
         "isRecursive": false
-    },
-    "sendMode": "kb"
+    }
 }

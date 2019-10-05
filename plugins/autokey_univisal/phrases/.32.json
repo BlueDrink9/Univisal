@@ -1,6 +1,6 @@
 {
     "type": "phrase",
-    "description": "shiftT",
+    "description": "]",
     "modes": [
         3
     ],
@@ -18,10 +18,8 @@
         "wordChars": "[\\w]"
     },
     "hotkey": {
-        "modifiers": [
-            "<shift>"
-        ],
-        "hotKey": "T"
+        "modifiers": [],
+        "hotKey": "]"
     },
     "filter": {
         "regex": null,
