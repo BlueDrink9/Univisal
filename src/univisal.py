@@ -18,14 +18,22 @@ from handleKey import *
 #     return
 
 readpipe = gettempdir() + '/univisal.in.fifo'
+writepipe = gettempdir() + '/univisal.out.fifo'
 try:
     os.mkfifo(readpipe)
+    os.mkfifo(writepipe)
 except OSError as oe:
     if oe.errno != errno.EEXIST:
         raise
 
 # handle(readpipe)
+#
+def outpt_write(key):
+    outpt = open(writepipe, "w")
+    outpt.write(key)
+    outpt.close()
 
+# Read http://man7.org/linux/man-pages/man7/fifo.7.html for reference.
 reading = True
 while reading:
     # print("Opening {}".format(readpipe))
@@ -35,12 +43,10 @@ while reading:
             if len(data) == 0:
                 break
             key = data.rstrip()
-            print(data)
             if key == "HUP":
                 print("HUP")
                 print("end reading")
                 reading = False
                 break
             output = handleKey(key)
-            print(output)
-            # outpt_write(output)
+            outpt_write(output)
