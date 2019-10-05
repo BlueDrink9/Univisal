@@ -15,9 +15,11 @@ def handleKey(key):
         return getPluginBinding("goLineEnd")
     elif key == "i":
         setMode(Mode.insert)
+        return "NOP"
     elif key == "a":
         # TODO: Add motion
         setMode(Mode.insert)
+        return "NOP"
     elif key == "I":
         setMode(Mode.insert)
         return getPluginBinding("goLineStart")
