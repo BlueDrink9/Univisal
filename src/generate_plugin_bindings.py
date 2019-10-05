@@ -43,10 +43,10 @@ cmdformat = expand_escapes(str(sys.argv[1]))
 generated_file=open(get_script_path() + "/../plugins/generated_bindings", "w")
 
 # Standard input keys
-keys = "esc" + \
-    string.ascii_letters + \
+keys = list(string.ascii_letters + \
     string.digits + \
-    string.punctuation
+    string.punctuation)
+keys.append("esc")
 for key in keys:
     # Doing a double escape, to expand the formatting stored in the variable.
     # May be easier to use python's Template module though.
