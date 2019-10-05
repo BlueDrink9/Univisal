@@ -64,6 +64,6 @@ keys.append("esc")
 for key in keys:
     # Doing a double escape, to expand the formatting stored in the variable.
     # May be easier to use python's Template module though.
-    generated_file.write(f"{cmdformat}\n" % (key, mapPluginInputKey(key)))
+    generated_file.write(f"{cmdformat}\n" % (mapPluginInputKey(key), key))
 
 generated_file.close()
