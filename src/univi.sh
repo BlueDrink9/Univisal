@@ -3,10 +3,18 @@
 # Usage: univi.py [key]
 # Takes only a single argument.
 
-if [ "$#" -ne 1 ]; then
-  echo "Usage: univi.py [key]"
-  exit 1
-fi
+univi(){
+  if [ "$#" -ne 1 ]; then
+    echo "Usage: univi.py [key]"
+    exit 1
+  fi
+
+  sendKey "$1"
+  result="$(readKey)"
+  if [ ! "${result}" == "NOP" ]; then
+    printf "${result}"
+  fi
+}
 
 sendKey(){
   key="$1"
@@ -16,8 +24,4 @@ readKey(){
   cat /tmp/univisal.out.fifo
 }
 
-sendKey "$1"
-result="$(readKey)"
-if [ ! "${result}" == "NOP" ]; then
-    printf "${result}"
-fi
+univi "$@"
