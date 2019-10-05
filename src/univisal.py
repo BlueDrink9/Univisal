@@ -5,6 +5,8 @@ import socket
 from threading import Thread
 import sys
 import os
+import errno
+from tempfile import gettempdir
 # Available since 3.1
 # import importlib
 def get_script_path():
@@ -12,40 +14,33 @@ def get_script_path():
 
 from handleKey import *
 
-PORT = 10000
-HOST = '127.0.0.1'
+# def handle(pipe):
+#     return
 
-MAX_LENGTH = 1024
+readpipe = gettempdir() + '/univisal.in.fifo'
+try:
+    os.mkfifo(readpipe)
+except OSError as oe:
+    if oe.errno != errno.EEXIST:
+        raise
 
-def close(sock):
-    sock.shutdown(socket.SHUT_RDWR)
-    sock.close()
+# handle(readpipe)
 
-def handle(clientsocket):
-  while True:
-    buf = clientsocket.recv(MAX_LENGTH).decode()
-    # if buf == '': return #client terminated connection
-    if buf == "HUP":
-        close(serversocket)
-        # Doesn't work in multithreaded environment.
-        # sys.exit(0)
-        # os.kill(os.getpid(), 9)
-        # close(serversocket)
-    # We only handle one key at a time. Several characters is bad input.
-    # if len(buf) != 1: return
-    output = handleKey(buf)
-    print(output)
-    clientsocket.send(output.encode())
-    return
-
-serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-serversocket.bind((HOST, PORT))
-# Allow instant reuse of socket if program closed.
-serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-serversocket.listen(10)
-while True:
-    #accept connections from outside
-    (clientsocket, address) = serversocket.accept()
-    ct = Thread(target=handle, args=(clientsocket,))
-    ct.start()
+reading = True
+while reading:
+    # print("Opening {}".format(readpipe))
+    with open(readpipe) as inpt:
+        while True:
+            data = inpt.read()
+            if len(data) == 0:
+                break
+            key = data.rstrip()
+            print(data)
+            if key == "HUP":
+                print("HUP")
+                print("end reading")
+                reading = False
+                break
+            output = handleKey(key)
+            print(output)
+            # outpt_write(output)
