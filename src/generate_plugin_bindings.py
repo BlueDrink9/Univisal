@@ -22,8 +22,15 @@ def get_script_path():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 # Can dump a dict in python with `json.dumps(dict, sort_keys=True, indent=2)`
-script_maps_f=open(get_script_path() + "/../plugins/sxhkd/mappings.json", "r")
-script_maps = json.loads(script_maps_f.read())
+try:
+    script_maps_f=open(get_script_path() + "/../plugins/sxhkd/mappings.json", "r")
+    script_maps = json.load(script_maps_f)
+    script_maps_f.close()
+except IOError as e:
+    scrpt_maps = {}
+except JSONDecodeError as e:
+    scrpt_maps = {}
+
 def mapPluginInputKey(key):
     if key in script_maps:
         return script_maps[key]
@@ -51,4 +58,5 @@ for key in keys:
     # Doing a double escape, to expand the formatting stored in the variable.
     # May be easier to use python's Template module though.
     generated_file.write(f"{cmdformat}\n" % (key, mapPluginInputKey(key)))
+
 generated_file.close()
