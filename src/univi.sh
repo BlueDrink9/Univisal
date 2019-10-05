@@ -24,4 +24,4 @@ readKey(){
   cat /tmp/univisal.out.fifo
 }
 
-univi "$@"
+# univi "$@"
