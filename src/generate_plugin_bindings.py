@@ -27,17 +27,20 @@ def mapPluginInputKey(key):
     else:
         return key
 
-if len(sys.argv) != 2:
-    print("Usage: generate_plugin_bindings.py [string]")
-    print("[string] is a printf-formatted string. \
-          It is the command to generate for the plugin, \
-          with %ss in two places: Binding and send position" % ('%'))
-    print("There are examples in the source")
+if len(sys.argv) != 3:
+    print("Usage: generate_plugin_bindings.py program string")
+    print("Args:")
+    print("'program': name generated bindings will write as")
+    print("""'string' : a printf-formatted string.
+          It is the command to generate for the plugin,
+          with %s in two places: Binding and send position.
+          There are examples in the source
+          """)
     sys.exit(1)
 
 cmdformat = expand_escapes(str(sys.argv[1]))
 
-program = "sxhkd"
+program = expand_escapes(str(sys.argv[2]))
 
 # Can dump a dict in python with `json.dumps(dict, sort_keys=True, indent=2)`
 try:
