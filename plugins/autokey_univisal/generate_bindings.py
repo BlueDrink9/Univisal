@@ -67,8 +67,10 @@ for key in keys:
             key = "shift" + key
     if "shift" in key:
         modifiers.append("<shift>")
-    phrase = "<script name=univi args={}>".format(mapPluginInputKey(origKey))
+    # Use lowercase for hotkey, with modifiers.
+    hotkey = mapPluginInputKey(origKey.lower())
+    phrase = "<script name=univi args={}>".format(origKey)
     # Actually creates a phrase, apparently.
     # engine.create_hotkey(folder, description, modifiers, key, contents)
-    engine.create_hotkey(folder, key, modifiers, mapPluginInputKey(origKey),
+    engine.create_hotkey(folder, key, modifiers, hotkey),
                          phrase)
