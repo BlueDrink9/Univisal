@@ -1,10 +1,10 @@
 {
     "type": "phrase",
-    "description": "^[",
+    "description": "shiftO",
     "modes": [
         3
     ],
-    "usageCount": 46,
+    "usageCount": 0,
     "prompt": false,
     "omitTrigger": false,
     "matchCase": false,
@@ -19,9 +19,9 @@
     },
     "hotkey": {
         "modifiers": [
-            "<ctrl>"
+            "<shift>"
         ],
-        "hotKey": "["
+        "hotKey": "o"
     },
     "filter": {
         "regex": null,
