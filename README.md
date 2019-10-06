@@ -13,6 +13,26 @@ Try UDP instead of TCP?
 
 Try subprocess with writable stdin?
 
+Used pipes and the speed with python seems fine. Depends entirely on how fast the key is sent though. It may be best to just write to the pipe from ahk.
+
+# Adapters
+
+* [Autohotkey](https://www.autohotkey.com) (Windows) : Needs updating for pipe system.
+* [Autokey](github.com/autokey/autokey) (Xorg) : A little tricky to set up, and if univisal crashes (which it hasn't so far...) then any keys the adapter handles will stop working.
+* [skhd](https://github.com/koekeishiya/skhd) (OSX) : Not written.
+* [hammerspoon](https://www.hammerspoon.org/) (OSX) : Not written.
+* sxhkd (Xorg) : Doesn't work. Adapter is written, but uses `xdotool` to send input, which is then recursively picked up by `sxhkd`.
+
+# Installation
+
+This differs based on what adapter you want to use.
+
+## Autokey (X)
+
+* Start univisal.py. Do this first, otherwise your keyboard will stop working.
+* Add the adapter as a folder in Autokey. It should pick up all the hotkeys.
+* 
+
 # Plan
 
 ## Sending and receiving keys/OS interaction handled by separate programs
@@ -102,6 +122,8 @@ White/black list for always/never enable. Title matching, optionally with regex?
 For speed, potentially have an option where the key grab software passes key straight back if it is insert mode, only enables maps in normal mode. Would mean insert mappings aren't possible, but not everyone uses.
 Have a function/command callable from univi that returns current mode?
 
+Remember insert mode entries. Parse for imaps, and allow `.` repeats.
+
 ## Benchmarking
 
 In one terminal: `f(){ echo "h" > /tmp/univisal.in.fifo; cat /tmp/univisal.out.fifo ; }`
@@ -121,3 +143,23 @@ This remains broadly the same when running `univisal.py` in the second terminal 
 [Article about latency measurements](https://pavelfatin.com/typing-with-pleasure/)
 
 [Use typometer to benchmark/measure latency](https://pavelfatin.com/typometer/)
+
+# Alternatives/similar projects
+
+## Windows
+
+I recommend [vim_ahk](https://github.com/rcmdnk/vim_ahk). It is relatively feature-full, and actively maintained.
+It's currently far better than Univisal. Probably faster, too.
+
+It is, however, limited by its ahk model. Adding imaps is an absolute pain, and is something I want Univisal to handle much better.
+
+## OSX
+
+A [handful](https://www.reddit.com/r/vim/comments/56twvs/modal_keybindings_everywhere_with_hammerspoon_mac/) of [Hammerspoon](https://github.com/wingillis/hammerspoon-vim-bindings) vim spoons exist. None are phenominal, most are fine.
+
+## Xorg
+
+None that I know of, which was the main motivation for writing this.
+
+I just decided that, if I was going to put time into another emulator, I wanted it to be a good one and therefore I wanted to use it on any OS.
+Hence, Univisal was born.
