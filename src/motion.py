@@ -1,10 +1,10 @@
-from enum import Enum
+from enum import Enum, auto
 class Motion(Enum):
-    goLineStart = "goLineStart"
-    goLineEnd = "goLineEnd"
-    goFileStart = "goFileStart"
-    goFileEnd = "goFileEnd"
-    goWordPrevious = "goWordPrevious"
-    goWordNext = "goWordNext"
-    visualStart = "visualStart"
-    visualEnd = "visualEnd"
+    goLineStart = auto()
+    goLineEnd = auto()
+    goFileStart = auto()
+    goFileEnd = auto()
+    goWordPrevious = auto()
+    goWordNext = auto()
+    visualStart = auto()
+    visualEnd = auto()

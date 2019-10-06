@@ -1,7 +1,9 @@
+from enum import Enum, auto
+
 def delete():
     pass
 
 class Operator(Enum):
-    delete = "delete"
-    change = "change"
-    yank = "yank"
+    delete = auto()
+    change = auto()
+    yank = auto()
