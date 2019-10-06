@@ -1,6 +1,11 @@
 from model import *
 from motion import *
 from operators import *
+from json import loads as json_load
+
+
+pluginBindings["goLineStart"] = "{Home}"
+pluginBindings["goLineEnd"] = "<end>"
 
 def handleKey(key):
     if key.lower() == "esc":
@@ -10,9 +15,9 @@ def handleKey(key):
     if getMode() == Mode.insert:
         return key
     if key == "0":
-        return getPluginBinding("goLineStart")
+        return getAdapterMap(Motion.goLineStart.name)
     if key == "$":
-        return getPluginBinding("goLineEnd")
+        return getAdapterMap(Motion.goLineEnd.name)
     elif key == "i":
         setMode(Mode.insert)
         return "nop"
@@ -22,9 +27,13 @@ def handleKey(key):
         return "nop"
     elif key == "I":
         setMode(Mode.insert)
-        return getPluginBinding("goLineStart")
+        return getAdapterMap(Motion.goLineStart.name)
     elif key == "A":
         setMode(Mode.insert)
-        return getPluginBinding("goLineEnd")
+        return getAdapterMap(Motion.goLineEnd.name)
+    elif key == "w":
+        return getAdapterMap(Motion.goWordNext.name)
+    elif key == "b":
+        return getAdapterMap(Motion.goWordPrevious.name)
     else:
         return key
