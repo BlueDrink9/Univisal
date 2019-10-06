@@ -7,15 +7,21 @@ import sys
 import os
 import errno
 from tempfile import gettempdir
+from library import *
 # Available since 3.1
 # import importlib
-def get_script_path():
-    return os.path.dirname(os.path.realpath(sys.argv[0]))
+#
 
 from handleKey import *
 
-# def handle(pipe):
-#     return
+if len(sys.argv) != 2:
+    print("Usage: univisal.py adapter")
+    print("""'adapter' is a string corresponding to a folder in ../adapters
+    that contains a json 'mappings.json'."
+    """)
+    sys.exit(1)
+
+adapterdir = get_script_path() + "/../" + str(sys.argv[1])
 
 readpipe = gettempdir() + '/univisal.in.fifo'
 writepipe = gettempdir() + '/univisal.out.fifo'
