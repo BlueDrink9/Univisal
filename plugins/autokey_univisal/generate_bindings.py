@@ -61,15 +61,17 @@ keys.append("esc")
 folder = engine.get_folder("phrases")
 for key in keys:
     modifiers = []
+    description = key
     if key.upper() != key.lower():
         if key.upper() == key:
             modifiers.append("<shift>")
+            description = "shift"+key
     # Use lowercase for hotkey, with modifiers.
     hotkey = mapPluginInputKey(key.lower())
     phrase = "<script name=univi args={}>".format(key)
     # Actually creates a phrase, apparently.
     # engine.create_hotkey(folder, description, modifiers, key, contents)
-    engine.create_hotkey(folder, key, modifiers, hotkey, phrase)
+    engine.create_hotkey(folder, description, modifiers, hotkey, phrase)
 
 phrase = "<script name=univi args={}>".format("esc")
-engine.create_hotkey(folder, "^[", ["<ctrl>"], "[", phrase)
+engine.create_hotkey(folder, "ctrl-bracket", ["<ctrl>"], "[", phrase)
