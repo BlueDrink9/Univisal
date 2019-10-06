@@ -141,6 +141,12 @@ Have a function/command callable from univi that returns current mode?
 
 Remember insert mode entries. Parse for imaps, and allow `.` repeats.
 
+Benchmark latency using https://github.com/pavelfatin/typometer
+
+Tests to compare text change parity with vim.
+
+Way to edit the cursor shape of the system, or otherwise have a visual indication close to the text about mode.
+
 ## Hacking together motions and operators from OS shortcuts
 
 `^`: Possible home, then ctrl+right+left, to go BoL->Eo first word -> Bo first word.
@@ -162,6 +168,12 @@ This remains broadly the same when running `univisal.py` in the second terminal 
 ## Misc
 
 Note: in vim, counts before an operator multiply with the count after the operator.
+
+In vim, operators leave the cursor at the left of the text operated on.
+
+Read through [normal.c](https://github.com/neovim/neovim/blob/master/src/nvim/normal.c) to understand how vim's architecture handles normal mode etc.
+
+Also skim [ops.c](https://github.com/neovim/neovim/blob/master/src/nvim/ops.c)
 
 [This has notes at the bottom about what emulators often miss](https://reversed.top/2016-08-13/big-list-of-vim-like-software/)
 
