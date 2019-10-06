@@ -1,21 +1,31 @@
 # Univisal
-Planning universal vi emulation that works across windows, OSX and linux/X, focusing on linux and portability.
 
-This readme is currently just an ideas dump. Feel free to open issues with suggestions.
+Universal vi emulation that works across windows, OSX and linux/X, focusing on linux and portability.
 
-# PoC Python ahk
+## Concept
 
-Python initial proof of concept gives unusable typing speeds.
+A vi emulator that doesn't handle key input, leaving it free to focus on the hard work of emulating vi using common system shortcuts.
 
-Will keep trying with different priorities, maybe other communication methods for a bit, then change langs.
+Key input is handled by some other program, with an adapter written to call `univisal` and emit the responded keys.
 
-Try UDP instead of TCP?
+Since [adapters](#adapters) are written for many OSes, this makes `Univisal` fairly portable.
 
-Try subprocess with writable stdin?
+## Installation
 
-Used pipes and the speed with python seems fine. Depends entirely on how fast the key is sent though. It may be best to just write to the pipe from ahk.
+This differs based on what adapter you want to use (see [Adapters](#adapters) for currently known options).
 
-# Adapters
+#### Autokey (X)
+
+1. Start univisal.py. Do this first, otherwise your keyboard will stop working.
+2. Add the adapter as a folder in Autokey. It should pick up all the hotkeys.
+
+
+## Adapters
+
+An adapter consists of config files for keybinding programs that call `univisal` some how (through an interface `univi`), and a `.json` that maps basic `univisal` movement and key commands with the string the keybinding program uses to represent those keys.
+The mappings json also takes into account OS-specific shortcuts.
+
+Generating new adapters is made simpler with `generate_adapter_bindings.py`, which can create config files with entries for each key.
 
 * [Autohotkey](https://www.autohotkey.com) (Windows) : Needs updating for pipe system.
 * [Autokey](github.com/autokey/autokey) (Xorg) : A little tricky to set up, and if univisal crashes (which it hasn't so far...) then any keys the adapter handles will stop working.
@@ -23,15 +33,18 @@ Used pipes and the speed with python seems fine. Depends entirely on how fast th
 * [hammerspoon](https://www.hammerspoon.org/) (OSX) : Not written.
 * sxhkd (Xorg) : Doesn't work. Adapter is written, but uses `xdotool` to send input, which is then recursively picked up by `sxhkd`.
 
-# Installation
+## Univisal is WIP, currently using a Python and FIFO-pipe proof-of-concept
 
-This differs based on what adapter you want to use.
+Python initial proof of concept using sockets gives unusable typing speeds.
 
-## Autokey (X)
+Used pipes and the speed with python seems fine. Depends entirely on how fast the key is sent though. It may be best to just write to the pipe from ahk.
 
-* Start univisal.py. Do this first, otherwise your keyboard will stop working.
-* Add the adapter as a folder in Autokey. It should pick up all the hotkeys.
-* 
+Pipes are very fast, with only a few ms of latency. Reading the key can add many more, however.
+
+Detailed benchmarks are yet to be done.
+
+Using autokey on Xorg seems to be working fine, at reasonable latencies - not hugely noticeable.
+
 
 # Plan
 
@@ -43,15 +56,19 @@ eg `ahk` (Windows), `sxhkd` (Linux/X input) + `xdotool` (Linux/X output), `hamme
 
 Keys sent to program. Program tells what keys to send out the other end. Maybe have adapter that takes command like "goEndOfLine" and sends appropriate keys. This could be a simple .json that maps the command to the necessary key strokes for an OS.
 
-###### implemtenation ideas
+###### implementation ideas
 
 * Keybind program: map every key such that it calls univisal like `univi handleKey('d')`, and then send the key returned (if any).
 An skhd example: `d : skhd -k "$(univi handleKey('d'))"`  
 An sxhkd+xdotool example: `d \n xdotool key $(univi handleKey('d'))`
+
 I feel like this has the most promise atm, but I'd like to get a proof-of-concept on each OS first.
+
 Would still need a way to map desired output to a key/command in format the OS tool can use, which brings back the json.
 But if using [autopilot-rs](https://github.com/autopilot-rs/autopilot-rs), only need to handle OS-specific behaviour, not tool-specific. (Ie rust or python).
+
 As part of this, could write script to generate this sort of command for every letter/key I want to handle. Maybe take input in stringformat/printf format, eg `%s : skhd -k "$(univi handleKey('%s'))", letter, letter`.
+
 * Write script for program that contains calls for current mode
 * Call keybinding program from univisal (won't work with AHK, since it doesn't have an interface to run a single send from a command).
 * Spin off a subprocess/backgrounded 'server' univisal, and have a function 'univi' that writes to its stdin and reads its stdout. Might only work for root though... May have to create own pipe.
@@ -111,7 +128,7 @@ Is this just trendy or is it a viable replacement for c in this case? Incl. MS W
 
 * [Potentially can do OS-independent keypress simulation](https://rosettacode.org/wiki/Simulate_input/Keyboard#Rust)
 
-## Feature list
+## Feature list / roadmap
 
 Key to enable/disable for a given window/all over system (make this an option).
 
@@ -123,6 +140,10 @@ For speed, potentially have an option where the key grab software passes key str
 Have a function/command callable from univi that returns current mode?
 
 Remember insert mode entries. Parse for imaps, and allow `.` repeats.
+
+## Hacking together motions and operators from OS shortcuts
+
+`^`: Possible home, then ctrl+right+left, to go BoL->Eo first word -> Bo first word.
 
 ## Benchmarking
 
@@ -136,7 +157,11 @@ In first term again: `time f`
 
 This remains broadly the same when running `univisal.py` in the second terminal instead, version at this commit.
 
+## 
+
 ## Misc
+
+Note: in vim, counts before an operator multiply with the count after the operator.
 
 [This has notes at the bottom about what emulators often miss](https://reversed.top/2016-08-13/big-list-of-vim-like-software/)
 
