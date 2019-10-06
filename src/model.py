@@ -1,11 +1,13 @@
 # enum from py >= 3.4
-from enum import Enum
+from enum import Enum, auto
 import string
+# Not using terms "edit" or "Ex" because they are less familiar.
 class Mode(Enum):
-    normal  = 0
-    insert  = 1
-    visual  = 2
-    command = 3
+    insert  = auto()
+    command = auto()
+    visual  = auto()
+    normal  = auto()
+    operator_pending  = auto()
 
 def setMode(m):
     global mode
@@ -15,12 +17,13 @@ def getMode():
     global mode
     return mode
 
-# TODO: Refresh memory of python global usage.
-global mode
-global repeat_count
-global registers
-registers = {}
-mode = Mode.normal
-# for l in string.ascii_letters:
-#     registers[l] = ""
+# Declare globals within a function to access them.
+def init_model():
+    global repeat_count
+    global registers
+    setMode(Mode.normal)
+    registers = {}
+    for l in string.ascii_letters:
+        registers[l] = ""
+    repeat_count = 1
 
