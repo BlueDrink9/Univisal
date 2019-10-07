@@ -8,12 +8,11 @@ import sys
 import errno
 from tempfile import gettempdir
 
-sys.path.append('pipes')
 # If Windows, else assume Unix.
 if os.name == "nt":
-    from windows import makePipes
+    from pipes_windows import makePipes
 else:
-    from unix import makePipes
+    from pipes_unix import makePipes
 
 readpipe, writepipe = makePipes()
 

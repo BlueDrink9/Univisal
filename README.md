@@ -12,7 +12,15 @@ Since [adapters](#adapters) are written for many OSes, this makes `Univisal` fai
 
 ## Installation
 
-This differs based on what adapter you want to use (see [Adapters](#adapters) for currently known options).
+### Dependencies
+
+The following is a list of python modules (usually installable through `pip`).
+* `enum`
+* `pypiwin32` (if on windows)
+
+### Adapters
+
+This step of installation differs based on what adapter you want to use (see [Adapters](#adapters) for currently known options).
 
 #### Autokey (X)
 
