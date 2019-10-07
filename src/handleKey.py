@@ -1,19 +1,25 @@
+from json import loads as json_load
+
 from model import *
 from motion import *
 from operators import *
-from json import loads as json_load
 
-
-pluginBindings["goLineStart"] = "{Home}"
-pluginBindings["goLineEnd"] = "<end>"
 
 def handleKey(key):
     if key.lower() == "esc":
         setMode(Mode.normal)
-        # No op. Need to send something back via socket.
+        # No op. Need to send something back to signal finish.
         return "nop"
     if getMode() == Mode.insert:
         return key
+    elif key == "h":
+        return getAdapterMap(Motion.goLeft.name)
+    elif key == "l":
+        return getAdapterMap(Motion.goRight.name)
+    elif key == "j":
+        return getAdapterMap(Motion.goDown.name)
+    elif key == "k":
+        return getAdapterMap(Motion.goUp.name)
     if key == "0":
         return getAdapterMap(Motion.goLineStart.name)
     if key == "$":
