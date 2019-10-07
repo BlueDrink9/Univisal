@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-15 -*-
+import os
 
 def makeUnixPipes():
     # Read http://man7.org/linux/man-pages/man7/fifo.7.html for reference.
