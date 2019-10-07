@@ -15,6 +15,8 @@ else:
     from pipes_unix import makePipes
 
 readpipe, writepipe = makePipes()
+print(readpipe)
+print(writepipe)
 
 
 def outpt_write(key):
