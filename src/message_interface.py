@@ -14,7 +14,7 @@ if os.name == "nt":
 else:
     from pipes_unix import makePipes
 
-readpipe, writepipe = makePipes()
+# readpipe, writepipe = makePipes()
 
 
 def outpt_write(key):
@@ -46,15 +46,23 @@ def process_input(data):
 
 def init_message_interface():
     global reading_input
+    f = open(r'\\.\pipe\univisal', 'w', 0)
+    f.write("direct write")
+    f.close
+
     reading_input = True
     while reading_input:
         if os.name == "nt":
+            print("here")
+            # writePipe(readpipe, "Hello")
             data = readPipe(readpipe)
             process_input(data)
         else:
             # print("Opening {}".format(readpipe))
-            with open(readpipe) as inpt:
+            with open(readpipe, 'rb') as inpt:
                 while True:
+                    print(readpipe)
                     data = inpt.read()
+                    print(data)
                     if not process_input(data):
                         break
