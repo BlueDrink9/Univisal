@@ -31,17 +31,20 @@ def makePipes():
     readpipeh = makeWin32Pipe(readpipe)
     writepipeh = makeWin32Pipe(writepipe)
     print(readpipe)
-    win32file.CreateFile(
-            readpipe,
-            win32file.GENERIC_READ | win32file.GENERIC_WRITE,
-            0,
-            None,
-            win32file.OPEN_EXISTING,
-            0,
-            None,
-            )
+    # win32file.CreateFile(
+    #         readpipe,
+    #         win32file.GENERIC_READ | win32file.GENERIC_WRITE,
+    #         0,
+    #         None,
+    #         win32file.OPEN_EXISTING,
+    #         0,
+    #         None,
+    #         )
+    # win32pipe.ConnectNamedPipe(readpipeh, None)
+    # win32pipe.ConnectNamedPipe(writepipeh, None)
     # win32pipe.ConnectNamedPipe(readpipe, None)
     # win32pipe.ConnectNamedPipe(writepipe, None)
+    win32file.WriteFile(readpipeh, bytes("test", "UTF-8"))
     win32file.WriteFile(readpipe, bytes("test", "UTF-8"))
     print(readpipe)
     return readpipe, writepipe
@@ -55,7 +58,7 @@ def readPipe(handle):
     # operation has completed, you can convert this to a string (str(object))to
     # obtain the data. While the operation is in progress, you can use the slice
     # operations (object[:end]) to obtain the data read so far. You must use the
-    # OVERLAPPED API functions to determine how much of the data is valid. 
+    # OVERLAPPED API functions to determine how much of the data is valid.
     out = win32file.ReadFile(handle, bufSize)
     return str(out[1])
 
