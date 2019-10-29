@@ -57,8 +57,8 @@ def init_message_interface():
     while reading_input:
         if os.name == "nt":
             print("here")
-            # writePipe(readpipe, "Hello")
-            data = readPipe(readpipe)
+            writePipe(readpipe, "Hello")
+            # data = readPipe(readpipe)
             print(data)
             process_input(data)
         else:

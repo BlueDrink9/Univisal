@@ -46,8 +46,21 @@ univisalRunning(){
     return pidExists(getUnivisalPID())
 }
 
+readPipe(){
+    pipe_name := "\\.\pipe\univisal.out.fifo"
+    While !DllCall("WaitNamedPipe", "Str", pipe_name, "UInt", 0xffffffff){
+    ; Hoping that it should connect right away, and won't need this sleep.
+        Sleep, 50
+    }
+    ; Assume only one line, so return after first.
+    Loop, read, %pipe_name%{
+        return %A_LoopReadLine%
+    }
+}
+
 univiResultFromKey(key){
-    result := StdOutToVar("python3 " . srcDir . "\univi.py " . key)
+; result := StdOutToVar("python3 " . srcDir . "\univi.py " . key)
+    result : = readPipe()
     send %result%
 }
 
