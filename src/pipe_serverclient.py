@@ -1,13 +1,13 @@
 import time
 import sys
-import win32pipe, win32file, pywintypes
+import pywintypes, win32pipe, win32file
 
+pipename=r'\\.\pipe\mypipe'
 
 def pipe_server():
     print("pipe server")
-    count = 0
     pipe = win32pipe.CreateNamedPipe(
-        r'\\.\pipe\Foo',
+        pipename,
         win32pipe.PIPE_ACCESS_DUPLEX,
         win32pipe.PIPE_TYPE_MESSAGE | win32pipe.PIPE_READMODE_MESSAGE | win32pipe.PIPE_WAIT,
         1, 65536, 65536,
@@ -18,10 +18,11 @@ def pipe_server():
         win32pipe.ConnectNamedPipe(pipe, None)
         print("got client")
 
-        while count < 10:
+        count = 0
+        while count < 5:
             print(f"writing message {count}")
             # convert to bytes
-            some_data = str.encode(f"{count}")
+            some_data = str.encode(f"count {count}")
             win32file.WriteFile(pipe, some_data)
             time.sleep(1)
             count += 1
@@ -37,8 +38,9 @@ def pipe_client():
 
     while not quit:
         try:
+            print(f"creating file")
             handle = win32file.CreateFile(
-                r'\\.\pipe\Foo',
+                pipename,
                 win32file.GENERIC_READ | win32file.GENERIC_WRITE,
                 0,
                 None,
@@ -46,7 +48,9 @@ def pipe_client():
                 0,
                 None
             )
+            print(f"created")
             res = win32pipe.SetNamedPipeHandleState(handle, win32pipe.PIPE_READMODE_MESSAGE, None, None)
+            print(f"SetNamedPipeHandleState return code: {res}")
             if res == 0:
                 print(f"SetNamedPipeHandleState return code: {res}")
             while True:
@@ -59,6 +63,17 @@ def pipe_client():
             elif e.args[0] == 109:
                 print("broken pipe, bye bye")
                 quit = True
+        except Exception as e:
+            print(e)
+
+def pipe_read():
+    f = open(pipename,"r")
+    msg = f.read()
+    # AHK's write function seems to add two strange extra chars to the message
+    # at the start, and adds an extra space after every other letter.
+    # But python server doesn't do this.
+    # msg = msg[2:]
+    print(msg)
 
 
 if __name__ == '__main__':
@@ -68,5 +83,7 @@ if __name__ == '__main__':
         pipe_server()
     elif sys.argv[1] == "c":
         pipe_client()
+    elif sys.argv[1] == "r":
+        pipe_read()
     else:
         print(f"no can do: {sys.argv[1]}")

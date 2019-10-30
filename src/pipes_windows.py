@@ -13,8 +13,7 @@ def readPipe():
             msg = pipe.read()
             return msg
         except FileNotFoundError:
-            # XXX log
-            # print("Pipe not found for reading")
+            logger.warning("Pipe not found for reading")
             pass
 
 
@@ -37,18 +36,16 @@ def writePipe(pipe, msg):
     # for named pipe code loops that don't fully close it.
     pipe = makeWritePipe(writepipeName)
     try:
-        print("waiting for client")
+        logger.info("Waiting for pipe to be read")
         win32pipe.ConnectNamedPipe(pipe, None)
-        print("got client")
-
+        logger.info("Got pipe client")
         # count = 0
         # while count < 10:
         #     print(f"writing message {count}")
         # convert to bytes
         some_data = str.encode(f"{msg}")
         win32file.WriteFile(pipe, some_data)
-
-        print("finished now")
+        logger.info("Finished writing to pipe")
     finally:
         win32file.CloseHandle(pipe)
         pass

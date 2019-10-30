@@ -28,7 +28,6 @@ makePipes()
 
 def writePipe(msg):
     global writepipe
-    print(msg)
     outpt = open(writepipe, "w")
     outpt.write(msg)
     outpt.close()
@@ -38,8 +37,7 @@ def readPipe():
     global readpipe
     with open(readpipe, 'rb') as inpt:
         while True:
-            print(readpipe)
             data = inpt.read()
-            print(data)
+            return data
             # if not process_input(data):
             #     break
