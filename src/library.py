@@ -7,6 +7,13 @@ import logging
 import logging.config
 from tempfile import gettempdir
 
+class myLogHandler(logging.handlers.RotatingFileHandler):
+    def __init__(self,filename,maxBytes,backupCount,encoding):
+        path = os.path.join(gettempdir(), "univisal_logs")
+        if not os.path.isdir(path):
+            os.mkdir(path)
+        super(myLogHandler,self).__init__(os.path.join(path,filename),'a',maxBytes,backupCount,encoding)
+
 # LOG_CFG=path is an env variable, uses `path` as config.
 def setup_logging(
     default_path='logging.json',
@@ -36,7 +43,7 @@ def setup_logging(
 def get_script_path():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
 
-setup_logging(os.path.join(get_script_path(), '..', 'logging_py.json'), logging.DEBUG)
+setup_logging(os.path.join(get_script_path(), 'logging_py.json'), logging.DEBUG)
 
 # logger = logging.getLogger(__name__)
 # logger.config.filename(
