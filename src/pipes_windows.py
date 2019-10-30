@@ -43,7 +43,7 @@ def makeWritePipe():
     return writepipeh
 
 
-def writePipe(pipe, msg):
+def writePipe(msg):
     # Have to close pipe to finish sending message, meaning you have to re-open
     # it here.
     # There may be an alternative to having to totally re-open the pipe. Look
