@@ -2,6 +2,7 @@
 # -*- coding: iso-8859-15 -*-
 import os
 import sys
+from tempfile import gettempdir
 import logging
 
 def get_script_path():

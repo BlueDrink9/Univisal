@@ -4,7 +4,6 @@
 Handles sending and receiving messages from adapters via a univi client
 """
 import os
-from tempfile import gettempdir
 
 # If Windows, else assume Unix.
 if os.name == "nt":
