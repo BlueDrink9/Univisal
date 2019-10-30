@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-15 -*-
 import os
+import errno
+import sys
 
 def makeUnixPipes():
     # Read http://man7.org/linux/man-pages/man7/fifo.7.html for reference.
@@ -19,6 +21,26 @@ def makeUnixPipes():
             raise
     return readpipe, writepipe
 
-def makePipes():
+def initPipes():
+    global readpipe, writepipe
     readpipe, writepipe = makeUnixPipes()
-    return readpipe, writepipe
+    # return readpipe, writepipe
+
+
+def writePipe(msg):
+    global writepipe
+    print(msg)
+    outpt = open(writepipe, "w")
+    outpt.write(msg)
+    outpt.close()
+
+
+def readPipe():
+    global readpipe
+    with open(readpipe, 'rb') as inpt:
+        while True:
+            print(readpipe)
+            data = inpt.read()
+            print(data)
+            # if not process_input(data):
+            #     break

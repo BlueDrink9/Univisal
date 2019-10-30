@@ -4,25 +4,20 @@
 Handles sending and receiving messages from adapters via a univi client
 """
 import os
-import sys
-import errno
 from tempfile import gettempdir
 print('start')
 
 # If Windows, else assume Unix.
 if os.name == "nt":
-    from pipes_windows import makePipes, readPipe, writePipe
+    from pipes_windows import initPipes, readPipe, writePipe
 else:
-    from pipes_unix import makePipes
+    from pipes_unix import initPipes, readPipe, writePipe
 
-readpipe, writepipe = makePipes()
+readpipe, writepipe = initPipes()
 
 
 def outpt_write(key):
-    print(key)
-    outpt = open(writepipe, "w")
-    outpt.write(key)
-    outpt.close()
+    writePipe(key)
 
 
 def process_input(data):
@@ -47,26 +42,10 @@ def process_input(data):
 
 def init_message_interface():
     global reading_input
-    while False:
-        print('writing')
-        f = open(r'\\.\pipe\univisal', 'w', 0)
-        f.write("direct write")
-        f.close
-
     reading_input = True
     while reading_input:
-        if os.name == "nt":
-            print("here")
-            writePipe(readpipe, "Hello")
-            # data = readPipe(readpipe)
-            print(data)
-            process_input(data)
-        else:
-            # print("Opening {}".format(readpipe))
-            with open(readpipe, 'rb') as inpt:
-                while True:
-                    print(readpipe)
-                    data = inpt.read()
-                    print(data)
-                    if not process_input(data):
-                        break
+        data = readPipe()
+        print(data)
+        # If processing returns False, was HUP. End processing.
+        if not process_input(data):
+            break
