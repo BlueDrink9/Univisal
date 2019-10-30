@@ -21,10 +21,9 @@ setUnivisalPID(pid){
 }
 
 runUnivisal(){
-    msgbox run python %srcDir%\univisal.py autohotkey,, hide, PID
     run python %srcDir%\univisal.py autohotkey,, hide, PID
     setUnivisalPID(PID)
-    msgbox running univisal with pid %PID%
+    ; msgbox running univisal with pid %PID%
     univisalPID := getUnivisalPID()
     ; Univisal should get high priority if possible, because it affects input
     ; latency.
@@ -55,13 +54,12 @@ univiResultFromKey(key){
 ; result := StdOutToVar("python3 " . srcDir . "\univi.py " . key)
     writePipe(key)
     result := readPipe()
-    msgbox, %result%
+    ; msgbox, %result%
     send %result%
 }
 
 toggleUnivisal(){
     if (univisalRunning()) {
-    msgbox killing
         ; process, Close, %univisalPID%
         exitFunc()
     } else {
@@ -104,9 +102,9 @@ writePipe(msg){
        }
    DllCall("ConnectNamedPipe", ptr, pipe, ptr, 0)
 
-   ; PipeMsg := (A_IsUnicode ? chr(0xfeff) : chr(239) chr(187) chr(191)) . PipeMsg
-   ; MsgBox % "Pipemessage is "PipeMsg
-   If !DllCall("WriteFile", ptr, pipe, "str", msg, "uint", (StrLen(PipeMsg)+1)*char_size, "uint*", 0, ptr, 0){
+   ; msg := (A_IsUnicode ? chr(0xfeff) : chr(239) chr(187) chr(191)) . msg
+   ; MsgBox % "Pipemessage is "msg
+   If !DllCall("WriteFile", ptr, pipe, "str", msg, "uint", (StrLen(msg)+1)*char_size, "uint*", 0, ptr, 0){
        MsgBox WriteFile failed: %ErrorLevel%/%A_LastError%
    }
    DllCall("CloseHandle", ptr, pipe)
