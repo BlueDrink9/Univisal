@@ -4,7 +4,7 @@ import os
 import errno
 import sys
 from tempfile import gettempdir
-import library
+from library import *
 import logging
 import logging_
 

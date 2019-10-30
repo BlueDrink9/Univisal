@@ -67,7 +67,7 @@
   },
 
   "root": {
-    "level": "INFO",
+    "level": "DEBUG",
     "filename": "univisal.log",
     "handlers": ["console", "debug_file_handler", "info_file_handler", "error_file_handler", "critical_file_handler"]
   }

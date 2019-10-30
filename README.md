@@ -16,7 +16,16 @@ Since [adapters](#adapters) are written for many OSes, this makes `Univisal` fai
 
 The following is a list of python modules (usually installable through `pip`).
 * `enum`
-* `pypiwin32` (if on windows)
+* (if on windows) `pywin32`
+
+#### windows pipes
+
+wpipe.py fails with error opening pipe.
+
+serverclient server will write fine to ahk reader. univisal > ahk.
+ahk write can be read with just a plain file.read operation, but this adds odd chars...
+ahk write adds them if using unicode ahk. IDK why.
+It also pads everything with spaces, so we want to prevent that.
 
 ### Adapters
 

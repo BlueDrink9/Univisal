@@ -34,7 +34,7 @@ def process_input(data):
         reading_input = False
         return False
     output = handleKey(key)
-    logger.debug("Outway: " + output)
+    logger.debug("Output: " + output)
     if output is None:
         logger.error("""
         Error: No key sent. Output is None. Returning input key instead.
