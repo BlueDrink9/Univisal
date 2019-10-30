@@ -1,5 +1,5 @@
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
+#Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; #NoTrayIcon
@@ -8,7 +8,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #inputlevel 1
 #include %A_ScriptDir%\runGetOutput.ahk
 global srcDir
-srcDir=%A_ScriptDir%\..\src
+srcDir=%A_ScriptDir%\..\..\src
 
 global univisalPID = 0
 getUnivisalPID(){
@@ -21,8 +21,10 @@ setUnivisalPID(pid){
 }
 
 runUnivisal(){
-    run python3 %srcDir%\univisal.py,, hide, PID
+    msgbox run python %srcDir%\univisal.py autohotkey,, hide, PID
+    run python %srcDir%\univisal.py autohotkey,, hide, PID
     setUnivisalPID(PID)
+    msgbox running univisal with pid %PID%
     univisalPID := getUnivisalPID()
     ; Univisal should get high priority if possible, because it affects input
     ; latency.
@@ -37,6 +39,7 @@ OnExit("exitFunc")
 pidExists(pid){
     Process, Exist, %pid%
     exists := ErrorLevel
+    ; Verbose, but easier than trying to remember what each errorlevel means
     if (exists == 0){
         return False
     } else {
@@ -52,11 +55,13 @@ univiResultFromKey(key){
 ; result := StdOutToVar("python3 " . srcDir . "\univi.py " . key)
     writePipe(key)
     result := readPipe()
+    msgbox, %result%
     send %result%
 }
 
 toggleUnivisal(){
     if (univisalRunning()) {
+    msgbox killing
         ; process, Close, %univisalPID%
         exitFunc()
     } else {
@@ -72,7 +77,8 @@ readPipe(){
         Sleep, 50
     }
     ; Assume only one line, so return after first.
-    Loop, read, %pipe_name%{
+    Loop, read, %pipe_name%
+    {
         return %A_LoopReadLine%
     }
 }
