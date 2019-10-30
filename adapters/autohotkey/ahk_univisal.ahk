@@ -24,6 +24,8 @@ runUnivisal(){
     run python3 %srcDir%\univisal.py,, hide, PID
     setUnivisalPID(PID)
     univisalPID := getUnivisalPID()
+    ; Univisal should get high priority if possible, because it affects input
+    ; latency.
     Process, Priority, %univisalPID%, H
 }
 exitFunc(){
@@ -48,7 +50,8 @@ univisalRunning(){
 
 univiResultFromKey(key){
 ; result := StdOutToVar("python3 " . srcDir . "\univi.py " . key)
-    result : = readPipe()
+    writePipe(key)
+    result := readPipe()
     send %result%
 }
 
