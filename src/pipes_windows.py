@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: iso-8859-15 -*-
-# From module pywin32
 import pywintypes, win32pipe, win32file
 import time
 import sys
@@ -15,16 +13,14 @@ def readPipe():
     while reading:
         msg = None
         try:
-            pipe = open(readpipeName,"r")
-            msg = pipe.read()
+            # AHK pipe sends in utf-16 for some AHK versions.
+            pipe = open(readpipeName,"rb")
+            raw = pipe.read()
+            try:
+                msg = raw.decode("utf-8")
+            except UnicodeDecodeError:
+                msg = raw.decode("utf-16")
             logger.debug("Read '{}' from univisal input pipe".format(msg))
-            # The current system with how the AHK adapter writes to the pipe
-            # results in a weird extra space after every character when read by
-            # python. This is some unfortunate adapter-specific check for the
-            # BOM added by the AHK adapter, which then strips the extra spaces
-            # and the BOM.
-            if msgIsFromAHK(msg):
-                msg = AHKMsgProcess(msg)
             reading = False
             return str(msg)
         except FileNotFoundError:
@@ -32,24 +28,6 @@ def readPipe():
             # logger.debug("Pipe not found for reading, trying again", exc_info=True)
             pass
 
-def msgIsFromAHK(msg):
-    # return msg[0] == chr(0xfeff) or msg[0:2] == chr(239) + chr(187) + chr(191)
-    # It's this on my system, but this feels very fragile.
-    logger.debug("msg[:2] '{}' ".format(msg[:2] == "ÿþ"))
-    # return msg[:2] == "ÿþ"
-    return True
-
-def AHKMsgProcess(msg):
-    # strip BOM.
-    msg = msg[2:]
-    # if msg[0] == chr(0xfeff):
-    #     msg = msg[1:]
-    # elif msg[0:2] == chr(239) + chr(187) + chr(191):
-    #     msg = msg[3:]
-    # Remove every second char (which is a space coming from AHK).
-    msg = msg[::2]
-    logger.debug("Read '{}' from univisal input pipe".format(msg))
-    return msg
 
 def makeWritePipe():
     name = r'\\.\pipe\univisal.out.fifo'
