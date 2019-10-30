@@ -4,10 +4,8 @@ import os
 import errno
 import sys
 
-def makeUnixPipes():
+def makePipes():
     # Read http://man7.org/linux/man-pages/man7/fifo.7.html for reference.
-    readpipe = gettempdir() + '/univisal.in.fifo'
-    writepipe = gettempdir() + '/univisal.out.fifo'
     try:
         os.mkfifo(readpipe)
         os.mkfifo(writepipe)
@@ -19,12 +17,13 @@ def makeUnixPipes():
         if oe.errno != errno.EEXIST:
             sys.stderr.write(errmsg)
             raise
-    return readpipe, writepipe
-
-def initPipes():
-    global readpipe, writepipe
-    readpipe, writepipe = makeUnixPipes()
     # return readpipe, writepipe
+
+
+readpipe = gettempdir() + '/univisal.in.fifo'
+writepipe = gettempdir() + '/univisal.out.fifo'
+makePipes()
+# readpipe, writepipe = makePipes()
 
 
 def writePipe(msg):

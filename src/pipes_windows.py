@@ -5,25 +5,17 @@ import pywintypes, win32pipe, win32file
 import time
 import sys
 
-def initPipes():
+def readPipe():
     readpipeName = r'\\.\pipe\univisal.in.fifo'
-    writepipeName = r'\\.\pipe\univisal.out.fifo'
-    # Don't need to read as a pipe, can just read as a regular file.
-    # readpipeHandle = makeWin32Pipe(readpipeName)
-    readpipeHandle = None
-    writepipeHandle = makeWritePipe(writepipeName)
-    # return readpipeHandle, writepipeHandle
-    return readpipeName, writepipeName
-
-
-def readPipe(pipe):
     while True:
         try:
-            f = open(pipe,"r")
-            msg = f.read()
+            pipe = open(readpipeName,"r")
+            msg = pipe.read()
             return msg
         except FileNotFoundError:
-            print("Pipe not found for reading")
+            # XXX log
+            # print("Pipe not found for reading")
+            pass
 
 
 def makeWritePipe(name):
@@ -38,20 +30,12 @@ def makeWritePipe(name):
 
 
 def writePipe(pipe, msg):
-    # print("pipe server")
-    # pipe = win32pipe.CreateNamedPipe(
-    #     pipename,
-    #     win32pipe.PIPE_ACCESS_DUPLEX,
-    #     win32pipe.PIPE_TYPE_MESSAGE | win32pipe.PIPE_READMODE_MESSAGE | win32pipe.PIPE_WAIT,
-    #     1, 65536, 65536,
-    #     0,
-    #     None)
-
+    writepipeName = r'\\.\pipe\univisal.out.fifo'
     # Have to close pipe to finish sending message, meaning you have to re-open
     # it here.
     # There may be an alternative to having to totally re-open the pipe. Look
     # for named pipe code loops that don't fully close it.
-    # pipe = makeWritePipe()
+    pipe = makeWritePipe(writepipeName)
     try:
         print("waiting for client")
         win32pipe.ConnectNamedPipe(pipe, None)

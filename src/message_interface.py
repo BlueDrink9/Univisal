@@ -9,11 +9,9 @@ print('start')
 
 # If Windows, else assume Unix.
 if os.name == "nt":
-    from pipes_windows import initPipes, readPipe, writePipe
+    from pipes_windows import readPipe, writePipe
 else:
-    from pipes_unix import initPipes, readPipe, writePipe
-
-readpipe, writepipe = initPipes()
+    from pipes_unix import readPipe, writePipe
 
 
 def outpt_write(key):
