@@ -18,13 +18,38 @@ def readPipe():
             pipe = open(readpipeName,"r")
             msg = pipe.read()
             logger.debug("Read '{}' from univisal input pipe".format(msg))
+            # The current system with how the AHK adapter writes to the pipe
+            # results in a weird extra space after every character when read by
+            # python. This is some unfortunate adapter-specific check for the
+            # BOM added by the AHK adapter, which then strips the extra spaces
+            # and the BOM.
+            if msgIsFromAHK(msg):
+                msg = AHKMsgProcess(msg)
             reading = False
             return str(msg)
         except FileNotFoundError:
             # Pipe not open. Keep trying.
-            logger.debug("Pipe not found for reading, trying again", exc_info=True)
+            # logger.debug("Pipe not found for reading, trying again", exc_info=True)
             pass
 
+def msgIsFromAHK(msg):
+    # return msg[0] == chr(0xfeff) or msg[0:2] == chr(239) + chr(187) + chr(191)
+    # It's this on my system, but this feels very fragile.
+    logger.debug("msg[:2] '{}' ".format(msg[:2] == "ÿþ"))
+    # return msg[:2] == "ÿþ"
+    return True
+
+def AHKMsgProcess(msg):
+    # strip BOM.
+    msg = msg[2:]
+    # if msg[0] == chr(0xfeff):
+    #     msg = msg[1:]
+    # elif msg[0:2] == chr(239) + chr(187) + chr(191):
+    #     msg = msg[3:]
+    # Remove every second char (which is a space coming from AHK).
+    msg = msg[::2]
+    logger.debug("Read '{}' from univisal input pipe".format(msg))
+    return msg
 
 def makeWritePipe():
     name = r'\\.\pipe\univisal.out.fifo'
@@ -39,6 +64,7 @@ def makeWritePipe():
 
 
 def writePipe(msg):
+    return
     # Have to close pipe to finish sending message, meaning you have to re-open
     # it here.
     # There may be an alternative to having to totally re-open the pipe. Look
