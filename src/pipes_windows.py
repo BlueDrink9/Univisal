@@ -11,15 +11,24 @@ logger = logging.getLogger(__name__)
 
 def readPipe():
     readpipeName = r'\\.\pipe\univisal.in.fifo'
-    while True:
+    reading = True
+    while reading:
         try:
             pipe = open(readpipeName,"r")
             msg = pipe.read()
-            return msg
+            logger.debug("Read '{}' from univisal input pipe".format(msg))
+            reading = False
+            # print(msg)
+            # return str(msg)
         except FileNotFoundError:
             # Pipe not open. Keep trying.
-            # logger.warning("Pipe not found for reading", exc_info=True)
+            logger.debug("Pipe not found for reading, trying again", exc_info=True)
             pass
+        finally:
+            if msg is not None:
+                return msg
+            else:
+                return ""
 
 
 def makeWritePipe():
