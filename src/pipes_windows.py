@@ -4,6 +4,9 @@
 import pywintypes, win32pipe, win32file
 import time
 import sys
+import library
+import logging
+logger = logging.getLogger(__name__)
 
 def readPipe():
     readpipeName = r'\\.\pipe\univisal.in.fifo'
@@ -13,8 +16,7 @@ def readPipe():
             msg = pipe.read()
             return msg
         except FileNotFoundError:
-            logger.warning("Pipe not found for reading")
-            pass
+            logger.warning("Pipe not found for reading", exc_info=True)
 
 
 def makeWritePipe(name):

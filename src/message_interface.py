@@ -4,6 +4,9 @@
 Handles sending and receiving messages from adapters via a univi client
 """
 import os
+import library
+import logging
+logger = logging.getLogger(__name__)
 
 # If Windows, else assume Unix.
 if os.name == "nt":
