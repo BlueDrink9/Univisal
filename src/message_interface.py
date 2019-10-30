@@ -18,6 +18,8 @@ else:
 def outpt_write(key):
     writePipe(key)
 
+def inpt_read(key):
+    readPipe(key)
 
 def process_input(data):
     logger.debug("Data: " + data)
@@ -45,7 +47,7 @@ def init_message_interface():
     global reading_input
     reading_input = True
     while reading_input:
-        data = readPipe()
+        data = inpt_read()
         # If processing returns False, was HUP. End processing.
         if not process_input(data):
             break
