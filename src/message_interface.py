@@ -7,7 +7,7 @@ import os
 from library import *
 import logging
 import logging_
-import handleKey
+from handleKey import handleKey
 logger = logging.getLogger(__name__)
 
 # If Windows, else assume Unix.
