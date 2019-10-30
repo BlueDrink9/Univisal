@@ -12,13 +12,18 @@ def initPipes():
     # readpipeHandle = makeWin32Pipe(readpipeName)
     readpipeHandle = None
     writepipeHandle = makeWritePipe(writepipeName)
-    return readpipeHandle, writepipeHandle
+    # return readpipeHandle, writepipeHandle
+    return readpipeName, writepipeName
 
 
 def readPipe(pipe):
-    f = open(pipe,"r")
-    msg = f.read()
-    return msg
+    while True:
+        try:
+            f = open(pipe,"r")
+            msg = f.read()
+            return msg
+        except FileNotFoundError:
+            print("Pipe not found for reading")
 
 
 def makeWritePipe(name):
