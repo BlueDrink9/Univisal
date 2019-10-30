@@ -78,6 +78,13 @@ readPipe(){
 }
 
 
+; 3 = duplex.
+CreateNamedPipe(Name, OpenMode=3, PipeMode=0, MaxInstances=255){
+   global ptr
+   ; https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-createnamedpipea
+   return DllCall("CreateNamedPipe", "str", Name, "uint", OpenMode, "uint", PipeMode, "uint", MaxInstances, "uint", 0, "uint", 0, "uint", 0, ptr, 0, ptr)
+}
+
 writePipe(msg){
    ptr := A_PtrSize ? "Ptr" : "UInt"
    char_size := A_IsUnicode ? 2 : 1
