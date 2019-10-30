@@ -13,22 +13,17 @@ def readPipe():
     readpipeName = r'\\.\pipe\univisal.in.fifo'
     reading = True
     while reading:
+        msg = None
         try:
             pipe = open(readpipeName,"r")
             msg = pipe.read()
             logger.debug("Read '{}' from univisal input pipe".format(msg))
             reading = False
-            # print(msg)
-            # return str(msg)
+            return str(msg)
         except FileNotFoundError:
             # Pipe not open. Keep trying.
             logger.debug("Pipe not found for reading, trying again", exc_info=True)
             pass
-        finally:
-            if msg is not None:
-                return msg
-            else:
-                return ""
 
 
 def makeWritePipe():
