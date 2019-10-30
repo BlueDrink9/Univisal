@@ -4,8 +4,9 @@
 import pywintypes, win32pipe, win32file
 import time
 import sys
-import library
+from library import *
 import logging
+import logging_
 logger = logging.getLogger(__name__)
 
 def readPipe():
@@ -16,10 +17,13 @@ def readPipe():
             msg = pipe.read()
             return msg
         except FileNotFoundError:
-            logger.warning("Pipe not found for reading", exc_info=True)
+            # Pipe not open. Keep trying.
+            # logger.warning("Pipe not found for reading", exc_info=True)
+            pass
 
 
-def makeWritePipe(name):
+def makeWritePipe():
+    name = r'\\.\pipe\univisal.out.fifo'
     writepipeh = win32pipe.CreateNamedPipe(
         name,
         win32pipe.PIPE_ACCESS_DUPLEX,
@@ -31,12 +35,11 @@ def makeWritePipe(name):
 
 
 def writePipe(pipe, msg):
-    writepipeName = r'\\.\pipe\univisal.out.fifo'
     # Have to close pipe to finish sending message, meaning you have to re-open
     # it here.
     # There may be an alternative to having to totally re-open the pipe. Look
     # for named pipe code loops that don't fully close it.
-    pipe = makeWritePipe(writepipeName)
+    pipe = makeWritePipe()
     try:
         logger.info("Waiting for pipe to be read")
         win32pipe.ConnectNamedPipe(pipe, None)

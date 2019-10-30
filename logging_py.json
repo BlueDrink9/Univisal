@@ -17,7 +17,7 @@
     },
 
     "debug_file_handler": {
-      "class": "library.myLogHandler",
+      "class": "logging_.myLogHandler",
       "level": "DEBUG",
       "formatter": "simple",
       "filename": "debug.log",
@@ -27,7 +27,7 @@
     },
 
     "info_file_handler": {
-      "class": "library.myLogHandler",
+      "class": "logging_.myLogHandler",
       "level": "INFO",
       "formatter": "simple",
       "filename": "info.log",
@@ -37,7 +37,7 @@
     },
 
     "error_file_handler": {
-      "class": "library.myLogHandler",
+      "class": "logging_.myLogHandler",
       "level": "ERROR",
       "formatter": "simple",
       "filename": "errors.log",
