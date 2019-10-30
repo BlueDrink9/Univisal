@@ -6,6 +6,7 @@ Handles sending and receiving messages from adapters via a univi client
 import os
 import library
 import logging
+import handleKey
 logger = logging.getLogger(__name__)
 
 # If Windows, else assume Unix.
@@ -18,8 +19,8 @@ else:
 def outpt_write(key):
     writePipe(key)
 
-def inpt_read(key):
-    readPipe(key)
+def inpt_read():
+    readPipe()
 
 def process_input(data):
     logger.debug("Data: " + data)
