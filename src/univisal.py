@@ -8,6 +8,7 @@ import sys
 
 from message_interface import init_message_interface
 from library import *
+from adapter_maps import *
 from handleKey import *
 
 if len(sys.argv) != 2:
@@ -17,6 +18,6 @@ if len(sys.argv) != 2:
     """)
     sys.exit(1)
 
-adapterdir = get_script_path() + "/../" + str(sys.argv[1])
+load_adapter_maps(sys.argv[1])
 
 init_message_interface()
