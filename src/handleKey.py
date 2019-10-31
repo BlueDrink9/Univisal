@@ -6,6 +6,7 @@ import logging_
 from model import *
 from motion import *
 from operators import *
+from adapter_maps import getAdapterMap
 
 
 def handleKey(key):
