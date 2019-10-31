@@ -51,11 +51,12 @@ univisalRunning(){
 }
 
 univiResultFromKey(key){
-; result := StdOutToVar("python3 " . srcDir . "\univi.py " . key)
     writePipe(key)
     result := readPipe()
     ; msgbox, %result%
-    send %result%
+    if (result != "nop"){
+        send %result%
+    }
 }
 
 toggleUnivisal(){
@@ -102,14 +103,18 @@ writePipe(msg){
        }
    DllCall("ConnectNamedPipe", ptr, pipe, ptr, 0)
 
-   ; msg := (A_IsUnicode ? chr(0xfeff) : chr(239) chr(187) chr(191)) . msg
+   ; Standard AHK needs a UTF-8 BOM to work via pipe.  If we're running on
+   ; Unicode AHK_L, 'msg' contains a UTF-16 string so add that BOM instead:
+   ; AutoHotkey reads the first 3 bytes to check for the UTF-8 BOM "ï»¿". If it is
+   ; NOT present, AutoHotkey then attempts to "rewind", thus breaking the pipe.
+   msg := (A_IsUnicode ? chr(0xfeff) : chr(239) chr(187) chr(191)) . msg
    ; MsgBox % "Pipemessage is "msg
-   If !DllCall("WriteFile", ptr, pipe, "str", msg, "uint", (StrLen(msg)+1)*char_size, "uint*", 0, ptr, 0){
+   ; https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-writefile
+   If !DllCall("WriteFile", ptr, pipe, "str", msg, "uint", (StrLen(msg))*char_size, "uint*", 0, ptr, 0){
        MsgBox WriteFile failed: %ErrorLevel%/%A_LastError%
    }
    DllCall("CloseHandle", ptr, pipe)
 }
-
 
 F12::toggleUnivisal()
 F11::exitapp
