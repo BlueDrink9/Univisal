@@ -20,6 +20,10 @@ def readPipe():
                 msg = raw.decode("utf-8")
             except UnicodeDecodeError:
                 msg = raw.decode("utf-16")
+                # try:
+                #     msg = raw.decode("utf-16")
+                # except UnicodeDecodeError:
+                #     msg = raw.decode("Latin-1")
             logger.debug("Read '{}' from univisal input pipe".format(msg))
             reading = False
             return str(msg)
@@ -42,7 +46,6 @@ def makeWritePipe():
 
 
 def writePipe(msg):
-    return
     # Have to close pipe to finish sending message, meaning you have to re-open
     # it here.
     # There may be an alternative to having to totally re-open the pipe. Look

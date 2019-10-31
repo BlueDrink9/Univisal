@@ -78,7 +78,12 @@ readPipe(){
     ; Assume only one line, so return after first.
     Loop, read, %pipe_name%
     {
-        return %A_LoopReadLine%
+        result := A_LoopReadLine
+        ; len := strlen(result)
+        ; tooltip,%len%
+        if strlen(result) != 0 {
+            return result
+        }
     }
 }
 
