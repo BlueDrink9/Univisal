@@ -10,6 +10,9 @@ from message_interface import init_message_interface
 from library import *
 from adapter_maps import *
 from handleKey import *
+import logging
+import logging_
+logger = logging.getLogger(__name__)
 
 if len(sys.argv) != 2:
     print("Usage: univisal.py adapter")
@@ -17,6 +20,8 @@ if len(sys.argv) != 2:
     that contains a json 'mappings.json'."
     """)
     sys.exit(1)
+
+logger.info("Starting univisal")
 
 load_adapter_maps(sys.argv[1])
 

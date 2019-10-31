@@ -18,6 +18,7 @@ def load_adapter_maps(adapter):
         adapter_maps_f=open(adapter_maps_p, "r")
         adapter_maps = json.load(adapter_maps_f)
         adapter_maps_f.close()
+        logger.info("Loaded adapter map file {}".format(adapter_maps_p))
     except IOError as e:
         logger.error("Error loading adapter map: {}".format(adapter_maps_p), exc_info=True)
         adapter_maps = {}

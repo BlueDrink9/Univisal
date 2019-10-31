@@ -2,6 +2,7 @@ from json import loads as json_load
 from library import *
 import logging
 import logging_
+logger = logging.getLogger(__name__)
 
 from model import *
 from motion import *
