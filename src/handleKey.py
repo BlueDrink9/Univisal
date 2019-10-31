@@ -20,13 +20,13 @@ def handleKey(key):
     if getMode() == Mode.insert:
         return key
     elif key == "h":
-        return getAdapterMap(Motion.goLeft.name)
+        return getAdapterMap(Motion.left.name)
     elif key == "l":
-        return getAdapterMap(Motion.goRight.name)
+        return getAdapterMap(Motion.right.name)
     elif key == "j":
-        return getAdapterMap(Motion.goDown.name)
+        return getAdapterMap(Motion.down.name)
     elif key == "k":
-        return getAdapterMap(Motion.goUp.name)
+        return getAdapterMap(Motion.up.name)
     if key == "0":
         return getAdapterMap(Motion.goLineStart.name)
     if key == "$":
