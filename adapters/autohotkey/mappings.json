@@ -11,6 +11,7 @@
     "down": "{down}",
     "right": "{right}",
     "left": "{left}",
+    "space": "{space}",
     "return": "{enter}",
     "esc": "{Escape}",
     "backspace": "{backspace}",
