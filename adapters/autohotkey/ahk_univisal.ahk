@@ -10,6 +10,16 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 global srcDir
 srcDir=%A_ScriptDir%\..\..\src
 
+; The main function, called by every keypress.
+univiResultFromKey(key){
+    writePipe(key)
+    result := readPipe()
+    ; msgbox, %result%
+    if (result != "nop"){
+        send %result%
+    }
+}
+
 global univisalPID = 0
 getUnivisalPID(){
     global univisalPID
@@ -21,7 +31,7 @@ setUnivisalPID(pid){
 }
 
 runUnivisal(){
-    run python %srcDir%\univisal.py autohotkey,, hide, PID
+    run python %srcDir%\univisal\univisal.py autohotkey,, hide, PID
     setUnivisalPID(PID)
     ; msgbox running univisal with pid %PID%
     univisalPID := getUnivisalPID()
@@ -48,15 +58,6 @@ pidExists(pid){
 
 univisalRunning(){
     return pidExists(getUnivisalPID())
-}
-
-univiResultFromKey(key){
-    writePipe(key)
-    result := readPipe()
-    ; msgbox, %result%
-    if (result != "nop"){
-        send %result%
-    }
 }
 
 toggleUnivisal(){
