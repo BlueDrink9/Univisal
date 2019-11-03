@@ -1,5 +1,5 @@
-readPipe(){
-    pipe_name := "\\.\pipe\univisal.out.fifo"
+readPipe(name="univisal.out.fifo"){
+    pipe_name := "\\.\pipe\"name
     While !DllCall("WaitNamedPipe", "Str", pipe_name, "UInt", 0xffffffff){
     ; Hoping that it should connect right away, and won't need this sleep.
         Sleep, 50
@@ -23,10 +23,10 @@ CreateNamedPipe(Name, OpenMode=3, PipeMode=0, MaxInstances=255){
    return DllCall("CreateNamedPipe", "str", Name, "uint", OpenMode, "uint", PipeMode, "uint", MaxInstances, "uint", 0, "uint", 0, "uint", 0, ptr, 0, ptr)
 }
 
-writePipe(msg){
+writePipe(msg, name="univisal.in.fifo"){
    ptr := A_PtrSize ? "Ptr" : "UInt"
    char_size := A_IsUnicode ? 2 : 1
-   pipe_name := "\\.\pipe\univisal.in.fifo"
+   pipe_name := "\\.\pipe\"name
 
    pipe := CreateNamedPipe(pipe_name, 2)
    If pipe = -1
@@ -48,4 +48,3 @@ writePipe(msg){
    }
    DllCall("CloseHandle", ptr, pipe)
 }
-
