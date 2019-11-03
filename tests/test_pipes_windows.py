@@ -4,13 +4,11 @@ import pytest
 
 # Add src dir to the python path so we can import.
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
-
-# import ..src.pipes_windows as target
-# from ..src.pipes_windows import readPipe, writePipe
 from univisal.pipes_windows import readPipe, writePipe
-# readPipe = target.readPipe
-# writePipe = target.writePipe
 
+# TODO: Thread this so that messages can be read after writing, without
+# waiting for connection to finish.
+# (Probably try reading first to get fastest results?)
 
 def test_single_char():
     pipe = "pipe_test"
