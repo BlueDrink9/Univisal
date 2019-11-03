@@ -1,7 +1,7 @@
 from json import loads as json_load
-from library import *
+from .library import *
 import logging
-import logging_
+from . import logging_
 logger = logging.getLogger(__name__)
 
 from model import *

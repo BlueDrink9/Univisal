@@ -6,7 +6,7 @@ import sys
 # For expand_escapes
 import codecs
 from adapter_maps import *
-from library import *
+from .library import *
 
 # Hack to get python to store literal '%s' in string. "%ss% % '%'
 # d::univiResultFromKey("d")

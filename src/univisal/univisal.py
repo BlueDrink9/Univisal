@@ -7,11 +7,11 @@ import sys
 
 
 from message_interface import init_message_interface
-from library import *
+from .library import *
 from adapter_maps import *
 from handleKey import *
 import logging
-import logging_
+from . import logging_
 logger = logging.getLogger(__name__)
 
 if len(sys.argv) != 2:

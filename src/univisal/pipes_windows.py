@@ -2,13 +2,13 @@
 import pywintypes, win32pipe, win32file
 import time
 import sys
-from library import *
 import logging
-import logging_
+from .library import *
+from . import logging_
 logger = logging.getLogger(__name__)
 
 def readPipe(pipename="univisal.in.fifo"):
-    readpipeName = r'\\.\pipe\' + pipename
+    readpipeName = r'\\.\pipe\\' + pipename
     reading = True
     while reading:
         msg = None
@@ -34,7 +34,7 @@ def readPipe(pipename="univisal.in.fifo"):
 
 
 def makeWritePipe(pipename="univisal.out.fifo"):
-    readpipeName = r'\\.\pipe\' + pipename
+    readpipeName = r'\\.\pipe\\' + pipename
     writepipeh = win32pipe.CreateNamedPipe(
         name,
         win32pipe.PIPE_ACCESS_DUPLEX,

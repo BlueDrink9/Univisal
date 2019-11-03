@@ -5,7 +5,7 @@ import json
 import logging
 import logging.config
 from tempfile import gettempdir
-from library import *
+from .library import *
 
 class myLogHandler(logging.handlers.RotatingFileHandler):
     def __init__(self,filename,maxBytes,backupCount,encoding):

@@ -3,8 +3,8 @@
 import json
 import logging
 import os
-from library import *
-import logging_
+from .library import *
+from . import logging_
 logger = logging.getLogger(__name__)
 
 adapter_maps = None

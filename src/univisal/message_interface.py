@@ -4,9 +4,9 @@
 Handles sending and receiving messages from adapters via a univi client
 """
 import os
-from library import *
+from .library import *
 import logging
-import logging_
+from . import logging_
 from handleKey import handleKey
 logger = logging.getLogger(__name__)
 
