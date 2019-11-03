@@ -16,9 +16,12 @@ def round_trip_msg(msg, pipe=None):
         # TODO make this a unique generation to prevent 1 broken test holding
         # up another one.
         pipe = "pipe_test"
-    writePipe(msg, pipe)
+    x = threading.Thread(target=writePipe, args=(msg, pipe))
+    x.start()
+    # writePipe(msg, pipe)
     result = readPipe(pipe)
     return result
+
 
 def test_single_char():
     msg = "t"
