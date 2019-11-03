@@ -7,8 +7,8 @@ import logging
 import logging_
 logger = logging.getLogger(__name__)
 
-def readPipe():
-    readpipeName = r'\\.\pipe\univisal.in.fifo'
+def readPipe(pipename="univisal.in.fifo"):
+    readpipeName = r'\\.\pipe\' + pipename
     reading = True
     while reading:
         msg = None
@@ -33,8 +33,8 @@ def readPipe():
             pass
 
 
-def makeWritePipe():
-    name = r'\\.\pipe\univisal.out.fifo'
+def makeWritePipe(pipename="univisal.out.fifo"):
+    readpipeName = r'\\.\pipe\' + pipename
     writepipeh = win32pipe.CreateNamedPipe(
         name,
         win32pipe.PIPE_ACCESS_DUPLEX,
