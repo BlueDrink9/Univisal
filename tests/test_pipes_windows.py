@@ -1,9 +1,16 @@
 #!/usr/bin/env python
+import sys, os
 import pytest
 
-target = __import__("src.pipes_windows.py")
-readPipe = target.readPipe
-writePipe = target.writePipe
+# Add src dir to the python path so we can import.
+sys.path.append(os.path.abspath(os.path.join('src')))
+# target = __import__("src.pipes_windows.py")
+
+# import ..src.pipes_windows as target
+# from ..src.pipes_windows import readPipe, writePipe
+from pipes_windows import readPipe, writePipe
+# readPipe = target.readPipe
+# writePipe = target.writePipe
 
 
 def test_single_char():
