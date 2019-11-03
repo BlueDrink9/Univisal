@@ -46,6 +46,12 @@ Generating new adapters is made simpler with `generate_adapter_bindings.py`, whi
 * [hammerspoon](https://www.hammerspoon.org/) (OSX) : Not written.
 * sxhkd (Xorg) : Doesn't work. Adapter is written, but uses `xdotool` to send input, which is then recursively picked up by `sxhkd`.
 
+## Testing
+
+Download [`pytest`](https://docs.pytest.org/en/latest/getting-started.html) using `pip install pytest`.
+
+Run from the root repo dir using `pytest`.
+
 ## Univisal is WIP, currently using a Python and FIFO-pipe proof-of-concept
 
 Python initial proof of concept using sockets gives unusable typing speeds.
