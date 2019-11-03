@@ -50,7 +50,7 @@ Generating new adapters is made simpler with `generate_adapter_bindings.py`, whi
 
 Download [`pytest`](https://docs.pytest.org/en/latest/getting-started.html) using `pip install pytest`.
 
-Run from the root repo dir using `pytest`.
+Run from the root repo dir using `python -m pytest` (or just `pytest` seems to work, but [may have issues with which directory it is run by)](https://docs.pytest.org/en/latest/pythonpath.html#pytest-vs-python-m-pytest).
 
 ## Univisal is WIP, currently using a Python and FIFO-pipe proof-of-concept
 
