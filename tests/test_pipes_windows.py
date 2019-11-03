@@ -31,7 +31,7 @@ def test_multi_char():
 def test_multi_msg():
     pipe = "pipe_test"
     for m in range(1, 10):
-        msg = "test" + m
+        msg = "test" + str(m)
         writePipe(msg, pipe)
         result = readPipe(pipe)
         assert result == msg, \
@@ -41,7 +41,7 @@ def test_multi_msg():
 def test_pipe_latency():
     pipe = "pipe_test"
     for m in range(1, 10):
-        msg = "test" + m
+        msg = "test" + str(m)
         writePipe(msg, pipe)
         result = readPipe(pipe)
         assert result == msg, \
