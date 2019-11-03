@@ -1,26 +1,26 @@
 #!/usr/bin/env python
 target = __import__("../src/pipes_windows.py")
-readpipe = target.readpipe
-writepipe = target.writepipe
+readPipe = target.readPipe
+writePipe = target.writePipe
 
 
 def test_single_char():
     msg = "t"
-    writepipe(msg)
-    result = readpipe()
+    writePipe(msg, "pipe_test")
+    result = readPipe("pipe_test")
     assert result == msg
 
 
 def test_multi_char():
     msg = "test"
-    writepipe(msg)
-    result = readpipe()
+    writePipe(msg, "pipe_test")
+    result = readPipe("pipe_test")
     assert result == msg
 
 
 def test_multi_msg():
     for m in range(1, 10):
         msg = "test" + m
-        writepipe(msg)
-        result = readpipe()
+        writePipe(msg, "pipe_test")
+        result = readPipe("pipe_test")
         assert result == msg
