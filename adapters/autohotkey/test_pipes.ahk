@@ -1,4 +1,5 @@
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+#warn
 ; Need to start writepipe as separate instance.
 #SingleInstance off
 ; #Warn  ; Enable warnings to assist with detecting common errors.
@@ -11,26 +12,66 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 If Instance("","-")   ; this is in the autoexecute section to initialize
  Return               ; and to redirect when a special instance is started
 
-msg=test_message
-pipename=test_pipe
-; Need to pass params in 2nd arg.
-pid := Instance("-writethread", msg " " pipename)
-; return
-; sleep, 100
-result := readPipe(pipename)
-if(result != msg){
-   msgbox Failed
-}else{
-   msgbox Pass
+round_trip_msg(msg, pipename="test_pipe"){
+   ; writePipe will block until something reads pipe.
+   ; Need to pass params in 2nd arg.
+   pid := Instance("-writethread", msg " " pipename)
+   ; readPipe will block until something is written to pipe.
+   result := readPipe(pipename)
+   return result
 }
+
+test_single_char(){
+   msg=t
+   result := round_trip_msg(msg)
+   if(result != msg){
+      return false
+   }else{
+      return true
+   }
+}
+
+test_multi_char(){
+   msg=test_message
+   result := round_trip_msg(msg)
+   if(result != msg){
+      return false
+   }else{
+      return true
+   }
+}
+
+run_tests(){
+   failed := false
+   tests:=["test_single_char"
+   , "test_multi_char"]
+   results:=[]
+   Loop % tests.Length(){
+      test := tests[A_Index]
+      ; Run this test function
+      results[A_Index] := %test%()
+   }
+   Loop % results.Length(){
+      if (!results[A_Index]){
+         test := tests[A_Index]
+         failed := true
+         msgbox Failed test %test%
+      }
+   }
+   if (!failed){
+      msgbox All passed!
+   }
+}
+
+run_tests()
 exitapp
 
 -writethread:
    ; msg can't contain spaces or this breaks.
-   msg=%2%
+   writemsg=%2%
    pipename=%3%
 ; msgbox %msg%
 ; msgbox %pipename%
-   writePipe(msg, pipename)
+   writePipe(writemsg, pipename)
    exitapp
 return
