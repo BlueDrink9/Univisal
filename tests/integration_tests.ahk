@@ -14,6 +14,7 @@ SetTitleMatchMode 2 ; window title functions will match by containing the match 
 ; Only affects sendevent, used for sending the test one key at a time.
 ; Gives the vim script time to interpret it, also useful to increase when
 ; debugging failures.
+; SetKeyDelay, 70
 SetKeyDelay, 70
 ; (gives vim script time to react).
 DetectHiddenWindows, on
@@ -89,6 +90,7 @@ ReadFileWithComments(OutputArray){
     Loop, read, testcases.txt
     {
         Line := A_LoopReadLine
+        ; Split out commented lines.
         output := StrSplit(Line, ";")
         if(Output.Length() > 0 AND strlen(Output[1]) > 0)
         {
@@ -129,12 +131,11 @@ SwitchToNotepad(){
 SendTestToNotepadAndReturnResult(test){
     Global SampleText
     SwitchToNotepad()
+    sleep, 50
     ; Make sure at start of body of notepad, and it's empty.
     send {esc}
     sleep, 50
     send i^a^a{delete}
-    ; Ensure insert mode for the sample text.
-    send i{backspace}
     sleep, 20
     ; Paste sample text. Faster, more reliable.
     SaveClipboard()
@@ -144,11 +145,18 @@ SendTestToNotepadAndReturnResult(test){
     send ^v ; Paste
     RestoreClipboard()
     sleep,50
-    ; Make sure we are in normal mode to start with, at start of text.
-    send {esc}
+    ; Make sure we at start of text.
     sleep, 50
     send ^{home}
+    ; Enable vim emulation.
+    send {F12}
+    ; Ensure normal mode to start with.
+    send {esc}
+; msgbox pause
     sendevent %test%
+    sleep, 50
+    ; Disable vim emulation.
+    send {F12}
     sleep, 50
     ; Ensure we select all of the inserted text.
     send {esc}
