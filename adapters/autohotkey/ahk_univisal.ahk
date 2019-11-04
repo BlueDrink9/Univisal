@@ -9,12 +9,24 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #inputlevel 1
 global srcDir
 srcDir=%A_ScriptDir%\..\..\src
+; Initialisation of lock to false, sets to true when creating writepipe.
 
 ; The main function, called by every keypress.
 univiResultFromKey(key){
+    ; The problem here is that when using hotkeys, which spawn new threads each
+    ; time, you may get a new call to write when the previous one hasn't
+    ; finished.
+    ; This lock aims to solve that.
+    ; Need to wait for write to finish, and read to return, before writing
+    ; anything else. Otherwise, AHK's main thread locks waiting for a read to
+    ; happen on .in.fifo. The problem arises when a hotkey spawns another
+    ; thread that requests a write, while univisal is writing to .out and
+    ; waiting for a read from the original?
+
+    ; Set threads to uninterruptable.
+    Thread, Interrupt, -1
     writePipe(key)
     result := readPipe()
-    ; msgbox, %result%
     if (result != "nop"){
         send %result%
     }
@@ -66,8 +78,13 @@ toggleUnivisal(){
         exitFunc()
     } else {
         runUnivisal()
+        if (!univisalRunning){
+            msgbox univisal failed to load. Exiting.
+            exitapp
+        }
     }
 }
+runUnivisal()
 
 F12::toggleUnivisal()
 F11::exitapp
