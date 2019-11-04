@@ -22,7 +22,7 @@ def handleKey(key):
         # No op. Need to send something back to signal finish.
         return nop
     if getMode() == Mode.insert:
-        return key
+        return getAdapterMap(key)
     elif key == "h":
         return getAdapterMap(Motion.left.name)
     elif key == "l":
@@ -52,4 +52,4 @@ def handleKey(key):
     elif key == "b":
         return getAdapterMap(Motion.goWordPrevious.name)
     else:
-        return key
+        return getAdapterMap(key)

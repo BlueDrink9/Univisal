@@ -34,6 +34,7 @@ def load_adapter_maps(adapter):
 def getAdapterMap(key):
     global adapter_maps
     if key in adapter_maps:
+        logger.debug("Mapping {} to adapter key {}".format(key, adapter_maps[key]))
         return adapter_maps[key]
     else:
         return key
