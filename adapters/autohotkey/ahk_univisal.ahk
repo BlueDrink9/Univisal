@@ -78,13 +78,12 @@ toggleUnivisal(){
         exitFunc()
     } else {
         runUnivisal()
-        if (!univisalRunning){
+        if (!univisalRunning()){
             msgbox univisal failed to load. Exiting.
             exitapp
         }
     }
 }
-runUnivisal()
 
 F12::toggleUnivisal()
 F11::exitapp

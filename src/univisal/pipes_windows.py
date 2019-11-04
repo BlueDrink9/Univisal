@@ -38,6 +38,18 @@ def readPipe(pipename="univisal.in.fifo"):
             # Pipe not open. Keep trying.
             # logger.debug("Pipe not found for reading, trying again", exc_info=True)
             pass
+        except OSError as exc:
+            # Invalid argument error.
+            # I think it occurs when the file doesn't exist... but it may occur
+            # for good reasons to. #XXX
+            if exc.errno == 22:
+                warntext = """While reading pipe, read failed with error
+                'invalid argument'.
+                Trying again."""
+                logger.warning(warntext, exc_info=True)
+                pass
+            else:
+                raise  # re-raise previously caught exception
 
 
 def makeWritePipe(pipename):

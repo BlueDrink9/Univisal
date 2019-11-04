@@ -150,18 +150,19 @@ SendTestToNotepadAndReturnResult(test){
     send ^{home}
     ; Enable vim emulation.
     send {F12}
+    sleep, 250
     ; Ensure normal mode to start with.
     send {esc}
-; msgbox pause
+    sleep, 50
     sendevent %test%
     sleep, 50
     ; Disable vim emulation.
     send {F12}
-    sleep, 50
+    sleep, 150
     ; Ensure we select all of the inserted text.
     send {esc}
     sleep, 50
-    send i^a
+    send ^a
     output := GetSelectedText()
     ; Delete text ready for next test
     send {backspace}
