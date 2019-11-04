@@ -42,16 +42,14 @@ test_multi_char(){
 }
 
 test_multi_msg(){
-   loop, 10{
-      msg=test %A_Index%
+   loop 15{
+      msg=test_%A_Index%
       result := round_trip_msg(msg)
       if(result != msg){
          return false
-      }else{
-         return true
       }
-      sleep, 100
    }
+   return true
 }
 
 run_tests(){
@@ -85,8 +83,6 @@ exitapp
    writemsg=%2%
    pipename=%3%
    Menu Tray, Tip, writer
-; msgbox %msg%
-; msgbox %pipename%
    writePipe(writemsg, pipename)
    exitapp
 return
