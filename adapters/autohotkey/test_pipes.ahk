@@ -41,10 +41,24 @@ test_multi_char(){
    }
 }
 
+test_multi_msg(){
+   loop, 10{
+      msg=test %A_Index%
+      result := round_trip_msg(msg)
+      if(result != msg){
+         return false
+      }else{
+         return true
+      }
+      sleep, 100
+   }
+}
+
 run_tests(){
    failed := false
    tests:=["test_single_char"
-   , "test_multi_char"]
+   , "test_multi_char"
+   , "test_multi_msg"]
    results:=[]
    Loop % tests.Length(){
       test := tests[A_Index]
@@ -70,6 +84,7 @@ exitapp
    ; msg can't contain spaces or this breaks.
    writemsg=%2%
    pipename=%3%
+   Menu Tray, Tip, writer
 ; msgbox %msg%
 ; msgbox %pipename%
    writePipe(writemsg, pipename)
