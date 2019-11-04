@@ -3,8 +3,12 @@ import pywintypes, win32pipe, win32file
 import time
 import sys
 import logging
-from .library import *
-from . import logging_
+try:
+    from .library import *
+    from . import logging_
+except ImportError:
+    from library import *
+    import logging_
 logger = logging.getLogger(__name__)
 
 def readPipe(pipename="univisal.in.fifo"):

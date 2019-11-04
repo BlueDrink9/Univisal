@@ -4,9 +4,13 @@ import os
 import errno
 import sys
 from tempfile import gettempdir
-from .library import *
 import logging
-from . import logging_
+try:
+    from .library import *
+    from . import logging_
+except ImportError:
+    from library import *
+    import logging_
 
 def makePipes():
     # Read http://man7.org/linux/man-pages/man7/fifo.7.html for reference.

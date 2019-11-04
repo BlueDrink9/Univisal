@@ -5,7 +5,10 @@ import json
 import logging
 import logging.config
 from tempfile import gettempdir
-from .library import *
+try:
+    from .library import *
+except ImportError:
+    from library import *
 
 class myLogHandler(logging.handlers.RotatingFileHandler):
     def __init__(self,filename,maxBytes,backupCount,encoding):
@@ -42,7 +45,7 @@ def setup_logging(
 # logPath = os.path.join(gettempdir(), "univisal.log")
 
 # setup_logging(os.path.join(get_script_path(), 'logging_py.json'), logging.DEBUG)
-setup_logging(os.path.join(get_script_path(), '..', 'logging_py.json'), logging.DEBUG)
+setup_logging(os.path.join(get_script_path(), '..', '..', 'logging_py.json'), logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Any unhandled exceptions will be logged.

@@ -1,7 +1,11 @@
 from json import loads as json_load
-from .library import *
 import logging
-from . import logging_
+try:
+    from .library import *
+    from . import logging_
+except ImportError:
+    from library import *
+    import logging_
 logger = logging.getLogger(__name__)
 
 from model import *

@@ -3,11 +3,16 @@
 """
 Handles sending and receiving messages from adapters via a univi client
 """
-import os
-from .library import *
 import logging
-from . import logging_
-from handleKey import handleKey
+import os
+try:
+    from .library import *
+    from . import logging_
+    from .handleKey import handleKey
+except ImportError:
+    from handleKey import handleKey
+    from library import *
+    import logging_
 logger = logging.getLogger(__name__)
 
 # If Windows, else assume Unix.

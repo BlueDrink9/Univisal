@@ -2,16 +2,23 @@
 # -*- coding: iso-8859-15 -*-
 
 import sys
+import logging
 # Available since 3.1
 # import importlib
 
-
-from message_interface import init_message_interface
-from .library import *
-from adapter_maps import *
-from handleKey import *
-import logging
-from . import logging_
+try:
+    from .message_interface import init_message_interface
+    from .library import *
+    from .adapter_maps import *
+    from .handleKey import *
+    from .library import *
+    from . import logging_
+except ImportError:
+    from message_interface import init_message_interface
+    from library import *
+    from adapter_maps import *
+    from handleKey import *
+    import logging_
 logger = logging.getLogger(__name__)
 
 if len(sys.argv) != 2:

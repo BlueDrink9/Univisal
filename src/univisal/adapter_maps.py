@@ -3,8 +3,12 @@
 import json
 import logging
 import os
-from .library import *
-from . import logging_
+try:
+    from .library import *
+    from . import logging_
+except ImportError:
+    from library import *
+    import logging_
 logger = logging.getLogger(__name__)
 
 adapter_maps = None
@@ -14,7 +18,7 @@ def load_adapter_maps(adapter):
     # Can dump a dict in python with `json.dumps(dict, sort_keys=True, indent=2)`
     try:
         adapter_maps_p=os.path.join(get_script_path(),
-                "..", "adapters", adapter, "mappings.json")
+                "..", "..", "adapters", adapter, "mappings.json")
         adapter_maps_f=open(adapter_maps_p, "r")
         adapter_maps = json.load(adapter_maps_f)
         adapter_maps_f.close()
