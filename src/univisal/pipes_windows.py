@@ -12,8 +12,11 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 def readPipe(pipename="univisal.in.fifo"):
-    readpipeName = r'\\.\pipe\\' + pipename
+    # Even in raw strings, backslashes escape quotes.
+    pipeBase = r'\\.\pipe' + '\\'
+    readpipeName = pipeBase + pipename
     reading = True
+    logger.debug("Opening univisal input pipe {}".format(readpipeName))
     while reading:
         msg = None
         try:
@@ -38,9 +41,11 @@ def readPipe(pipename="univisal.in.fifo"):
 
 
 def makeWritePipe(pipename):
-    readpipeName = r'\\.\pipe\\' + pipename
+    # Even in raw strings, backslashes escape quotes.
+    pipeBase = r'\\.\pipe' + '\\'
+    writepipeName = pipeBase + pipename
     writepipeh = win32pipe.CreateNamedPipe(
-        readpipeName,
+        writepipeName,
         win32pipe.PIPE_ACCESS_DUPLEX,
         win32pipe.PIPE_TYPE_MESSAGE | win32pipe.PIPE_READMODE_MESSAGE | win32pipe.PIPE_WAIT,
         1, 65536, 65536,
