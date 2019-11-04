@@ -1,6 +1,7 @@
 # enum from py >= 3.4
 from enum import Enum, auto
 import string
+
 # Not using terms "edit" or "Ex" because they are less familiar.
 class Mode(Enum):
     insert  = auto()
@@ -8,6 +9,8 @@ class Mode(Enum):
     visual  = auto()
     normal  = auto()
     operator_pending  = auto()
+
+mode = None
 
 def setMode(m):
     global mode

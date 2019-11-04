@@ -12,7 +12,20 @@ Since [adapters](#adapters) are written for many OSes, this makes `Univisal` fai
 
 ## Installation
 
-This differs based on what adapter you want to use (see [Adapters](#adapters) for currently known options).
+### Dependencies
+
+The following is a list of python modules (usually installable through `pip`).
+* `enum`
+* (if on windows) `pywin32`
+
+#### windows pipes
+
+Currently is working, but very slow. Look at optimising opening and closing of pipes.
+Also univisal occasionally gets stuck waiting for AHK to read pipe. Does AHK wait for something to be readable? No!
+
+### Adapters
+
+This step of installation differs based on what adapter you want to use (see [Adapters](#adapters) for currently known options).
 
 #### Autokey (X)
 
@@ -32,6 +45,12 @@ Generating new adapters is made simpler with `generate_adapter_bindings.py`, whi
 * [skhd](https://github.com/koekeishiya/skhd) (OSX) : Not written.
 * [hammerspoon](https://www.hammerspoon.org/) (OSX) : Not written.
 * sxhkd (Xorg) : Doesn't work. Adapter is written, but uses `xdotool` to send input, which is then recursively picked up by `sxhkd`.
+
+## Testing
+
+Download [`pytest`](https://docs.pytest.org/en/latest/getting-started.html) using `pip install pytest`.
+
+Run from the root repo dir using `python -m pytest` (or just `pytest` seems to work, but [may have issues with which directory it is run by)](https://docs.pytest.org/en/latest/pythonpath.html#pytest-vs-python-m-pytest).
 
 ## Univisal is WIP, currently using a Python and FIFO-pipe proof-of-concept
 
