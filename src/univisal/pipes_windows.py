@@ -37,6 +37,7 @@ def readPipe(pipename="univisal.in.fifo"):
         except FileNotFoundError:
             # Pipe not open. Keep trying.
             # logger.debug("Pipe not found for reading, trying again", exc_info=True)
+            time.sleep(0.01)
             pass
         except OSError as exc:
             # Invalid argument error.
