@@ -37,8 +37,11 @@ def readPipe(pipename="univisal.in.fifo"):
         except FileNotFoundError:
             # Pipe not open. Keep trying.
             # logger.debug("Pipe not found for reading, trying again", exc_info=True)
+            # Sleep to reduce busywaiting.
+            # Using threading and Events may be a better solution, but given
+            # how frequently and low-latency we may need this to fire, may not
+            # work as well.
             time.sleep(0.01)
-            pass
         except OSError as exc:
             # Invalid argument error.
             # I think it occurs when the file doesn't exist... but it may occur
