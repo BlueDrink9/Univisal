@@ -52,6 +52,11 @@ def process_input(data):
 def init_message_interface():
     global reading_input
     reading_input = True
+
+    while reading_input:
+        outpt_write('l')
+    return
+
     while reading_input:
         data = inpt_read()
         logger.debug("data :'{}'".format(data))

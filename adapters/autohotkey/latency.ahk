@@ -3,7 +3,6 @@
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-#NoTrayIcon
 #KeyHistory 0
 #inputlevel 1
 #include %A_ScriptDir%\pipes.ahk
@@ -88,8 +87,16 @@ toggleUnivisal(){
 
 runUnivisal()
 formattime, starttime,,HHmmss
-loop, 50{
-    univiResultFromKey("l")
+Thread, Interrupt, -1
+; run, autohotkey writePipeRepeat.ahk l testpipe,,,
+loop, 100{
+    ; writePipe(key)
+    res := readPipe()
+    ; res := readPipe("testpipe")
+    if (res != "l"){
+        msgbox failed. Result is %res%
+    }
+    ; univiResultFromKey("l")
     }
 formattime, endtime,,HHmmss
 msgbox % endtime - starttime
