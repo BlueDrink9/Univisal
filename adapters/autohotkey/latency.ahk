@@ -7,6 +7,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #KeyHistory 0
 #inputlevel 1
 #include %A_ScriptDir%\pipes.ahk
+; #include %A_ScriptDir%\test_pipes.ahk
 
 global srcDir
 srcDir=%A_ScriptDir%\..\..\src
