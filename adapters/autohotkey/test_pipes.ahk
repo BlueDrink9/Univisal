@@ -75,7 +75,10 @@ run_tests(){
    }
 }
 
+formattime, starttime,,HHmmss
 run_tests()
+formattime, endtime,,HHmmss
+msgbox % "Tests took " endtime - starttime " seconds"
 exitapp
 
 -writethread:
