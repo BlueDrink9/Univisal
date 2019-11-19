@@ -88,16 +88,16 @@ toggleUnivisal(){
 runUnivisal()
 formattime, starttime,,HHmmss
 Thread, Interrupt, -1
-; run, autohotkey writePipeRepeat.ahk l testpipe,,,
+run, autohotkey writePipeRepeat.ahk 0 testpipe,,,
 loop, 100{
     ; writePipe(key)
-    res := readPipe()
-    ; res := readPipe("testpipe")
-    if (res != "l"){
+    ; res := readPipe()
+    res := readPipe("testpipe")
+    if (res != A_Index){
         msgbox failed. Result is %res%
     }
     ; univiResultFromKey("l")
     }
 formattime, endtime,,HHmmss
-msgbox % endtime - starttime
+msgbox % endtime - starttime " seconds"
 toggleUnivisal()

@@ -36,13 +36,19 @@ test_multi_char(){
 }
 
 test_multi_msg(){
-   loop 15{
+   formattime, stime,,HHmmss
+   n = 100
+   loop %n%{
       msg=test_%A_Index%
       result := round_trip_msg(msg)
       if(result != msg){
          return false
       }
    }
+   formattime, etime,,HHmmss
+   t := etime - stime
+   av := t/n
+   msgbox tested %n% messages in %t% seconds, averaging %av% seconds per message.
    return true
 }
 
@@ -72,5 +78,5 @@ run_tests(){
 formattime, starttime,,HHmmss
 run_tests()
 formattime, endtime,,HHmmss
-msgbox % "Tests took " endtime - starttime " seconds"
+; msgbox % "Tests took " endtime - starttime " seconds"
 exitapp
