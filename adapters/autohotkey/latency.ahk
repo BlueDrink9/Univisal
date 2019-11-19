@@ -92,12 +92,13 @@ run, autohotkey writePipeRepeat.ahk 0 testpipe,,,
 loop, 100{
     ; writePipe(key)
     ; res := readPipe()
+    ; univiResultFromKey(A_Index)
     res := readPipe("testpipe")
     if (res != A_Index){
         msgbox failed. Result is %res%
     }
-    ; univiResultFromKey("l")
     }
+; runwait, autohotkey writePipeRepeat.ahk 0 univisal.in.fifo,,,
 formattime, endtime,,HHmmss
 msgbox % endtime - starttime " seconds"
 toggleUnivisal()

@@ -66,9 +66,9 @@ Using autokey on Xorg seems to be working fine, at reasonable latencies - not hu
 
 On windows, python pipe latency is fine (<0.4 ms for 30 messages) according to `test_pipes_windows.py`. However, when using ahk, latency jumps 10-fold. AHK's pipe writing/reading methods seem to be a bottleneck.
 
-Reading and writing in ahk for 100 messages in a loop takes 3 seconds.
-
-Only reading in ahk and writing in python reduce it to 1 second for 100 messages.
+Reading and writing in ahk for 100 messages in a loop takes 3 seconds. 
+Only reading in ahk and writing in python reduce it to at most 1 second for 100 messages.
+Only writing in ahk and reading in python reduce it to at most 1 second for 100 messages.
 
 
 # Plan

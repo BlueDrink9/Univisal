@@ -54,10 +54,6 @@ def init_message_interface():
     reading_input = True
 
     while reading_input:
-        outpt_write('l')
-    return
-
-    while reading_input:
         data = inpt_read()
         logger.debug("data :'{}'".format(data))
         # logger.debug("Data: " + data)
