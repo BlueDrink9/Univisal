@@ -20,7 +20,9 @@ for key in keys:
     # Use lowercase for hotkey, with modifiers.
     hotkey = getAdapterMap(key.lower())
     phrase = "<script name=univi args={}>".format(key)
-    # Actually creates a phrase, apparently.
+    # create_hotkey actually creates a phrase, but with a hotkey already
+    # assigned. create_phrase creates a phrase with no associated hotkey to
+    # activate it.
     # engine.create_hotkey(folder, description, modifiers, key, contents)
     engine.create_hotkey(folder, description, modifiers, hotkey, phrase)
 
