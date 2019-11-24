@@ -44,7 +44,7 @@ def handleKey(key):
         return nop
     elif key == "a":
         setMode(Mode.insert)
-        return getAdapterMap(Motion.goRight.name)
+        return getAdapterMap(Motion.right.name)
     elif key == "I":
         setMode(Mode.insert)
         return getAdapterMap(Motion.goLineStart.name)
