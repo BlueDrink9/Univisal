@@ -41,7 +41,7 @@ cmdformat = expand_escapes(str(sys.argv[2]))
 script_maps = load_adapter_maps(adapter)
 
 generated_file=open(get_script_path() + \
-                    "/../adapter/{}/bindings.{}".format(adapter, adapter), "w")
+                    "/../../adapters/{}/bindings.{}".format(adapter, adapter), "w")
 
 # Standard input keys
 keys = list(string.ascii_letters + \
