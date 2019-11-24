@@ -15,6 +15,10 @@ except ImportError:
 def makePipes():
     # Read http://man7.org/linux/man-pages/man7/fifo.7.html for reference.
     try:
+        if os.path.exists(readpipe):
+              os.remove(readpipe)
+        if os.path.exists(writepipe):
+              os.remove(writepipe)
         os.mkfifo(readpipe)
         os.mkfifo(writepipe)
     except OSError as oe:
@@ -45,7 +49,7 @@ def readPipe():
     global readpipe
     with open(readpipe, 'rb') as inpt:
         while True:
-            data = inpt.read()
+            data = inpt.read().decode()
             return data
             # if not process_input(data):
             #     break
