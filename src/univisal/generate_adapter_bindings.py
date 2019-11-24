@@ -20,7 +20,6 @@ cmdformat_ahk = "%ss::univiResultFromKey(\"%ss\")" % ('%', '%')
 # d
 #   xdotool key $(univi_handleKey 'd')
 cmdformat_sxhkd = "%ss\n\txdotool key $(univi_handleKey %ss)" % ('%', '%')
-cmdformat_autokey = "engine.create_hotkey(univisal, \"desc\", [], \"%ss\", \"%ss\", temporary=True)" % ('%', '%')
 
 def expand_escapes(string):
     return codecs.escape_decode(bytes(string, "utf-8"))[0].decode("utf-8")
@@ -47,7 +46,12 @@ generated_file=open(get_script_path() + \
 keys = list(string.ascii_letters + \
     string.digits + \
     string.punctuation)
+# Append any special keys. These will be at the end of the bindings, and may
+# require special attention/modification.
 keys.append("esc")
+# Put backslash at the end because it might be an escape char for the adapter.
+keys.remove("\\")
+keys.append("\\")
 for key in keys:
     # Doing a double escape, to expand the formatting stored in the variable.
     # May be easier to use python's Template module though.
