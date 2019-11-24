@@ -9,17 +9,22 @@ try:
     from .library import *
     from . import logging_
     from .handleKey import handleKey
+    # If Windows, else assume Unix.
+    if os.name == "nt":
+        from .pipes_windows import readPipe, writePipe
+    else:
+        from .pipes_unix import readPipe, writePipe
 except ImportError:
     from handleKey import handleKey
     from library import *
     import logging_
+    # If Windows, else assume Unix.
+    if os.name == "nt":
+        from pipes_windows import readPipe, writePipe
+    else:
+        from pipes_unix import readPipe, writePipe
 logger = logging.getLogger(__name__)
 
-# If Windows, else assume Unix.
-if os.name == "nt":
-    from pipes_windows import readPipe, writePipe
-else:
-    from pipes_unix import readPipe, writePipe
 
 
 def outpt_write(key):
