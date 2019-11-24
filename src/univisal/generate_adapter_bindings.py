@@ -49,9 +49,12 @@ keys = list(string.ascii_letters + \
 # Append any special keys. These will be at the end of the bindings, and may
 # require special attention/modification.
 keys.append("esc")
-# Put backslash at the end because it might be an escape char for the adapter.
 keys.remove("\\")
 keys.append("\\")
+keys.remove("'")
+keys.append("\\'")
+keys.remove('"')
+keys.append('\\"')
 for key in keys:
     # Doing a double escape, to expand the formatting stored in the variable.
     # May be easier to use python's Template module though.

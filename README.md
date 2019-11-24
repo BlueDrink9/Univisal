@@ -40,19 +40,21 @@ The mappings json also takes into account OS-specific shortcuts.
 
 * [Autohotkey](https://www.autohotkey.com) (Windows) : Needs updating for pipe system.
 * [Autokey](github.com/autokey/autokey) (Xorg) : A little tricky to set up, and if univisal crashes (which it hasn't so far...) then any keys the adapter handles will stop working.
+Add the adapter folder in autokey, and set things up to run `bindings.py` on startup. `autokey-run -s bindings`, where "bindings" is the script description in autokey.
 * [skhd](https://github.com/koekeishiya/skhd) (OSX) : Not written.
 * [hammerspoon](https://www.hammerspoon.org/) (OSX) : Not written.
 * sxhkd (Xorg) : Doesn't work. Adapter is written, but uses `xdotool` to send input, which is then recursively picked up by `sxhkd`.
 
 #### Generating adapters
 
-Generating new adapters is made simpler with `generate_adapter_bindings.py`, which can create config files with entries for each key.
+Generating new adapters is made simpler with `generate_adapter_bindings.py`, which can create config files with entries for each key univisal needs to handle, mapped with an appropriate `mappings.json` file in the adapter directory.
+Once the file is generated, additional code usually needs to be added. At minimum, some function that sends the right string to the main univisal process.
 
 Usage: `generate_adapter_bindings.py adapter string`
 
 Args:
 
-* `adapter`: name generated bindings will write as
+* `adapter`: name generated bindings will write as. Should be the name of a folder in `adapters` containing a valid `mappings.json`.
 * `string` : a printf-formatted string. It is the command to generate for the adapter, with %s in two places: Binding and send position.
 
 Examples:
@@ -65,14 +67,29 @@ Examples:
     d
         xdotool key $(univi_handleKey 'd')
     ```
-* `autokey`: `engine.create_hotkey(univisal, \"desc\", [], \"%s\", \"%s\", temporary=True)`
-    * creates `engine.create_hotkey(univisal, "desc", [], "d", "d", temporary=True)`
+* `autokey`: `create_hotkey(folder, \"desc\", [], \"%s\", \"<script name=univi args=%s>\", temporary=True)`
+    * creates `create_hotkey("univisal", "desc", [], "d", "d", temporary=True)`
+
+#### mappings.json
+
+This is a simple json with values as the representation of any special keys for the adapter, eg `{escape}` for autohotkey. Keys are the string univisal uses for that key, as found in the table under **Key represenations**.
+
+Any key without an adapter map will be send as the input string.
 
 ## Testing
 
 Download [`pytest`](https://docs.pytest.org/en/latest/getting-started.html) using `pip install pytest`.
 
 Run from the root repo dir using `python -m pytest` (or just `pytest` seems to work, but [may have issues with which directory it is run by)](https://docs.pytest.org/en/latest/pythonpath.html#pytest-vs-python-m-pytest).
+
+## Key representations (documentation under construction).
+
+For the most part these don't matter too much, since the `mappings.json` will convert whatever it has written. A few keys are handled specifically though, so it's best to follow this carefully.
+
+| key | Univisal representation |
+---------------------------------
+| escape | "esc" |
+| spacebar | "space" |
 
 ## Univisal is WIP, currently using a Python and FIFO-pipe proof-of-concept
 
@@ -184,15 +201,19 @@ Alternatively, always active but single hotkey always enters cmd mode? I don't p
 White/black list for always/never enable. Title matching, optionally with regex?
 
 For speed, potentially have an option where the key grab software passes key straight back if it is insert mode, only enables maps in normal mode. Would mean insert mappings aren't possible, but not everyone uses.
-Have a function/command callable from univi that returns current mode?
+Have a function/command callable from univi that returns current mode? Maybe change <nop> output for keys that enter normal mode to <normal>?
+Probably adapter-dependent.
+Can send the key to univisal regardless, to keep it updated of current mode, but sends key straight away if in insert mode (ie without waiting for univisal response.) (Although for the pipes it will still have to read and discard the output.)
 
 Remember insert mode entries. Parse for imaps, and allow `.` repeats.
 
 Benchmark latency using https://github.com/pavelfatin/typometer
 
-Tests to compare text change parity with vim.
+[x] Tests to compare text change parity with vim.
 
 Way to edit the cursor shape of the system, or otherwise have a visual indication close to the text about mode.
+
+setting: allow specifying the binary for adapters (so they don't have to be on the path).
 
 ## Hacking together motions and operators from OS shortcuts
 

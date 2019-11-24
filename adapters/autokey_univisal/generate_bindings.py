@@ -24,7 +24,7 @@ for key in keys:
     # assigned. create_phrase creates a phrase with no associated hotkey to
     # activate it.
     # engine.create_hotkey(folder, description, modifiers, key, contents)
-    engine.create_hotkey(folder, description, modifiers, hotkey, phrase)
+    engine.create_hotkey(folder, description, modifiers, hotkey, phrase, temporary=True)
 
 phrase = "<script name=univi args={}>".format("esc")
 engine.create_hotkey(folder, "ctrl-bracket", ["<ctrl>"], "[", phrase)
