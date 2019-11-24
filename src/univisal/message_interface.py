@@ -36,7 +36,7 @@ def inpt_read():
 def process_input(data):
     global reading_input
     if len(data) == 0:
-        return False
+        output = ""
     key = data.rstrip()
     logger.debug("Key: " + key)
     if key == "HUP":
