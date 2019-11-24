@@ -38,13 +38,35 @@ This step of installation differs based on what adapter you want to use (see [Ad
 An adapter consists of config files for keybinding programs that call `univisal` some how (through an interface `univi`), and a `.json` that maps basic `univisal` movement and key commands with the string the keybinding program uses to represent those keys.
 The mappings json also takes into account OS-specific shortcuts.
 
-Generating new adapters is made simpler with `generate_adapter_bindings.py`, which can create config files with entries for each key.
-
 * [Autohotkey](https://www.autohotkey.com) (Windows) : Needs updating for pipe system.
 * [Autokey](github.com/autokey/autokey) (Xorg) : A little tricky to set up, and if univisal crashes (which it hasn't so far...) then any keys the adapter handles will stop working.
 * [skhd](https://github.com/koekeishiya/skhd) (OSX) : Not written.
 * [hammerspoon](https://www.hammerspoon.org/) (OSX) : Not written.
 * sxhkd (Xorg) : Doesn't work. Adapter is written, but uses `xdotool` to send input, which is then recursively picked up by `sxhkd`.
+
+#### Generating adapters
+
+Generating new adapters is made simpler with `generate_adapter_bindings.py`, which can create config files with entries for each key.
+
+Usage: `generate_adapter_bindings.py adapter string`
+
+Args:
+
+* `adapter`: name generated bindings will write as
+* `string` : a printf-formatted string. It is the command to generate for the adapter, with %s in two places: Binding and send position.
+
+Examples:
+
+* `autohotkey`: `%s::univiResultFromKey(\"%s\")`
+    * creates `d::univiResultFromKey("d")` 
+* `sxhkd`: `%s\n\txdotool key $(univi_handleKey %s)`
+    * creates
+    ```
+    d
+        xdotool key $(univi_handleKey 'd')
+    ```
+* `autokey`: `engine.create_hotkey(univisal, \"desc\", [], \"%s\", \"%s\", temporary=True)`
+    * creates `engine.create_hotkey(univisal, "desc", [], "d", "d", temporary=True)`
 
 ## Testing
 

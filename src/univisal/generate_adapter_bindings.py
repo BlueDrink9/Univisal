@@ -5,8 +5,14 @@ import os
 import sys
 # For expand_escapes
 import codecs
-from adapter_maps import *
-from .library import *
+try:
+    from .library import *
+    from . import logging_
+    from .adapter_maps import getAdapterMap
+except ImportError:
+    from library import *
+    import logging_
+    from adapter_maps import *
 
 # Hack to get python to store literal '%s' in string. "%ss% % '%'
 # d::univiResultFromKey("d")
@@ -14,6 +20,7 @@ cmdformat_ahk = "%ss::univiResultFromKey(\"%ss\")" % ('%', '%')
 # d
 #   xdotool key $(univi_handleKey 'd')
 cmdformat_sxhkd = "%ss\n\txdotool key $(univi_handleKey %ss)" % ('%', '%')
+cmdformat_autokey = "engine.create_hotkey(univisal, \"desc\", [], \"%ss\", \"%ss\", temporary=True)" % ('%', '%')
 
 def expand_escapes(string):
     return codecs.escape_decode(bytes(string, "utf-8"))[0].decode("utf-8")
