@@ -3,15 +3,19 @@ import logging
 try:
     from .library import *
     from . import logging_
+    from .model import *
+    from .motion import *
+    from .operators import *
+    from .adapter_maps import getAdapterMap
 except ImportError:
     from library import *
     import logging_
+    from model import *
+    from motion import *
+    from operators import *
+    from adapter_maps import getAdapterMap
 logger = logging.getLogger(__name__)
 
-from model import *
-from motion import *
-from operators import *
-from adapter_maps import getAdapterMap
 
 
 def handleKey(key):
