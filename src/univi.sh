@@ -3,6 +3,8 @@
 # Usage: univi.py [key]
 # Takes only a single argument.
 
+TMP="${TMP:-/tmp}"
+
 univi(){
   if [ "$#" -ne 1 ]; then
     echo "Usage: univi.py [key]"
@@ -18,10 +20,10 @@ univi(){
 
 sendKey(){
   key="$1"
-  printf "${key}" > /tmp/univisal.in.fifo
+  printf "${key}" > "$TMP/univisal.in.fifo"
 }
 readKey(){
-  cat /tmp/univisal.out.fifo
+  cat "$TMP/univisal.out.fifo"
 }
 
 # univi "$@"
