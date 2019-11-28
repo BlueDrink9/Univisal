@@ -38,12 +38,42 @@ This step of installation differs based on what adapter you want to use (see [Ad
 An adapter consists of config files for keybinding programs that call `univisal` some how (through an interface `univi`), and a `.json` that maps basic `univisal` movement and key commands with the string the keybinding program uses to represent those keys.
 The mappings json also takes into account OS-specific shortcuts.
 
-* [Autohotkey](https://www.autohotkey.com) (Windows) : Needs updating for pipe system.
-* [Autokey](github.com/autokey/autokey) (Xorg) : A little tricky to set up, and if univisal crashes (which it hasn't so far...) then any keys the adapter handles will stop working.
+#### Windows
+
+###### [Autohotkey](https://www.autohotkey.com)
+
+Currently poor latency because of how windows handles named pipes. (However, this seems to be more a problem with how AHK interacts with them than the pipe speeds themselves, which from python tests are fast enough).
+
+Use 
+
+#### Linux/Xorg
+
+###### [Autokey](github.com/autokey/autokey)
+
+A little tricky to set up, and if univisal crashes (which it hasn't so far...) then any keys the adapter handles will stop working.
+
+Requires the `develop` branch of autokey.
+
 Add the adapter folder in autokey, and set things up to run `bindings.py` on startup. `autokey-run -s bindings`, where "bindings" is the script description in autokey.
-* [skhd](https://github.com/koekeishiya/skhd) (OSX) : Not written.
-* [hammerspoon](https://www.hammerspoon.org/) (OSX) : Not written.
-* sxhkd (Xorg) : Doesn't work. Adapter is written, but uses `xdotool` to send input, which is then recursively picked up by `sxhkd`.
+
+Currently there's a bug where each key is inputted twice. Instant workaround: as soon as bindings is run, use your key to disable autokey expansion, then re-enable it.
+
+###### sxhkd
+
+Doesn't work. Adapter is written, but uses `xdotool` to send input, which is then recursively picked up by `sxhkd`.
+
+If this can be fixed, this adapter should work.
+
+#### OSX
+
+###### [skhd](https://github.com/koekeishiya/skhd)
+
+Not written.
+
+###### [hammerspoon](https://www.hammerspoon.org/)
+
+Not written.
+
 
 #### Generating adapters
 
