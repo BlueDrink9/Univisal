@@ -3,14 +3,12 @@
 SCRIPTDIR_CMD='eval echo $(cd $( dirname "${BASH_SOURCE[0]}" ) && pwd)'
 SCRIPTDIR="$($SCRIPTDIR_CMD)"
 UNIVISAL_DIR="$(realpath "${SCRIPTDIR}/../..")"
-# Source univi()
-. "${UNIVISAL_DIR}/src/univi.sh"
-univi_handleKey(){
-  key="$1"
-  univi "${key}"
-  # python3 "${UNIVISAL_DIR}"/src/univi.py "${key}"
-  # bash -c "\"${UNIVISAL_DIR}\"/src/univi.sh \"${key}\""
-}
+# Source univi() with blank arg to skip inital run.
+. "${UNIVISAL_DIR}/src/univi.sh" ""
+# This was just the func name used in bindings.sxhkd.
+# Could be changed if wanted, to just call univi directly.
+univi_handleKey(){ univi "${1}"; };
+
 export UNIVISAL_DIR
 export -f univi_handleKey
 
