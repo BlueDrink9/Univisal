@@ -80,7 +80,7 @@ Not written.
 Generating new adapters is made simpler with `generate_adapter_bindings.py`, which can create config files with entries for each key univisal needs to handle, mapped with an appropriate `mappings.json` file in the adapter directory.
 Once the file is generated, additional code usually needs to be added. At minimum, some function that sends the right string to the main univisal process.
 
-Usage: `generate_adapter_bindings.py adapter string`
+Usage: `generate_adapter_bindings.py adapter 'string'`
 
 Args:
 
@@ -97,12 +97,15 @@ Examples:
     d
         xdotool key $(univi_handleKey 'd')
     ```
-* `autokey`: `create_hotkey(folder, \"desc\", [], \"%s\", \"<script name=univi args=%s>\", temporary=True)`
-    * creates `create_hotkey("univisal", "desc", [], "d", "d", temporary=True)`
+* `autokey < 0.96`: `create_hotkey(folder, \"desc\", [], \"%s\", \"<script name=univi args=%s>\", temporary=True)`
+    * creates `create_hotkey("univisal", "desc", [], "d", "d")`
+* `autokey > 0.96`: `create_phrase(folder, \"desc\", \"<script name=univi args=%s>\", hotkey=\"%s\", temporary=True)`
+    * creates `create_phrase(folder, "desc", "<script name=univi args=d>", hotkey="d", temporary=True)`
+* A much easier version declares a wrapper func in the binding file that calls the above functions. `bind(\"%s\", \"%s\")`
 
 #### mappings.json
 
-This is a simple json with values as the representation of any special keys for the adapter, eg `{escape}` for autohotkey. Keys are the string univisal uses for that key, as found in the table under **Key represenations**.
+This is a simple json with values as the representation of any special keys for the adapter, eg `{escape}` for autohotkey. Keys are the string univisal uses for that key, as found in the table under **Key representations**.
 
 Any key without an adapter map will be send as the input string.
 
@@ -114,12 +117,25 @@ Run from the root repo dir using `python -m pytest` (or just `pytest` seems to w
 
 ## Key representations (documentation under construction).
 
-For the most part these don't matter too much, since the `mappings.json` will convert whatever it has written. A few keys are handled specifically though, so it's best to follow this carefully.
+Univisal tries to use the same representation as vim keycodes in `:h intro`, for example in mappings (`inoremap jj <Esc>`). 
+This means they can be inserted using `^V`.
+Exceptions are keys that send their non-whitespace text representation when pressed, like `|` (`<Bar>`).
+
+The representations are also only lowercase.
+
+Modifier keys are their standard name, since vim normally only maps them with another key, e.g. <shift>.
+
+Any other keys are listed here.
 
 | key | Univisal representation |
 ---------------------------------
-| escape | "esc" |
-| spacebar | "space" |
+| capslock | "<capslock>" |
+| enter/return | "<enter>" |
+| ctrl | "<ctrl>" |
+| shift | "<shift>" |
+| alt | "<alt>" |
+| super/winkey | "<super>" |
+<!-- | spacebar | "space" | -->
 
 ## Univisal is WIP, currently using a Python and FIFO-pipe proof-of-concept
 
