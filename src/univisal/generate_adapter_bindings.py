@@ -48,17 +48,28 @@ keys = list(string.ascii_letters + \
     string.punctuation)
 # Append any special keys. These will be at the end of the bindings, and may
 # require special attention/modification.
+try:
+    keys.remove("\\")
+    keys.remove("\'")
+    keys.remove('\"')
+except ValueError:
+    pass
 keys.append("<esc>")
-keys.remove("\\\\")
 keys.append("\\\\")
-keys.remove("\\'")
 keys.append("\\'")
-keys.remove('\\"')
 keys.append('\\"')
 # Add any keys in the adapter map that may have been missed.
 for key in adapter_maps:
     if key not in keys:
         keys.append(key)
+# Remove modifiers that shouldn't be bound as single keys.
+try:
+    keys.remove("<ctrl>")
+    keys.remove("<shift>")
+    keys.remove("<alt>")
+    keys.remove("<super>")
+except ValueError:
+    pass
 for key in keys:
     # Doing a double escape, to expand the formatting stored in the variable.
     # May be easier to use python's Template module though.
