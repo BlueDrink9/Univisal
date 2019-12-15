@@ -37,7 +37,7 @@ if len(sys.argv) != 3:
 
 adapter = expand_escapes(str(sys.argv[1]))
 cmdformat = expand_escapes(str(sys.argv[2]))
-script_maps = load_adapter_maps(adapter)
+adapter_maps = load_adapter_maps(adapter)
 
 generated_file=open(get_script_path() + \
                     "/../../adapters/{}/bindings.{}".format(adapter, adapter), "w")
@@ -48,13 +48,17 @@ keys = list(string.ascii_letters + \
     string.punctuation)
 # Append any special keys. These will be at the end of the bindings, and may
 # require special attention/modification.
-keys.append("esc")
+keys.append("<esc>")
 keys.remove("\\")
 keys.append("\\")
 keys.remove("'")
 keys.append("\\'")
 keys.remove('"')
 keys.append('\\"')
+# Add any keys in the adapter map that may have been missed.
+for key in adapter_maps:
+    if key not in keys:
+        keys.append(key)
 for key in keys:
     # Doing a double escape, to expand the formatting stored in the variable.
     # May be easier to use python's Template module though.
