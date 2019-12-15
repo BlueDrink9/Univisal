@@ -11,6 +11,11 @@ univi(){
     exit 1
   fi
 
+  if [ ! -f "$TMP/univisal.in.fifo" ]; then
+    printf "${1}"
+    return
+  fi
+
   sendKey "$1"
   result="$(readKey)"
   if [ ! "${result}" == "NOP" ]; then
