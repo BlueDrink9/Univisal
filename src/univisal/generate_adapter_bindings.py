@@ -49,11 +49,11 @@ keys = list(string.ascii_letters + \
 # Append any special keys. These will be at the end of the bindings, and may
 # require special attention/modification.
 keys.append("<esc>")
-keys.remove("\\")
-keys.append("\\")
-keys.remove("'")
+keys.remove("\\\\")
+keys.append("\\\\")
+keys.remove("\\'")
 keys.append("\\'")
-keys.remove('"')
+keys.remove('\\"')
 keys.append('\\"')
 # Add any keys in the adapter map that may have been missed.
 for key in adapter_maps:
