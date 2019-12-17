@@ -7,6 +7,7 @@ Usage:
   autokey-run -s [path/to/autokey_univisal.py]
 """
 import os
+import subprocess
 # import autokey.iomediator
 # import autokey.configmanager
 # import autokey.scripting
@@ -18,6 +19,9 @@ def get_script_dir():
     return os.path.dirname(__file__)
 
 univi_script_path=get_script_dir() + "/univi.py"
+univisal_path= os.path.join(get_script_dir(), "..", "..", "src",
+        "univisal", "univisal.py")
+subprocess.Popen(["python3", univisal_path,"autokey_univisal"])
 
 def bind(keypress, univi_key):
     split = keypress.split("+")
