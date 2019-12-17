@@ -23,24 +23,32 @@ def translate_keys(keys):
     out = []
     for char in keys:
         out += handleKey(char)
-    print(out)
+    out = ''.join(out)
+    # Simulate sending the backspaces
     while "<bs>" in out:
         index = out.index("<bs>")
-        out.pop(index)
-        out.pop(index - 1)
+        out = out[:index -1] + out[index + len("<bs>"):]
     # need to iteratively replace <bs> with removed char
     return ''.join(out)
 
 
 @pytest.mark.parametrize("maps, test, expected, error_msg", [
     ({"map": "pam"},
-        "complimapcated",
-        "complipamcated",
-        "fails map in middle of a word with one starting letter early"),
-    ({"map": "pam"},
         "complimacated",
         "complimacated",
         "fails map where 2/3 match"),
+    ({"j": "a"},
+        "j",
+        "a",
+        "fails single-char map"),
+    ({"map": "pam"},
+        "eamapsy",
+        "eapamsy",
+        "fails simple map in middle of sequence"),
+    ({"map": "pam"},
+        "complimapcated",
+        "complipamcated",
+        "fails map in middle of a word with one starting letter early"),
     pytest.param({"map": "pam"},
         "complimamapcated",
         "complimapamcated",
@@ -65,28 +73,35 @@ def test_imap(caplog, maps, test, expected, error_msg):
     for m in maps:
         imap(m)
 
-def test_imap_to_esc(caplog):
+
+
+@pytest.mark.parametrize("maps, test, expected, error_msg", [
+    ({"jj": "<esc>"},
+        "I want jj",
+        "I want ",
+        "jj imapped to escape doesn't expand properly"),
+    ({"jk": "<esc>"},
+        "I want jk",
+        "I want ",
+        "jk imapped to escape doesn't expand properly"),
+    ])
+def test_imap_to_esc(caplog, maps, test, expected, error_msg):
     caplog.set_level(logging.DEBUG)
-
     setMode(Mode.insert)
-    test = "I want jj"
-    expected = "I want <esc>"
-    imap("jj", "<esc>")
-    assert translate_keys(test) == expected
+    for m in maps:
+        imap(m, maps[m])
+    assert translate_keys(test) == expected, error_msg
     assert isMode(Mode.normal)
-    imap("jj")
+    # Remove imaps again
+    for m in maps:
+        imap(m)
 
-    test = "I want jk"
-    expected = "I want <esc>"
-    imap("jk", "<esc>")
-    assert translate_keys(test) == expected
-    assert isMode(Mode.normal)
-    imap("jk")
-
+def test_imap_to_esc_one_at_a_time(caplog):
+    caplog.set_level(logging.DEBUG)
     setMode(Mode.insert)
-    expected = "<bs><bs><esc>"
+    expected = "<bs>"
     imap("jk", "<esc>")
     handleKey("j")
-    assert handleKey("k" == expected), "one key at a time doesn't trigger map"
+    assert handleKey("k") == expected, "one key at a time doesn't trigger map"
     assert isMode(Mode.normal)
     imap("jk")

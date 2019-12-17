@@ -99,11 +99,15 @@ def resolve_map(key):
         if maps_in_progress[map_] == len(map_):
             # Full sequence has been matched
             maps_in_progress = {}
-            logger.info("Expanding map '{}' as '{}'".format(map_, current_maps[map_]))
-            # return appropriate number of backspaces.
-            return ["<bs>"] * (len(map_) - 1) + [current_maps[map_]]
+            backspaces = ""
+            if modelIsInsertLike():
+                # return appropriate number of backspaces.
+                backspaces = ["<bs>"] * (len(map_) - 1)
+            out = backspaces + [current_maps[map_]]
+            logger.info("Expanded map '{}' as '{}'".format(map_, out))
+            return out
     for k in expired_maps:
         del maps_in_progress[k]
-    return key
+    return [key]
 
 
