@@ -41,3 +41,9 @@ def getAdapterMap(key):
     else:
         return key
 
+
+def getJoinChar():
+    joinChar = getAdapterMap("<multikey_join_char>")
+    # This happens if the adapter doesn't have a map for this.
+    if joinChar == "<multikey_join_char>":
+        return ""
