@@ -16,8 +16,8 @@ insertlike_modes = [
         Mode.insert,
         Mode.command,
         ]
-def isInsertLike(m):
-    return m in insertlike_modes
+def modelIsInsertLike():
+    return mode in insertlike_modes
 
 def setMode(m):
     global mode
