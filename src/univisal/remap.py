@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 imaps = {}
 nmaps = {}
+vmaps = {}
+cmaps = {}
 
 current_mode = None
 current_maps = None
@@ -32,7 +34,7 @@ def remap(maps, sequence, result=None):
         logger.info("Mapping {} to {}".format(sequence, result))
     else:
         del maps[sequence]
-        logger.info("removing map for {}}".format(sequence))
+        logger.info("removing map for {}".format(sequence))
 
 def imap(sequence, result=None):
     remap(imaps, sequence, result)
@@ -50,6 +52,12 @@ def set_current_maps():
     if isMode(Mode.insert):
         current_maps = imaps
     elif isMode(Mode.normal):
+        current_maps = nmaps
+    elif isMode(Mode.visual):
+        current_maps = vmaps
+    elif isMode(Mode.command):
+        current_maps = cmaps
+    elif isMode(Mode.operator_pending):
         current_maps = nmaps
     else:
         logger.warning("Unknown mode for mapping: {}. \
