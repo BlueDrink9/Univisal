@@ -42,9 +42,9 @@ def handleKey(key):
             return getAdapterMap(Motion.down.name)
         elif key == "k":
             return getAdapterMap(Motion.up.name)
-        if key == "0":
+        elif key == "0":
             return getAdapterMap(Motion.goLineStart.name)
-        if key == "$":
+        elif key == "$":
             return getAdapterMap(Motion.goLineEnd.name)
         elif key == "i":
             setMode(Mode.insert)
@@ -64,9 +64,6 @@ def handleKey(key):
             return getAdapterMap(Motion.goWordPrevious.name)
         else:
             return getAdapterMap(key)
-    except AttributeError:
-        logger.error("Incorrect enum specified when handling key {}".format(key), exc_info=True)
-        return key
     except:
         logger.critical("Unhandled exception", exc_info=True)
         try:
