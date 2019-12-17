@@ -68,4 +68,9 @@ def handleKey(key):
         logger.error("Incorrect enum specified when handling key {}".format(key), exc_info=True)
         return key
     except:
-        logger.critical("Unhandled exception".format(key), exc_info=True)
+        logger.critical("Unhandled exception", exc_info=True)
+        try:
+            return getAdapterMap(key)
+        except:
+            logger.critical("Unhandled exception while mapping adapter", exc_info=True)
+            return key
