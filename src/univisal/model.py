@@ -12,6 +12,13 @@ class Mode(Enum):
 
 mode = None
 
+insertlike_modes = [
+        Mode.insert,
+        Mode.command,
+        ]
+def isInsertLike(m):
+    return m in insertlike_modes
+
 def setMode(m):
     global mode
     mode = m
