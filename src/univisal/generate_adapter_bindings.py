@@ -8,7 +8,7 @@ import codecs
 try:
     from .library import *
     from . import logging_
-    from .adapter_maps import getAdapterMap
+    from .adapter_maps import *
 except ImportError:
     from library import *
     import logging_
@@ -42,10 +42,15 @@ adapter_maps = load_adapter_maps(adapter)
 generated_file=open(get_script_path() + \
                     "/../../adapters/{}/bindings.{}".format(adapter, adapter), "w")
 
+
 # Standard input keys
 keys = list(string.ascii_letters + \
-    string.digits + \
-    string.punctuation)
+    string.digits)
+
+# Punctuation needs special handling, since shift is involved and it may change
+# depending on keyboard layout.
+    # + \
+    # string.punctuation)
 # Append any special keys. These will be at the end of the bindings, and may
 # require special attention/modification.
 try:
@@ -58,6 +63,19 @@ keys.append("<esc>")
 keys.append("\\\\")
 keys.append("\\'")
 keys.append('\\"')
+# This is designed to suit US international QWERTY symbol location.
+unshifted_symbols = r",./;'\[]-=`"
+symbols = []
+shifted_symbols =          r'~!@#$%^&*()_+{}|:"<>?'
+shifted_symbols_base_key = r"`1234567890-=[]\';,./"
+for i, symbol in enumerate(shifted_symbols_base_key):
+    symbols.append("<shift>" + getJoinChar() + symbol)
+symbols += list(unshifted_symbols)
+keys += symbols
+# Symbols and capitals need shift.
+for key in keys:
+    if (key.isalpha() and key == key.upper()):
+        key = "<shift>" + getJoinChar() + key
 # Add any keys in the adapter map that may have been missed.
 for key in adapter_maps:
     if key not in keys:
