@@ -12,12 +12,16 @@ try:
     from .adapter_maps import *
     from .handleKey import *
     from .library import *
+    from . import model
+    from . import config
     from . import logging_
 except ImportError:
     from message_interface import init_message_interface
     from library import *
     from adapter_maps import *
     from handleKey import *
+    import model
+    import config
     import logging_
 logger = logging.getLogger(__name__)
 
@@ -32,4 +36,6 @@ logger.info("Starting univisal")
 
 load_adapter_maps(sys.argv[1])
 
+init_config()
+init_model()
 init_message_interface()

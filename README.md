@@ -10,6 +10,18 @@ Key input is handled by some other program, with an adapter written to call `uni
 
 Since [adapters](#adapters) are written for many OSes, this makes `Univisal` fairly portable.
 
+## Configuration
+
+Configuration is done by `config.json` in `$XDG_CONFIG_HOME/univisal/` or `~/.config/univisal/`.
+
+If this file is not present, defaults will be created.
+
+| option | description | default |
+|--------|--------|---------|
+| load_config | A list of paths to alternative `json`s to load after the main config. `~` is expanded. | [] |
+| imaps | Map of key:value pairs to expand in insert mode. | {} |
+| nmaps, vmaps, cmaps | Map of key:value pairs to expand in normal, visual, or command modes. | {} |
+
 ## Installation
 
 ### Dependencies
@@ -128,7 +140,7 @@ Modifier keys are their standard name, since vim normally only maps them with an
 Any other keys are listed here.
 
 | key | Univisal representation |
----------------------------------
+|-----|-------------------------|
 | capslock | `"<capslock>"` |
 | enter/return | `"<enter>"` |
 | ctrl | `"<ctrl>"` |
@@ -142,7 +154,7 @@ Any other keys are listed here.
 These are strings to send as keys or to map that have special meaning.
 
 | key | Univisal representation |
----------------------------------
+|-----|-------------------------|
 | `"<multikey_join_char>"` | String to tell adapter to send multiple keys from one response, each key specified by this character |
 
 
