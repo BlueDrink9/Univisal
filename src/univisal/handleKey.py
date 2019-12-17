@@ -22,7 +22,7 @@ def handleKey(key):
     try:
         # Reduce chance of a typo if returning nop
         nop = "nop"
-        if key.lower() == "esc":
+        if key.lower() == "<esc>":
             setMode(Mode.normal)
             # No op. Need to send something back to signal finish.
             return nop
