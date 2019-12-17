@@ -67,3 +67,5 @@ def handleKey(key):
     except AttributeError:
         logger.error("Incorrect enum specified when handling key {}".format(key), exc_info=True)
         return key
+    except:
+        logger.critical("Unhandled exception".format(key), exc_info=True)
