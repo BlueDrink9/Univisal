@@ -7,7 +7,7 @@
     "goWordNext": "<ctrl>+<right>",
     "visualStart": "<shift>",
     "visualEnd": "<shift>",
-    "multikey_join_char": "+",
+    "<multikey_join_char>": "+",
     "<up>": "<up>",
     "<down>": "<down>",
     "<right>": "<right>",
