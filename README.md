@@ -129,13 +129,22 @@ Any other keys are listed here.
 
 | key | Univisal representation |
 ---------------------------------
-| capslock | "<capslock>" |
-| enter/return | "<enter>" |
-| ctrl | "<ctrl>" |
-| shift | "<shift>" |
-| alt | "<alt>" |
-| super/winkey | "<super>" |
+| capslock | `"<capslock>"` |
+| enter/return | `"<enter>"` |
+| ctrl | `"<ctrl>"` |
+| shift | `"<shift>"` |
+| alt | `"<alt>"` |
+| super/winkey | `"<super>"` |
 <!-- | spacebar | "space" | -->
+
+## Special 'keys'
+
+These are strings to send as keys or to map that have special meaning.
+
+| key | Univisal representation |
+---------------------------------
+| `"<multikey_join_char>"` | String to tell adapter to send multiple keys from one response, each key specified by this character |
+
 
 ## Univisal is WIP, currently using a Python and FIFO-pipe proof-of-concept
 
