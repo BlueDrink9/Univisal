@@ -47,3 +47,4 @@ def getJoinChar():
     # This happens if the adapter doesn't have a map for this.
     if joinChar == "<multikey_join_char>":
         return ""
+    return joinChar
