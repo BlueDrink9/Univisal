@@ -20,6 +20,10 @@ def getMode():
     global mode
     return mode
 
+def isMode(m):
+    global mode
+    return mode == m
+
 # Declare globals within a function to access them.
 def init_model():
     global repeat_count

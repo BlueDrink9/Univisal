@@ -6,6 +6,7 @@ try:
     from .model import *
     from .motion import *
     from .operators import *
+    from .remap import resolve_map
     from .adapter_maps import getAdapterMap
 except ImportError:
     from library import *
@@ -13,6 +14,7 @@ except ImportError:
     from model import *
     from motion import *
     from operators import *
+    from remap import resolve_imap, resolve_nmap
     from adapter_maps import getAdapterMap
 logger = logging.getLogger(__name__)
 
@@ -22,10 +24,14 @@ def handleKey(key):
     try:
         # Reduce chance of a typo if returning nop
         nop = "nop"
+
+        key = resolve_map(key)
+        # esc regardless of mode, for now. But still permit mappings.
         if key.lower() == "<esc>":
             setMode(Mode.normal)
             # No op. Need to send something back to signal finish.
             return nop
+
         if getMode() == Mode.insert:
             return getAdapterMap(key)
         elif key == "h":

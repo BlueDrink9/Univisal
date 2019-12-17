@@ -6,6 +6,7 @@ folder.
 Usage:
   autokey-run -s [path/to/autokey_univisal.py]
 """
+import os
 # import autokey.iomediator
 # import autokey.configmanager
 # import autokey.scripting
@@ -27,10 +28,10 @@ def bind(keypress, univi_key):
         # Assuming all keys except last are modifiers.
         key = split[-1]
         modifiers = split[:-1]
-    if keypress == keypress.Upper():
+    if keypress == keypress.upper():
         modifiers.append("<shift>")
     hotkeys = (modifiers, key)
-    folder = engine.create_folder("autokey_univisal", temporary=True)
+    # folder = engine.create_folder("autokey_univisal", temporary=True)
     folder = engine.create_folder("autokey_univisal")
     name = univi_key
     contents = "<script name={} args='{}'>".format(univi_script_path, univi_key)
