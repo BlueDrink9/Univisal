@@ -56,19 +56,19 @@ keys = list(string.ascii_letters + \
 # This is designed to suit US international QWERTY symbol location.
 unshifted_symbols = r",./;'[]-=`"
 symbols = []
-shifted_symbols =          r'~!@#$%^&*()_+{}:<>?'
+shifted_symbols =               r'~!@#$%^&*()_+{}:<>?'
 shifted_symbols_base_key = list(r"`1234567890-=[];,./")
-shifted_symbols_base_key += "\\\\"
-shifted_symbols_base_key += "\\'"
-shifted_symbols_base_key += '\\"'
+shifted_symbols_base_key.append("\\\\")
+shifted_symbols_base_key.append("\\'")
+shifted_symbols_base_key.append('\\"')
 for i, symbol in enumerate(shifted_symbols_base_key):
-    symbols.append("<shift>" + getJoinChar() + symbol)
+    symbols.append(getAdapterMap("<shift>") + getJoinChar() + symbol)
 symbols += list(unshifted_symbols)
 keys += symbols
 # Symbols and capitals need shift.
 for key in keys:
     if (key.isalpha() and key == key.upper()):
-        key = "<shift>" + getJoinChar() + key
+        key = getAdapterMap("<shift>") + getJoinChar() + key
 
 def isSpecialMap(key):
     if key == "<multikey_join_char>":
@@ -76,7 +76,6 @@ def isSpecialMap(key):
     enums = [motion.Motion, operation.Operation]
     for enum in enums:
         for e in enum:
-            print(e.name)
             if e.name == key:
                 return True
     return False
