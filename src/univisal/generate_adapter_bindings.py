@@ -9,10 +9,12 @@ try:
     from .library import *
     from . import logging_
     from .adapter_maps import *
+    from . import motion, operation
 except ImportError:
     from library import *
     import logging_
     from adapter_maps import *
+    import motion, operation
 
 # Hack to get python to store literal '%s' in string. "%ss% % '%'
 # d::univiResultFromKey("d")
@@ -51,23 +53,14 @@ keys = list(string.ascii_letters + \
 # depending on keyboard layout.
     # + \
     # string.punctuation)
-# Append any special keys. These will be at the end of the bindings, and may
-# require special attention/modification.
-try:
-    keys.remove("\\")
-    keys.remove("\'")
-    keys.remove('\"')
-except ValueError:
-    pass
-keys.append("<esc>")
-keys.append("\\\\")
-keys.append("\\'")
-keys.append('\\"')
 # This is designed to suit US international QWERTY symbol location.
-unshifted_symbols = r",./;'\[]-=`"
+unshifted_symbols = r",./;'[]-=`"
 symbols = []
-shifted_symbols =          r'~!@#$%^&*()_+{}|:"<>?'
-shifted_symbols_base_key = r"`1234567890-=[]\';,./"
+shifted_symbols =          r'~!@#$%^&*()_+{}:<>?'
+shifted_symbols_base_key = list(r"`1234567890-=[];,./")
+shifted_symbols_base_key += "\\\\"
+shifted_symbols_base_key += "\\'"
+shifted_symbols_base_key += '\\"'
 for i, symbol in enumerate(shifted_symbols_base_key):
     symbols.append("<shift>" + getJoinChar() + symbol)
 symbols += list(unshifted_symbols)
@@ -76,18 +69,43 @@ keys += symbols
 for key in keys:
     if (key.isalpha() and key == key.upper()):
         key = "<shift>" + getJoinChar() + key
+
+def isSpecialMap(key):
+    if key == "<multikey_join_char>":
+        return True
+    enums = [motion.Motion, operation.Operation]
+    for enum in enums:
+        for e in enum:
+            print(e.name)
+            if e.name == key:
+                return True
+    return False
+
 # Add any keys in the adapter map that may have been missed.
 for key in adapter_maps:
-    if key not in keys:
+    if key not in keys and not isSpecialMap(key):
         keys.append(key)
-# Remove modifiers that shouldn't be bound as single keys.
-try:
-    keys.remove("<ctrl>")
-    keys.remove("<shift>")
-    keys.remove("<alt>")
-    keys.remove("<super>")
-except ValueError:
-    pass
+# Remove modifiers that shouldn't be bound as single keys, and chars that cause
+# errors.
+keys_to_remove=[
+        "<super>", "<ctrl>", "<shift>", "<alt>", "<esc>",
+        "\\", "\'", '\"', "'", '"',
+        ]
+for k in keys_to_remove:
+    try:
+        keys.remove(k)
+        if k in shifted_symbols_base_key:
+            keys.remove("<shift>" + getJoinChar() + symbol)
+    except ValueError:
+        pass
+# Append any special keys. These will be at the end of the bindings, and may
+# require special attention/modification.
+keys_to_add=[
+        "\\\\", "\\'", '\\"',
+        ]
+for k in keys_to_add:
+    keys.append(k)
+
 for key in keys:
     # Doing a double escape, to expand the formatting stored in the variable.
     # May be easier to use python's Template module though.
