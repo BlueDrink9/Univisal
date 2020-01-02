@@ -23,12 +23,6 @@ univiResultFromKey(key){
     global useWSL
     global univisalWSLPath
     global WSLCmd
-    if (useWSL == 1) {
-        cmd=%WSLCmd% -c "%univisalWSLPath%/src/univi.sh %key%"  ; literal "
-        result:=StdoutToVar_CreateProcess(cmd)
-        send %result%
-        return
-    } else {
     ; The problem here is that when using hotkeys, which spawn new threads each
     ; time, you may get a new call to write when the previous one hasn't
     ; finished.
@@ -41,11 +35,17 @@ univiResultFromKey(key){
 
     ; Set threads to uninterruptable.
     Thread, Interrupt, -1
-    writePipe(key)
-    result := readPipe()
-    if (result != "nop"){
+    if (useWSL == 1) {
+        cmd=%WSLCmd% -c "%univisalWSLPath%/src/univi.sh '%key%'"  ; literal "
+        result:=StdoutToVar_CreateProcess(cmd)
         send %result%
-    }
+        return
+    } else {
+        writePipe(key)
+        result := readPipe()
+        if (result != "nop"){
+            send %result%
+        }
     }
 }
 
