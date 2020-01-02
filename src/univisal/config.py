@@ -45,9 +45,9 @@ def getConfigPath():
 
 def makeDefaults():
     path = getConfigPath()
-    dir = pathlib.Path(pathlib.PurePath(path).parent)
-    if not dir.exists():
-        path.dirname().mkdir(parents=True)
+    dir_ = pathlib.Path(pathlib.PurePath(path).parent)
+    if not dir_.exists():
+        dir_.mkdir(parents=True)
     with open(path, 'w') as outfile:
         logger.info("Making default config file at '{}'".format(path))
         json.dump(defaults, outfile, indent=2, ensure_ascii=False)
