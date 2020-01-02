@@ -56,7 +56,13 @@ The mappings json also takes into account OS-specific shortcuts.
 
 Currently poor latency because of how windows handles named pipes. (However, this seems to be more a problem with how AHK interacts with them than the pipe speeds themselves, which from python tests are fast enough).
 
-Use 
+There is also an option to use Linux FIFO pipes via WSL, but this currently has even worse latencies. This suggests it isn't the windows pipes that were causing the problems, unless the `wsl -c` use is the bottleneck.
+
+To use WSL, in the adapters folder, create a file called WSLSettings.ahk, and set 3 options:
+
+* `useWSL` 1 or 0 depending on whether you want to use WSL paths.
+* `univisalWSLPath` to the path of this repo from within WSL (eg `/bin/univisal`)
+* `WSLCmd` to the cmd to run WSL (eg `bash.exe` or `ubuntu.exe`)
 
 #### Linux/Xorg
 
