@@ -36,6 +36,6 @@ logger.info("Starting univisal")
 
 load_adapter_maps(sys.argv[1])
 
-init_config()
+config.init_config()
 init_model()
 init_message_interface()
