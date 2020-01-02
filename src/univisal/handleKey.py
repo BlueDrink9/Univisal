@@ -15,7 +15,7 @@ except ImportError:
     from model import *
     from motion import *
     from operators import *
-    from remap import resolve_imap, resolve_nmap
+    from remap import resolve_map, resolve_map
     from adapter_maps import getAdapterMap
     import adapter_maps
 logger = logging.getLogger(__name__)
