@@ -1,4 +1,3 @@
-#If univisalRunning()
 Esc::univiResultFromKey("Esc")
 ^[::univiResultFromKey("Esc")
 a::univiResultFromKey("a")

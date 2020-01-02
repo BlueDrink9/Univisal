@@ -87,4 +87,5 @@ toggleUnivisal(){
 
 F12::toggleUnivisal()
 F11::exitapp
+#If univisalRunning()
 #include %A_ScriptDir%/bindings.ahk
