@@ -22,7 +22,7 @@ univi(){
 
   sendKey "$1"
   result="$(readKey)"
-  if [ ! "${result}" == "NOP" ]; then
+  if [ ! "${result}" == "nop" ]; then
     printf "${result}"
   fi
 }

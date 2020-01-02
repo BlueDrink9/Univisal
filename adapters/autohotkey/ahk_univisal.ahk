@@ -11,18 +11,20 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 global srcDir
 srcDir=%A_ScriptDir%\..\..\src
 ; Initialisation of lock to false, sets to true when creating writepipe.
-useWSL=1
-; Set this variable from this file.
+; Set these variable from file.
+useWSL=0
 univisalWSLPath=/unset_var/univisal
-#include %A_ScriptDir%\univisalWSLpath.ahk
+WSLCmd=bash.exe
+#include %A_ScriptDir%\WSLSettings.ahk
 univisalWSLCmd=python3 %univisalWSLPath%/src/univisal/univisal.py autohotkey
 
 ; The main function, called by every keypress.
 univiResultFromKey(key){
     global useWSL
     global univisalWSLPath
+    global WSLCmd
     if (useWSL == 1) {
-        cmd=ubuntu.exe -c "%univisalWSLPath%/src/univi.sh %key%"  ; literal "
+        cmd=%WSLCmd% -c "%univisalWSLPath%/src/univi.sh %key%"  ; literal "
         result:=StdoutToVar_CreateProcess(cmd)
         send %result%
         return
@@ -57,11 +59,17 @@ setUnivisalPID(pid){
     univisalPID := pid
 }
 
+WSLRun(cmd){
+    global WSLCmd
+    run %WSLCmd% -c %cmd%,, hide, pid
+    return pid
+}
+
 runUnivisal(){
     global useWSL
     global univisalWSLCmd
     if (useWSL == 1) {
-        run ubuntu.exe -c %univisalWSLCmd%,, hide, PID
+        PID:=WSLRun(univisalWSLCmd)
     } else {
         run python %srcDir%\univisal\univisal.py autohotkey,, hide, PID
     }
@@ -78,7 +86,8 @@ exitFunc(){
     univisalPID := getUnivisalPID()
     process, Close, %univisalPID%
     if (useWSL == 1) {
-        run ubuntu.exe -c "pkill -9 -f '%univisalWSLCmd%'",, hide
+        cmd=pkill -9 -f '%univisalWSLCmd%'
+        WSLRun(cmd)
     }
 }
 OnExit("exitFunc")
