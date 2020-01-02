@@ -5,14 +5,28 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; #NoTrayIcon
 #KeyHistory 0
 #include %A_ScriptDir%\pipes.ahk
+#include %A_ScriptDir%\StdoutToVar.ahk
 ; Prevent it from triggering itself.
 #inputlevel 1
 global srcDir
 srcDir=%A_ScriptDir%\..\..\src
 ; Initialisation of lock to false, sets to true when creating writepipe.
+useWSL=1
+; Set this variable from this file.
+univisalWSLPath=/unset_var/univisal
+#include %A_ScriptDir%\univisalWSLpath.ahk
+univisalWSLCmd=python3 %univisalWSLPath%/src/univisal/univisal.py autohotkey
 
 ; The main function, called by every keypress.
 univiResultFromKey(key){
+    global useWSL
+    global univisalWSLPath
+    if (useWSL == 1) {
+        cmd=ubuntu.exe -c "%univisalWSLPath%/src/univi.sh %key%"  ; literal "
+        result:=StdoutToVar_CreateProcess(cmd)
+        send %result%
+        return
+    } else {
     ; The problem here is that when using hotkeys, which spawn new threads each
     ; time, you may get a new call to write when the previous one hasn't
     ; finished.
@@ -30,6 +44,7 @@ univiResultFromKey(key){
     if (result != "nop"){
         send %result%
     }
+    }
 }
 
 global univisalPID = 0
@@ -43,7 +58,13 @@ setUnivisalPID(pid){
 }
 
 runUnivisal(){
-    run python %srcDir%\univisal\univisal.py autohotkey,, hide, PID
+    global useWSL
+    global univisalWSLCmd
+    if (useWSL == 1) {
+        run ubuntu.exe -c %univisalWSLCmd%,, hide, PID
+    } else {
+        run python %srcDir%\univisal\univisal.py autohotkey,, hide, PID
+    }
     setUnivisalPID(PID)
     ; msgbox running univisal with pid %PID%
     univisalPID := getUnivisalPID()
@@ -52,8 +73,13 @@ runUnivisal(){
     Process, Priority, %univisalPID%, H
 }
 exitFunc(){
+    global useWSL
+    global univisalWSLCmd
     univisalPID := getUnivisalPID()
     process, Close, %univisalPID%
+    if (useWSL == 1) {
+        run ubuntu.exe -c "pkill -9 -f '%univisalWSLCmd%'",, hide
+    }
 }
 OnExit("exitFunc")
 
