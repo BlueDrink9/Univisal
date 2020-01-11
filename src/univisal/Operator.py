@@ -4,5 +4,12 @@ def delete():
 delete = "<delete>"
 change = "<change>"
 yank = "<yank>"
+# Start: hold shift down. Pause: release shift. End: deselect. Note that ending
+# may be done directionally instead.
 visualStart = "<visualStart>"
-visualEnd = "<visualEnd>"
+visualPause = "<visualStart>"
+# visualEnd = "<visualEnd>"
+# Always end visual as if it had extended to the right.
+# I can't think of an easy way to tell if it extended right or left, at least
+# not without copying the text a lot.
+visualEnd = "<right>"
