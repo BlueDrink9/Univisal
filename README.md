@@ -96,7 +96,15 @@ Not written.
 #### Generating adapters
 
 Generating new adapters is made simpler with `generate_adapter_bindings.py`, which can create config files with entries for each key univisal needs to handle, mapped with an appropriate `mappings.json` file in the adapter directory.
+
 Once the file is generated, additional code usually needs to be added. At minimum, some function that sends the right string to the main univisal process.
+
+On Windows, adapters should handle a few special return cases from univisal:
+
+* `<requestSelectedText>`
+* ...
+
+On unix, `src/univi.sh` handles these cases for you. Adapters should simply call `src/univi.sh` with the input to be sent as an argument, and capture the `stdout` as the output. For example `output="$(src/univi.sh '<esc>')"`.
 
 Usage: `generate_adapter_bindings.py adapter 'string'`
 
@@ -311,6 +319,8 @@ This remains broadly the same when running `univisal.py` in the second terminal 
 Note: in vim, counts before an operator multiply with the count after the operator.
 
 In vim, operators leave the cursor at the left of the text operated on.
+
+[Notes and suggestions from a kind redditor about the processing model](https://www.reddit.com/r/vim/comments/el2rcl/describe_the_basic_normal_mode_algorithm/)
 
 Read through [normal.c](https://github.com/neovim/neovim/blob/master/src/nvim/normal.c) to understand how vim's architecture handles normal mode etc.
 
