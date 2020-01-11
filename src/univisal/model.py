@@ -12,12 +12,14 @@ class Mode(Enum):
     operator_pending  = auto()
 
 _current_mode = None
+pending_clipboard = False
+pending_motion = None
 
 insertlike_modes = [
         Mode.insert,
         Mode.command,
         ]
-def modelIsInsertLike():
+def modeIsInsertLike():
     return _current_mode in insertlike_modes
 
 def setMode(m):
@@ -40,3 +42,8 @@ def init_model():
         registers[l] = ""
     repeat_count = 1
 
+def getCapturedClipboard():
+    global captured_clipboard
+    out = captured_clipboard
+    captured_clipboard = None
+    return out

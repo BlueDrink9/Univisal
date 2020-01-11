@@ -26,6 +26,14 @@ def handle(cmd):
     elif cmd == ":getConfigDir":
         # Get basedir
         return config.getConfigDir()
+    elif ":clipboard:" in cmd:
+        if not model.clipboard_pending:
+            logger.warning("Received command ':clipboard', \
+                    but not expecding it.  cmd: '{}'".format(cmd))
+        l = len(":clipboard:")
+        cmd = cmd[l:]
+        captured_clipboard = cmd
+        return normalCommand(model.cmd)
     else:
         logger.error("Not a valid command: {cmd}".format(cmd))
     return None

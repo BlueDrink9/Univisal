@@ -30,6 +30,7 @@ def init_univisal():
     univisal.config.config = {}
 
 def translate_keys(keys):
+    # TODO: Handle visual selection, clipboard.
     """
     Converts a string/list of keypresses according to univisal rules.
     Expands <bs> as a backspace.
