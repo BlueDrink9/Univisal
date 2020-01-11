@@ -43,11 +43,15 @@ def process_input(data):
         logger.info("HUP. End reading.")
         reading_input = False
         return False
-    output = handleInput(key)
+    try:
+        output = handleInput(key)
+    except:
+        logger.critical("Unhandled exception", exc_info=True)
+        output = key
     logger.debug("Output: " + output)
-    if output is None:
+    if not isinstance(output, str):
         logger.error("""
-        Error: No key sent. Output is None. Returning input key instead.
+        Error: No key sent. Output is not str. Returning input key instead.
         """)
         output = key
     outpt_write(output)
