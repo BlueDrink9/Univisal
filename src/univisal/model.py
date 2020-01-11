@@ -8,28 +8,27 @@ class Mode(Enum):
     command = auto()
     visual  = auto()
     normal  = auto()
+    disabled  = auto()
     operator_pending  = auto()
 
-mode = None
+_current_mode = None
 
 insertlike_modes = [
         Mode.insert,
         Mode.command,
         ]
 def modelIsInsertLike():
-    return mode in insertlike_modes
+    return _current_mode in insertlike_modes
 
 def setMode(m):
-    global mode
-    mode = m
+    global _current_mode
+    _current_mode = m
 
 def getMode():
-    global mode
-    return mode
+    return _current_mode
 
 def isMode(m):
-    global mode
-    return mode == m
+    return _current_mode == m
 
 # Declare globals within a function to access them.
 def init_model():
