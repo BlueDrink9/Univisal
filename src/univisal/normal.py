@@ -82,17 +82,18 @@ def seekLetter(out, key, backwards=False, stopBeforeLetter=False):
     if searchLetter is None:
         # Haven't specified which char to search for yet.
         model._pending_motion = key
+        model.expecting_search_letter = True
         out.append(nop)
         return out
     else:
-        if not model.pending_clipboard:
+        if not model.expecting_clipboard:
             # Request clipboard and return.
             out.append(getAdapterMap(Operator.visualStart))
             if backwards:
                 out.append(getAdapterMap(Motion.goLineStart))
             else:
                 out.append(getAdapterMap(Motion.goLineEnd))
-            model.pending_clipboard = True
+            model.expecting_clipboard = True
             out.append(Keys.requestSelectedText)
             return out
         else:
@@ -122,6 +123,6 @@ def getSeekCount(string, searchLetter):
     except ValueError:
         # Seeked character not in line. Don't move.
         moveCount = 0
-    model.pending_clipboard = False
+    model.expecting_clipboard = False
     return moveCount
 

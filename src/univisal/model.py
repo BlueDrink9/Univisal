@@ -22,8 +22,8 @@ _registers = None
 _search_letter = None
 _pending_motion = None
 _captured_clipboard = None
-pending_clipboard = None
-pending_search_letter = None
+expecting_clipboard = None
+expecting_search_letter = None
 repeat_count = None
 
 insertlike_modes = [
@@ -61,17 +61,17 @@ def init_model():
     clear_pending()
 
 def clear_pending():
-    global repeat_count, pending_clipboard, _pending_motion, _captured_clipboard, pending_search_letter
+    global repeat_count, expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter
     repeat_count = 1
-    pending_clipboard = False
-    pending_search_letter = None
+    expecting_clipboard = False
+    expecting_search_letter = False
     pending_motion = None
     captured_clipboard = None
 
 def getCapturedClipboard():
     global _captured_clipboard
     if _captured_clipboard is None:
-        if pending_clipboard:
+        if expecting_clipboard:
             logger.error("Pending clipboard, but none was given \
                         (captured_clipboard is blank).")
         logger.warning("Clipboard was requested, but is None. Returning '' instead.")
@@ -94,6 +94,6 @@ def getSearchLetter(allow_none=False):
     return _search_letter
 
 def setSearchLetter(l):
-    global _search_letter, pending_search_letter
+    global _search_letter, expecting_search_letter
     _search_letter = l
-    pending_search_letter = None
+    expecting_search_letter = False

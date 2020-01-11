@@ -36,7 +36,7 @@ def handle(cmd):
     return None
 
 def handlePendingClipboard(cmd):
-    if not model.pending_clipboard:
+    if not model.expecting_clipboard:
         logger.warning("Received command ':clipboard', \
                 but not expecding it.  cmd: '{}'".format(cmd))
     if model.pending_motion is None:

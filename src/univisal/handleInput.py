@@ -38,7 +38,7 @@ def handleInput(input_):
         if isMode(Mode.disabled):
             return input_
 
-        if model.pending_clipboard:
+        if model.pending_search_letter:
             model.setSearchLetter(input_)
             return normalCommand([], model.pending_motion)
 
