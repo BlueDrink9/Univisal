@@ -31,10 +31,13 @@ if len(sys.argv) != 2:
     """)
     sys.exit(1)
 
-logger.info("Starting univisal")
+def main():
+    logger.info("Starting univisal")
 
-load_adapter_maps(sys.argv[1])
+    load_adapter_maps(sys.argv[1])
 
-config.init_config()
-model.init_model()
-init_message_interface()
+    config.init_config()
+    model.init_model()
+    init_message_interface()
+
+main()
