@@ -29,23 +29,8 @@ def translate_keys(keys):
         handleResult = handleInput(char)
         out += handleResult
     out = ''.join(out)
-    print(out)
     # Simulate sending the backspaces
     while "<bs>" in out:
         # need to iteratively replace <bs> with removed char
         out = translate_backspace(out)
     return ''.join(out)
-
-def translate_keys(keys):
-    # TODO: Handle visual selection, clipboard.
-    out = []
-    for char in keys:
-        out += handleInput(char)
-    out = ''.join(out)
-    # Simulate sending the backspaces
-    while "<bs>" in out:
-        index = out.index("<bs>")
-        out = out[:index -1] + out[index + len("<bs>"):]
-    # need to iteratively replace <bs> with removed char
-    return ''.join(out)
-

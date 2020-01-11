@@ -24,6 +24,9 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+# Reduce chance of a typo if returning nop
+nop = "nop"
+
 def normalCommand(out, key):
     if key == ":":
         setMode(Mode.command)
@@ -56,20 +59,35 @@ def normalCommand(out, key):
         out.append(getAdapterMap(Motion.goWordNext.name))
     elif key == "b":
         out.append(getAdapterMap(Motion.goWordPrevious.name))
-    elif key == "f":
+    elif key == "f" or key == "t":
         if model.pending_clipboard:
+            # After f/t.
             # count from clipboard till index of next letter. TODO
             # Do it count times?
-            # indexOf(model.getCapturedClipboard(), model.search_letter)
-            pass
-            model.pending_clipboard = False
+            clipboard = model.getCapturedClipboard()
+            moveCount = getSeekCount(clipboard, model.getSearchLetter())
+            if key == 't' and moveCount > 0:
+                moveCount -= 1
+            out.append(getAdapterMap(Motion.right.name) * moveCount)
+            return out
         else:
             out.append(getAdapterMap(Operator.visualStart.name))
             out.append(getAdapterMap(Motion.goLineEnd.name))
             out.append(getAdapterMap(Operator.visualEnd.name))
-            out.append(Keys.requestSelectedText)
+            out.append(Keys.requestSelectedText.value)
+            model.pending_motion = key
             model.pending_clipboard = True
     else:
         logger.info("Normal command not found: {}".format(key))
         return key
     return out
+
+def getSeekCount(string, searchLetter):
+    try:
+        moveCount = string.index(searchLetter)
+    except ValueError:
+        # Seeked character not in line. Don't move.
+        moveCount = 0
+    model.pending_clipboard = False
+    return moveCount
+

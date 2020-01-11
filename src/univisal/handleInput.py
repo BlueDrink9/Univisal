@@ -20,7 +20,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 def handleInput(input_):
-    logger.debug("input_: {}".format(input_))
+    logger.debug("handleInput input_: {}".format(input_))
     try:
         # nop = No op. Need to send something back to adapter to signal finish.
         # Reduce chance of a typo if returning nop
@@ -39,12 +39,9 @@ def handleInput(input_):
             return input_
 
         if model.pending_clipboard:
-            if model.captured_clipboard is None:
-                logger.error("Pending clipboard, but none was given \
-                        (captured_clipboard is blank). \ key: '{}'".format(input_))
+            model.setSearchLetter(input_)
             return normalCommand([], model.pending_motion)
 
-        print('input_', input_)
         return handleKey(input_)
     except:
         logger.critical("Unhandled exception", exc_info=True)

@@ -62,5 +62,4 @@ def processOutput(output):
             output.remove(nop)
         except ValueError:
             pass
-    print('output', output)
     return adapter_maps.getJoinChar().join(output)
