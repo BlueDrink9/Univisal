@@ -1,20 +1,23 @@
-from json import loads as json_load
 import logging
 try:
     from .library import *
     from . import logging_
-    from .model import *
+    from .model import Mode, getMode, setMode, isMode
+    from . import model
+    from .normal import normal_command
+    from .keys import Keys
     from .motion import *
     from .operators import *
     from . import command
     from .remap import resolve_map
     from .adapter_maps import getAdapterMap
     from . import adapter_maps
-    from .keys import Keys
 except ImportError:
     from library import *
     import logging_
-    from model import *
+    from model import Mode, getMode, setMode, isMode
+    import model
+    from normal import normal_command
     from keys import Keys
     from motion import *
     from operators import *
@@ -24,7 +27,8 @@ except ImportError:
     import adapter_maps
 logger = logging.getLogger(__name__)
 
-
+# TODO rename file, separate out handling of command vs key.
+# def handleInput()
 
 def handleKey(key_):
     try:
@@ -36,7 +40,7 @@ def handleKey(key_):
         # These should be handled specially, before other logic.
         # Still expect key_ to be a list.
         if len(key_) > 1 and key_[0] == ":":
-            out = command.handle(key_) 
+            out = command.handle(key_)
             if out is None:
                 return nop
             else:
@@ -44,6 +48,12 @@ def handleKey(key_):
         # Disabled: always return input key.
         if isMode(Mode.disabled):
             return key_
+
+        if model.pending_clipboard:
+            if model.captured_clipboard is None:
+                logger.error("Pending clipboard, but none was given \
+                        (captured_clipboard is blank). \ key: '{}'".format(cmd))
+            return normalCommand(model.pending_motion)
 
         keys = resolve_map(key_)
         # a map may turn one key into many, which we need to handle
@@ -60,37 +70,12 @@ def handleKey(key_):
 
             if isMode(Mode.insert):
                 out.append(getAdapterMap(key))
-            elif key == ":":
-                setMode(Mode.command)
-                out.append(nop)
-            elif key == "h":
-                out.append(getAdapterMap(Motion.left.name))
-            elif key == "l":
-                out.append(getAdapterMap(Motion.right.name))
-            elif key == "j":
-                out.append(getAdapterMap(Motion.down.name))
-            elif key == "k":
-                out.append(getAdapterMap(Motion.up.name))
-            elif key == "0":
-                out.append(getAdapterMap(Motion.goLineStart.name))
-            elif key == "$":
-                out.append(getAdapterMap(Motion.goLineEnd.name))
-            elif key == "i":
-                setMode(Mode.insert)
-                out.append(nop)
-            elif key == "a":
-                setMode(Mode.insert)
-                out.append(getAdapterMap(Motion.right.name))
-            elif key == "I":
-                setMode(Mode.insert)
-                out.append(getAdapterMap(Motion.goLineStart.name))
-            elif key == "A":
-                setMode(Mode.insert)
-                out.append(getAdapterMap(Motion.goLineEnd.name))
-            elif key == "w":
-                out.append(getAdapterMap(Motion.goWordNext.name))
-            elif key == "b":
-                out.append(getAdapterMap(Motion.goWordPrevious.name))
+            elif isMode(Mode.normal):
+                action = normalCommand(out, key)
+                if action is None:
+                    out.append(getAdapterMap(key))
+                else:
+                    out.append(getAdapterMap(action))
             else:
                 out.append(getAdapterMap(key))
 
