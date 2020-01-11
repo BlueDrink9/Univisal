@@ -10,5 +10,3 @@ class Motion(Enum):
     goFileEnd = auto()
     goWordPrevious = auto()
     goWordNext = auto()
-    visualStart = auto()
-    visualEnd = auto()

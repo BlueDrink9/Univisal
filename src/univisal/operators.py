@@ -7,3 +7,5 @@ class Operator(Enum):
     delete = auto()
     change = auto()
     yank = auto()
+    visualStart = auto()
+    visualEnd = auto()
