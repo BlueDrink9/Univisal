@@ -24,17 +24,17 @@ except ImportError:
     import logging_
 logger = logging.getLogger(__name__)
 
-if len(sys.argv) != 2:
-    print("Usage: univisal.py adapter")
-    print("""'adapter' is a string corresponding to a folder in ../adapters
-    that contains a json 'mappings.json'."
-    """)
-    sys.exit(1)
+def main(args=sys.argv):
+    if len(args) != 2:
+        print("Usage: univisal.py adapter")
+        print("""'adapter' is a string corresponding to a folder in ../adapters
+        that contains a json 'mappings.json'."
+        """)
+        sys.exit(1)
 
-def main():
     logger.info("Starting univisal")
 
-    load_adapter_maps(sys.argv[1])
+    load_adapter_maps(args[1])
 
     config.init_config()
     model.init_model()
