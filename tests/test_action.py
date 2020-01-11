@@ -30,10 +30,9 @@ def test_basic_motions(motion, expected, error_msg):
 
 # @pytest.mark.xfail
 def test_f():
-    translate_keys("fw")
-    assert Keys.requestSelectedText in translate_keys("fw")
-    result = translate_keys("<clipboard>end of this is w and text")
+    assert Keys.requestSelectedText in translate_keys("fm")
+    result = translate_keys("<clipboard>end of this is m and text")
     # TODO Account for deselect, then movement.
-    assert result == "<right>" * 16
+    assert result == "<left>" + "<right>" * 16
 
 # TODO: F, t, T.
