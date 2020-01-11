@@ -2,13 +2,14 @@
 import os
 import pytest
 import sys
+import unittest
 # Add src dir to the python path so we can import.
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 import univisal
 from univisal.remap import *
 from univisal.model import *
 from univisal.handleInput import handleInput
-from tests.mock_setup import init_univisal, clear_maps
+from tests.mock_setup import init_univisal, clear_maps, mock_adapter_maps
 from tests.translate_output import translate_keys
 
 
@@ -90,3 +91,23 @@ def test_imap_to_esc_one_at_a_time(caplog):
     assert handleInput("k") == expected, "one key at a time doesn't trigger map"
     assert isMode(Mode.normal)
     imap("jk")
+
+@unittest.mock.patch("univisal.adapter_maps.load_adapter_maps",
+            side_effect=mock_adapter_maps)
+@pytest.mark.parametrize("maps, test, expected, error_msg", [
+    ({"rep": "set"},
+        "a rep and a rep plus one rep",
+        "a set and a set plus one set",
+        "fails map when joinchar is not blank."),
+    ])
+def test_map_with_joinchar(caplog, maps, test, expected, error_msg):
+    caplog.set_level(logging.DEBUG)
+    assert univisal.adapter_maps.getJoinChar() != ""
+    setMode(Mode.insert)
+    for m in maps:
+        imap(m, maps[m])
+    assert translate_keys(test) == expected, error_msg
+    # Remove imaps again
+    for m in maps:
+        imap(m)
+
