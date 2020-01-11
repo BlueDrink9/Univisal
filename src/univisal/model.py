@@ -36,6 +36,8 @@ def setMode(m):
     global _current_mode
     checkValidMode(m)
     _current_mode = m
+    if isMode(Mode.normal):
+        clear_pending()
 
 def getMode():
     return _current_mode
@@ -44,7 +46,7 @@ def isMode(m):
     checkValidMode(m)
     return _current_mode == m
 
-def checkValidMode(m)
+def checkValidMode(m):
     if not isinstance(m, Mode):
         logger.error("Not a valid mode: '{}'".format(m))
 
@@ -56,6 +58,9 @@ def init_model():
     registers = {}
     for l in string.ascii_letters:
         registers[l] = ""
+    clear_pending()
+
+def clear_pending():
     repeat_count = 1
     pending_clipboard = False
     pending_motion = None
