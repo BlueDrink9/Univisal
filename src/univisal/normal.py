@@ -70,6 +70,10 @@ def normalCommand(out, key):
     else:
         logger.info("Normal command not found: {}".format(key))
         return key
+    if isMode(Mode.operator_pending):
+        out.insert(0, Operator.visualStart)
+        out.append(0, Operator.visualPause)
+        # TODO
     return out
 
 
