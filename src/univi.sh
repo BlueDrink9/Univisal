@@ -11,14 +11,18 @@ univi(){
     exit 1
   fi
 
-  if [ ! -f "$TMP/univisal.in.fifo" ]; then
+  if [ ! -p "$TMP/univisal.in.fifo" ]; then
     printf "${1}"
+    errmsg="ERROR: No input pipe found. Returning $1"
+    printf "$errmsg" >> "$TMP/univisal_logs/error.log"
+    printf "$errmsg" >> "$TMP/univisal_logs/debug.log"
+    printf "$errmsg" >> "$TMP/univisal_logs/info.log"
     return
   fi
 
   sendKey "$1"
   result="$(readKey)"
-  if [ ! "${result}" == "NOP" ]; then
+  if [ ! "${result}" == "nop" ]; then
     printf "${result}"
   fi
 }
