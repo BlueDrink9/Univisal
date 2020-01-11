@@ -50,3 +50,7 @@ def test_getMode():
     assert handleKey(':getMode') == "insert", "getMode doesn't return mode in insert mode"
     setMode(Mode.disabled)
     assert handleKey(':getMode') == "disabled", "getMode doesn't return mode when disabled"
+
+def test_getConfigDir():
+    from univisal.config import getConfigDir
+    assert handleKey(':getConfigDir') == getConfigDir(), "getConfigDir doesn't return path"

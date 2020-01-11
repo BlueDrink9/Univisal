@@ -36,9 +36,14 @@ def getConfigOption(opt):
                         exc_info=1)
         return None
 
+def getConfigDir():
+    # Not using appdirs (https://pypi.org/project/appdirs/), because we want
+    # OSX to be treated ike unix.
+    config_dir = pathlib.Path(os.getenv("XDG_CONFIG_HOME", "~/.config"))
+    return config_dir
 
 def getConfigPath():
-    config_dir = pathlib.Path(os.getenv("XDG_CONFIG_HOME", "~/.config"))
+    config_dir = getConfigDir()
     config_path = config_dir.expanduser() / "univisal" / "config.json"
     return config_path
 
