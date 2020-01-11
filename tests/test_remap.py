@@ -4,9 +4,10 @@ import pytest
 import sys
 # Add src dir to the python path so we can import.
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
+import univisal
 from univisal.remap import *
 from univisal.model import *
-from univisal.handleKey import handleKey
+from univisal.handleInput import handleInput
 
 
 @pytest.fixture(scope="function")
@@ -16,18 +17,33 @@ def clear_maps():
     vmaps = {}
     cmaps = {}
 
+def translate_backspace(out):
+    lookup = "<multikey_join_char>"
+    joinChar = univisal.adapter_maps.getAdapterMap(lookup)
+    if joinChar == lookup:
+        joinChar = ''
+    bs = ("<bs>" + joinChar)
+    try:
+        index = out.index(bs)
+    except ValueError:
+        bs = "<bs>"
+        index = out.index(bs)
+    out = out[:index -1] + out[index + len(bs):]
+    return out
+
 def translate_keys(keys):
     """
     Pass in a string if no special keys, else pass in a list.
     """
     out = []
     for char in keys:
-        out += handleKey(char)
+        handleResult = handleInput(char)
+        out += handleResult
     out = ''.join(out)
+    print(out)
     # Simulate sending the backspaces
     while "<bs>" in out:
-        index = out.index("<bs>")
-        out = out[:index -1] + out[index + len("<bs>"):]
+        out = translate_backspace(out)
     # need to iteratively replace <bs> with removed char
     return ''.join(out)
 
@@ -101,7 +117,7 @@ def test_imap_to_esc_one_at_a_time(caplog):
     setMode(Mode.insert)
     expected = "<bs>"
     imap("jk", "<esc>")
-    handleKey("j")
-    assert handleKey("k") == expected, "one key at a time doesn't trigger map"
+    handleInput("j")
+    assert handleInput("k") == expected, "one key at a time doesn't trigger map"
     assert isMode(Mode.normal)
     imap("jk")
