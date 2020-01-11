@@ -3,3 +3,4 @@ from enum import Enum, auto
 
 class Keys(Enum):
     esc  = "<esc>"
+    requestSelectedText = "<requestSelectedText>"
