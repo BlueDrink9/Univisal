@@ -6,9 +6,11 @@ import os
 try:
     from .library import *
     from . import logging_
+    from .keys import Keys
 except ImportError:
     from library import *
     import logging_
+    from keys import Keys
 logger = logging.getLogger(__name__)
 
 adapter_maps = None
@@ -35,16 +37,17 @@ def getAdapterMap(key):
     global adapter_maps
     if adapter_maps is None:
         return key
-    if key in adapter_maps:
-        logger.debug("Mapping {} to adapter key {}".format(key, adapter_maps[key]))
-        return adapter_maps[key]
+    if lookup in adapter_maps:
+        result = adapter_maps[lookup]
+        logger.debug("Mapping {} to adapter key {}".format(lookup, result))
+        return result
     else:
         return key
 
 
 def getJoinChar():
-    joinChar = getAdapterMap("<multikey_join_char>")
+    joinChar = getAdapterMap(Keys.multikey_join_char)
     # This happens if the adapter doesn't have a map for this.
-    if joinChar == "<multikey_join_char>":
+    if joinChar == Keys.multikey_join_char:
         return ""
     return joinChar
