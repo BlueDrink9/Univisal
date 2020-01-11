@@ -62,6 +62,8 @@ def normalCommand(out, key):
     elif key == "f" or key == "t":
         if model.pending_clipboard:
             # After f/t.
+            # First have to deselect back to previous spot.
+            out.append(getAdapterMap(Motion.left.name))
             # count from clipboard till index of next letter. TODO
             # Do it count times?
             clipboard = model.getCapturedClipboard()
@@ -73,6 +75,26 @@ def normalCommand(out, key):
         else:
             out.append(getAdapterMap(Operator.visualStart.name))
             out.append(getAdapterMap(Motion.goLineEnd.name))
+            out.append(getAdapterMap(Operator.visualEnd.name))
+            out.append(Keys.requestSelectedText.value)
+            model.pending_motion = key
+            model.pending_clipboard = True
+    elif key == "F" or key == "T":
+        if model.pending_clipboard:
+            # After f/t.
+            # First have to deselect back to previous spot.
+            out.append(getAdapterMap(Motion.right.name))
+            # count from clipboard till index of next letter. TODO
+            # Do it count times?
+            clipboard = model.getCapturedClipboard()[::-1]  # Reverse.
+            moveCount = getSeekCount(clipboard, model.getSearchLetter())
+            if key == 'T' and moveCount > 0:
+                moveCount -= 1
+            out.append(getAdapterMap(Motion.left.name) * moveCount)
+            return out
+        else:
+            out.append(getAdapterMap(Operator.visualStart.name))
+            out.append(getAdapterMap(Motion.goLineStart.name))
             out.append(getAdapterMap(Operator.visualEnd.name))
             out.append(Keys.requestSelectedText.value)
             model.pending_motion = key
