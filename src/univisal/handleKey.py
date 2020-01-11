@@ -36,8 +36,11 @@ def handleKey(key_):
         # These should be handled specially, before other logic.
         # Still expect key_ to be a list.
         if len(key_) > 1 and key_[0] == ":":
-            command.handle(key_)
-            return nop
+            out = command.handle(key_) 
+            if out is None:
+                return nop
+            else:
+                return out
         # Disabled: always return input key.
         if isMode(Mode.disabled):
             return key_

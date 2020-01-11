@@ -5,6 +5,7 @@ import unittest.mock
 import sys
 # Add src dir to the python path so we can import.
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
+import univisal
 from univisal.model import Mode, isMode, getMode, setMode
 from univisal.handleKey import handleKey
 from univisal.keys import Keys
@@ -34,7 +35,7 @@ def test_disable():
     handleKey(":disable")
     assert getMode() == Mode.disabled, "Disable does not change mode"
     assert handleKey('l') == 'l', "Disabled univisal does not return normal key"
-    assert handleKey(Keys.esc.value) == (Keys.esc.value), \
+    assert handleKey(Keys.esc.value) == ("<esc>"), \
         "Disabled univisal does not return special keys"
 
 def test_enable():
@@ -43,3 +44,9 @@ def test_enable():
     handleKey(":enable")
     assert handleKey('l') == Motion.right.name, "re-enabled univisal does not return motion"
 
+def test_getMode():
+    assert handleKey(':getMode') == "normal", "getMode doesn't return mode"
+    setMode(Mode.insert)
+    assert handleKey(':getMode') == "insert", "getMode doesn't return mode in insert mode"
+    setMode(Mode.disabled)
+    assert handleKey(':getMode') == "disabled", "getMode doesn't return mode when disabled"

@@ -18,5 +18,8 @@ def handle(cmd):
         setMode(Mode.disabled)
     elif cmd == ":enable":
         setMode(Mode.normal)
+    elif cmd == ":getMode":
+        return getMode().name
     else:
         logger.error("Not a valid command: {cmd}".format(cmd))
+    return None
