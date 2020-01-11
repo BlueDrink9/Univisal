@@ -34,13 +34,19 @@ def modeIsInsertLike():
 
 def setMode(m):
     global _current_mode
+    checkValidMode(m)
     _current_mode = m
 
 def getMode():
     return _current_mode
 
 def isMode(m):
+    checkValidMode(m)
     return _current_mode == m
+
+def checkValidMode(m)
+    if not isinstance(m, Mode):
+        logger.error("Not a valid mode: '{}'".format(m))
 
 # Declare globals within a function to access them.
 def init_model():
