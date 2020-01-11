@@ -23,6 +23,7 @@ _search_letter = None
 _pending_motion = None
 _captured_clipboard = None
 pending_clipboard = None
+pending_search_letter = None
 repeat_count = None
 
 insertlike_modes = [
@@ -52,8 +53,7 @@ def checkValidMode(m):
 
 # Declare globals within a function to access them.
 def init_model():
-    global repeat_count, _registers
-    global pending_clipboard, _pending_motion, _captured_clipboard
+    global _registers
     setMode(Mode.normal)
     registers = {}
     for l in string.ascii_letters:
@@ -61,8 +61,10 @@ def init_model():
     clear_pending()
 
 def clear_pending():
+    global repeat_count, pending_clipboard, _pending_motion, _captured_clipboard, pending_search_letter
     repeat_count = 1
     pending_clipboard = False
+    pending_search_letter = None
     pending_motion = None
     captured_clipboard = None
 
@@ -92,5 +94,6 @@ def getSearchLetter(allow_none=False):
     return _search_letter
 
 def setSearchLetter(l):
-    global _search_letter
+    global _search_letter, pending_search_letter
     _search_letter = l
+    pending_search_letter = None
