@@ -9,16 +9,14 @@ import logging
 try:
     from .message_interface import init_message_interface
     from .library import *
-    from .adapter_maps import *
-    from .handleKey import *
+    from .adapter_maps import load_adapter_maps
     from . import model
     from . import config
     from . import logging_
 except ImportError:
     from message_interface import init_message_interface
     from library import *
-    from adapter_maps import *
-    from handleKey import *
+    from adapter_maps import load_adapter_maps
     import model
     import config
     import logging_

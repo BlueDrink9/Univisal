@@ -9,7 +9,7 @@ def translate_backspace(out):
     """
     lookup = "<multikey_join_char>"
     joinChar = univisal.adapter_maps.getAdapterMap(lookup)
-    if joinChar == lookup:
+    if joinChar == lookup:  # Failed lookup.
         joinChar = ''
     bs = ("<bs>" + joinChar)
     try:

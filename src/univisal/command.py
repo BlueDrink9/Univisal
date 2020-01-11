@@ -4,15 +4,19 @@ import pathlib
 try:
     from .library import *
     from . import logging_
+    from .normal import normalCommand
     from .model import *
     from .motion import *
+    from .handleKey import processOutput
     from .operators import *
     from . import config
 except ImportError:
     from library import *
     import logging_
+    from normal import normalCommand
     from model import *
     from motion import *
+    from handleKey import processOutput
     from operators import *
     import config
 
@@ -24,16 +28,22 @@ def handle(cmd):
     elif cmd == ":getMode":
         return getMode().name
     elif cmd == ":getConfigDir":
-        # Get basedir
         return config.getConfigDir()
     elif ":clipboard:" in cmd:
-        if not model.clipboard_pending:
-            logger.warning("Received command ':clipboard', \
-                    but not expecding it.  cmd: '{}'".format(cmd))
-        l = len(":clipboard:")
-        cmd = cmd[l:]
-        captured_clipboard = cmd
-        return normalCommand(model.cmd)
+        return handlePendingClipboard(cmd)
     else:
         logger.error("Not a valid command: {cmd}".format(cmd))
     return None
+
+def handlePendingClipboard(cmd):
+    if not model.pending_clipboard:
+        logger.warning("Received command ':clipboard', \
+                but not expecding it.  cmd: '{}'".format(cmd))
+    if model.pending_motion is None:
+        logger.warning("Received command ':clipboard', \
+                but no pending motion.  cmd: '{}'".format(cmd))
+    l = len(":clipboard:")
+    cmd = cmd[l:]
+    captured_clipboard = cmd
+    commandOut = normalCommand([], model.getPendingMotion())
+    return processOutput(commandOut)

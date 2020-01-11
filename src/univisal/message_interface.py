@@ -8,14 +8,14 @@ import os
 try:
     from .library import *
     from . import logging_
-    from .handleKey import handleKey
+    from .handleInput import handleInput
     # If Windows, else assume Unix.
     if os.name == "nt":
         from .pipes_windows import readPipe, writePipe
     else:
         from .pipes_unix import readPipe, writePipe
 except ImportError:
-    from handleKey import handleKey
+    from handleInput import handleInput
     from library import *
     import logging_
     # If Windows, else assume Unix.
@@ -43,7 +43,7 @@ def process_input(data):
         logger.info("HUP. End reading.")
         reading_input = False
         return False
-    output = handleKey(key)
+    output = handleInput(key)
     logger.debug("Output: " + output)
     if output is None:
         logger.error("""

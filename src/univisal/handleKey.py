@@ -4,7 +4,7 @@ try:
     from . import logging_
     from .model import Mode, getMode, setMode, isMode
     from . import model
-    from .normal import normal_command
+    from .normal import normalCommand
     from .keys import Keys
     from .motion import *
     from .operators import *
@@ -17,7 +17,7 @@ except ImportError:
     import logging_
     from model import Mode, getMode, setMode, isMode
     import model
-    from normal import normal_command
+    from normal import normalCommand
     from keys import Keys
     from motion import *
     from operators import *
@@ -27,35 +27,12 @@ except ImportError:
     import adapter_maps
 logger = logging.getLogger(__name__)
 
-# TODO rename file, separate out handling of command vs key.
-# def handleInput()
-
+# Reduce chance of a typo if returning nop
+nop = "nop"
 def handleKey(key_):
-    try:
-        # nop = No op. Need to send something back to adapter to signal finish.
-        # Reduce chance of a typo if returning nop
-        nop = "nop"
-
-        # For specific commands sent from adapter, e.g. `:disable`.
-        # These should be handled specially, before other logic.
-        # Still expect key_ to be a list.
-        if len(key_) > 1 and key_[0] == ":":
-            out = command.handle(key_)
-            if out is None:
-                return nop
-            else:
-                return out
-        # Disabled: always return input key.
-        if isMode(Mode.disabled):
-            return key_
-
-        if model.pending_clipboard:
-            if model.captured_clipboard is None:
-                logger.error("Pending clipboard, but none was given \
-                        (captured_clipboard is blank). \ key: '{}'".format(cmd))
-            return normalCommand(model.pending_motion)
-
+        logger.debug("key_: {}".format(key_))
         keys = resolve_map(key_)
+        logger.debug("keys: {}".format(keys))
         # a map may turn one key into many, which we need to handle
         # individually.
         out = []
@@ -71,26 +48,19 @@ def handleKey(key_):
             if isMode(Mode.insert):
                 out.append(getAdapterMap(key))
             elif isMode(Mode.normal):
-                action = normalCommand(out, key)
-                if action is None:
-                    out.append(getAdapterMap(key))
-                else:
-                    out.append(getAdapterMap(action))
+                out = normalCommand(out, key)
             else:
                 out.append(getAdapterMap(key))
 
-        # Only need nop if it's the only thing being returned.
-        if len(out) > 1:
-            try:
-                out.remove(nop)
-            except ValueError:
-                pass
-        return adapter_maps.getJoinChar().join(out)
+        return processOutput(out)
 
-    except:
-        logger.critical("Unhandled exception", exc_info=True)
+
+def processOutput(output):
+    # Only need nop if it's the only thing being returned.
+    if len(output) > 1:
         try:
-            return getAdapterMap(key_)
-        except:
-            logger.critical("Unhandled exception while mapping adapter", exc_info=True)
-            return key_
+            output.remove(nop)
+        except ValueError:
+            pass
+    print('output', output)
+    return adapter_maps.getJoinChar().join(output)

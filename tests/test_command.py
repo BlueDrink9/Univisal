@@ -7,50 +7,37 @@ import sys
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 import univisal
 from univisal.model import Mode, isMode, getMode, setMode
-from univisal.handleKey import handleKey
+from univisal.handleInput import handleInput
 from univisal.keys import Keys
 from univisal.motion import Motion
-
-def ret_arg(arg):
-    return arg
+from tests.mock_setup import init_univisal
 
 @pytest.fixture(autouse=True)
-def init_univisal():
-    mockargs=['1', '2']
-    with unittest.mock.patch('sys.argv', mockargs), \
-    unittest.mock.patch("univisal.message_interface.init_message_interface",
-        create=True), \
-    unittest.mock.patch("univisal.adapter_maps.load_adapter_maps"), \
-    unittest.mock.patch("univisal.adapter_maps.getAdapterMap",
-        side_effect=ret_arg), \
-    unittest.mock.patch("univisal.adapter_maps.getJoinChar",
-            side_effect=ret_arg):
-        from univisal.univisal import main
-        main()
-    univisal.config.config = {}
+def setUp():
+    init_univisal()
 
 
 def test_disable():
     assert getMode() == Mode.normal, "Univisal not set up"
-    handleKey(":disable")
+    handleInput(":disable")
     assert getMode() == Mode.disabled, "Disable does not change mode"
-    assert handleKey('l') == 'l', "Disabled univisal does not return normal key"
-    assert handleKey(Keys.esc.value) == ("<esc>"), \
+    assert handleInput('l') == 'l', "Disabled univisal does not return normal key"
+    assert handleInput(Keys.esc.value) == ("<esc>"), \
         "Disabled univisal does not return special keys"
 
 def test_enable():
-    handleKey(":disable")
+    handleInput(":disable")
     assert getMode() == Mode.disabled, "Disable does not change mode"
-    handleKey(":enable")
-    assert handleKey('l') == Motion.right.name, "re-enabled univisal does not return motion"
+    handleInput(":enable")
+    assert handleInput('l') == Motion.right.name, "re-enabled univisal does not return motion"
 
 def test_getMode():
-    assert handleKey(':getMode') == "normal", "getMode doesn't return mode"
+    assert handleInput(':getMode') == "normal", "getMode doesn't return mode"
     setMode(Mode.insert)
-    assert handleKey(':getMode') == "insert", "getMode doesn't return mode in insert mode"
+    assert handleInput(':getMode') == "insert", "getMode doesn't return mode in insert mode"
     setMode(Mode.disabled)
-    assert handleKey(':getMode') == "disabled", "getMode doesn't return mode when disabled"
+    assert handleInput(':getMode') == "disabled", "getMode doesn't return mode when disabled"
 
 def test_getConfigDir():
     from univisal.config import getConfigDir
-    assert handleKey(':getConfigDir') == getConfigDir(), "getConfigDir doesn't return path"
+    assert handleInput(':getConfigDir') == getConfigDir(), "getConfigDir doesn't return path"

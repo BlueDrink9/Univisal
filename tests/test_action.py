@@ -7,45 +7,26 @@ import sys
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 import univisal
 from univisal.model import Mode, isMode, getMode, setMode
-from univisal.handleKey import handleKey
+from univisal.handleInput import handleInput
 from univisal.keys import Keys
 from univisal.motion import Motion
-
-def ret_arg(arg):
-    return arg
+from tests.mock_setup import init_univisal
+from tests.translate_output import translate_keys
 
 @pytest.fixture(autouse=True)
-def init_univisal():
-    mockargs=['1', '2']
-    with unittest.mock.patch('sys.argv', mockargs), \
-    unittest.mock.patch("univisal.message_interface.init_message_interface",
-        create=True), \
-    unittest.mock.patch("univisal.adapter_maps.load_adapter_maps"), \
-    unittest.mock.patch("univisal.adapter_maps.getAdapterMap",
-        side_effect=ret_arg), \
-    unittest.mock.patch("univisal.adapter_maps.getJoinChar",
-            side_effect=ret_arg):
-        from univisal.univisal import main
-        main()
-    univisal.config.config = {}
+def setUp():
+    init_univisal()
 
-def translate_keys(keys):
-    # TODO: Handle visual selection, clipboard.
-    """
-    Converts a string/list of keypresses according to univisal rules.
-    Expands <bs> as a backspace.
-    Pass in a string if no special keys, else pass in a list.
-    """
-    out = []
-    for char in keys:
-        out += handleKey(char)
-    out = ''.join(out)
-    # Simulate sending the backspaces
-    while "<bs>" in out:
-        index = out.index("<bs>")
-        out = out[:index -1] + out[index + len("<bs>"):]
-    # need to iteratively replace <bs> with removed char
-    return ''.join(out)
+
+@pytest.mark.parametrize("motion, expected, error_msg", [
+    ("l",
+        # getAdapterMap(motion.goRight.name),
+        (Motion.right.name),
+        "l returns wrong thing"),
+    ])
+def test_basic_motions(motion, expected, error_msg):
+    result = handleInput(motion)
+    assert result == expected, error_msg
 
 def test_f():
     assert Keys.requestSelectedText.value in translate_keys("fw")

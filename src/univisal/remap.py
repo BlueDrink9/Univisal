@@ -100,7 +100,7 @@ def resolve_map(key):
             # Full sequence has been matched
             maps_in_progress = {}
             backspaces = ""
-            if modelIsInsertLike():
+            if modeIsInsertLike():
                 # return appropriate number of backspaces.
                 backspaces = ["<bs>"] * (len(map_) - 1)
             out = backspaces + [current_maps[map_]]

@@ -6,7 +6,6 @@ try:
     from . import model
     from .motion import *
     from .operators import *
-    from . import command
     from .remap import resolve_map
     from .adapter_maps import getAdapterMap
     from . import adapter_maps
@@ -19,7 +18,6 @@ except ImportError:
     from keys import Keys
     from motion import *
     from operators import *
-    import command
     from remap import resolve_map
     from adapter_maps import getAdapterMap
     import adapter_maps
@@ -59,19 +57,19 @@ def normalCommand(out, key):
     elif key == "b":
         out.append(getAdapterMap(Motion.goWordPrevious.name))
     elif key == "f":
-        if model.clipboard_pending:
+        if model.pending_clipboard:
             # count from clipboard till index of next letter. TODO
             # Do it count times?
             # indexOf(model.getCapturedClipboard(), model.search_letter)
             pass
-            model.clipboard_pending = False
+            model.pending_clipboard = False
         else:
             out.append(getAdapterMap(Operator.visualStart.name))
             out.append(getAdapterMap(Motion.goLineEnd.name))
             out.append(getAdapterMap(Operator.visualEnd.name))
             out.append(Keys.requestSelectedText)
-            model.clipboard_pending = True
+            model.pending_clipboard = True
     else:
         logger.info("Normal command not found: {}".format(key))
-        return None
+        return key
     return out
