@@ -6,18 +6,18 @@ try:
     from . import logging_
     from .normal import normalCommand
     from .model import *
-    from .motion import *
+    from . import Motion
+    from . import Operator
     from .handleKey import processOutput
-    from .operators import *
     from . import config
 except ImportError:
     from library import *
     import logging_
     from normal import normalCommand
     from model import *
-    from motion import *
+    import Motion
+    import Operator
     from handleKey import processOutput
-    from operators import *
     import config
 
 def handle(cmd):

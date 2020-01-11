@@ -73,8 +73,9 @@ def getPendingMotion():
     _pending_motion = None
     return out
 
-def getSearchLetter():
-    if not isinstance(_search_letter, str):
+def getSearchLetter(allow_none=False):
+    if not (isinstance(_search_letter, str) or \
+            (_search_letter is None and allow_none)):
         logger.warning("model._search_letter is not a str. \
                 Is '{}', of type {}".format(_search_letter, type(_search_letter)))
     return _search_letter

@@ -5,9 +5,9 @@ try:
     from .model import Mode, getMode, setMode, isMode
     from . import model
     from .normal import normalCommand
-    from .keys import Keys
-    from .motion import *
-    from .operators import *
+    from . import Keys
+    from . import Motion
+    from . import Operator
     from . import command
     from .remap import resolve_map
     from .adapter_maps import getAdapterMap
@@ -18,9 +18,9 @@ except ImportError:
     from model import Mode, getMode, setMode, isMode
     import model
     from normal import normalCommand
-    from keys import Keys
-    from motion import *
-    from operators import *
+    import Keys
+    import Motion
+    import Operator
     import command
     from remap import resolve_map
     from adapter_maps import getAdapterMap
@@ -40,7 +40,7 @@ def handleKey(key_):
             if not isinstance(key, str):
                 logger.warning("Error, handled key is not a string: '{}'", key)
             # esc regardless of mode, for now. (Still permits mappings.)
-            if key.lower() == Keys.esc.value:
+            if key.lower() == Keys.esc:
                 setMode(Mode.normal)
                 out.append(nop)
                 continue

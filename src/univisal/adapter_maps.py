@@ -6,11 +6,11 @@ import os
 try:
     from .library import *
     from . import logging_
-    from .keys import Keys
+    from . import Keys
 except ImportError:
     from library import *
     import logging_
-    from keys import Keys
+    import Keys
 logger = logging.getLogger(__name__)
 
 adapter_maps = None
@@ -37,6 +37,7 @@ def getAdapterMap(key):
     global adapter_maps
     if adapter_maps is None:
         return key
+    lookup = key
     if lookup in adapter_maps:
         result = adapter_maps[lookup]
         logger.debug("Mapping {} to adapter key {}".format(lookup, result))

@@ -4,20 +4,20 @@ try:
     from . import logging_
     from .model import Mode, getMode, setMode, isMode, getCapturedClipboard
     from . import model
-    from .motion import *
-    from .operators import *
+    from . import Motion
+    from . import Operator
     from .remap import resolve_map
     from .adapter_maps import getAdapterMap
     from . import adapter_maps
-    from .keys import Keys
+    from . import Keys
 except ImportError:
     from library import *
     import logging_
     from model import Mode, getMode, setMode, isMode, getCapturedClipboard
     import model
-    from keys import Keys
-    from motion import *
-    from operators import *
+    import Keys
+    import Motion
+    import Operator
     from remap import resolve_map
     from adapter_maps import getAdapterMap
     import adapter_maps
@@ -32,77 +32,85 @@ def normalCommand(out, key):
         setMode(Mode.command)
         out.append(nop)
     elif key == "h":
-        out.append(getAdapterMap(Motion.left.name))
+        out.append(getAdapterMap(Motion.left))
     elif key == "l":
-        out.append(getAdapterMap(Motion.right.name))
+        out.append(getAdapterMap(Motion.right))
     elif key == "j":
-        out.append(getAdapterMap(Motion.down.name))
+        out.append(getAdapterMap(Motion.down))
     elif key == "k":
-        out.append(getAdapterMap(Motion.up.name))
+        out.append(getAdapterMap(Motion.up))
     elif key == "0":
-        out.append(getAdapterMap(Motion.goLineStart.name))
+        out.append(getAdapterMap(Motion.goLineStart))
     elif key == "$":
-        out.append(getAdapterMap(Motion.goLineEnd.name))
+        out.append(getAdapterMap(Motion.goLineEnd))
     elif key == "i":
         setMode(Mode.insert)
         out.append(nop)
     elif key == "a":
         setMode(Mode.insert)
-        out.append(getAdapterMap(Motion.right.name))
+        out.append(getAdapterMap(Motion.right))
     elif key == "I":
         setMode(Mode.insert)
-        out.append(getAdapterMap(Motion.goLineStart.name))
+        out.append(getAdapterMap(Motion.goLineStart))
     elif key == "A":
         setMode(Mode.insert)
-        out.append(getAdapterMap(Motion.goLineEnd.name))
+        out.append(getAdapterMap(Motion.goLineEnd))
     elif key == "w":
-        out.append(getAdapterMap(Motion.goWordNext.name))
+        out.append(getAdapterMap(Motion.goWordNext))
     elif key == "b":
-        out.append(getAdapterMap(Motion.goWordPrevious.name))
-    elif key == "f" or key == "t":
-        if model.pending_clipboard:
-            # After f/t.
-            # First have to deselect back to previous spot.
-            out.append(getAdapterMap(Motion.left.name))
-            # count from clipboard till index of next letter. TODO
-            # Do it count times?
-            clipboard = model.getCapturedClipboard()
-            moveCount = getSeekCount(clipboard, model.getSearchLetter())
-            if key == 't' and moveCount > 0:
-                moveCount -= 1
-            out.append(getAdapterMap(Motion.right.name) * moveCount)
-            return out
-        else:
-            out.append(getAdapterMap(Operator.visualStart.name))
-            out.append(getAdapterMap(Motion.goLineEnd.name))
-            out.append(getAdapterMap(Operator.visualEnd.name))
-            out.append(Keys.requestSelectedText.value)
-            model.pending_motion = key
-            model.pending_clipboard = True
-    elif key == "F" or key == "T":
-        if model.pending_clipboard:
-            # After f/t.
-            # First have to deselect back to previous spot.
-            out.append(getAdapterMap(Motion.right.name))
-            # count from clipboard till index of next letter. TODO
-            # Do it count times?
-            clipboard = model.getCapturedClipboard()[::-1]  # Reverse.
-            moveCount = getSeekCount(clipboard, model.getSearchLetter())
-            if key == 'T' and moveCount > 0:
-                moveCount -= 1
-            out.append(getAdapterMap(Motion.left.name) * moveCount)
-            return out
-        else:
-            out.append(getAdapterMap(Operator.visualStart.name))
-            out.append(getAdapterMap(Motion.goLineStart.name))
-            out.append(getAdapterMap(Operator.visualEnd.name))
-            out.append(Keys.requestSelectedText.value)
-            model.pending_motion = key
-            model.pending_clipboard = True
+        out.append(getAdapterMap(Motion.goWordPrevious))
+    elif key == "f":
+        out = seekLetter(out, key)
+    elif key == "t":
+        out = seekLetter(out, key, stopBeforeLetter=True)
+    elif key == "F":
+        out = seekLetter(out, key, backwards=True)
+    elif key == "T":
+        out = seekLetter(out, key, backwards=True, stopBeforeLetter=True)
     else:
         logger.info("Normal command not found: {}".format(key))
         return key
     return out
+
+
+def seekLetter(out, key, backwards=False, stopBeforeLetter=False):
+    searchLetter = model.getSearchLetter(allow_none=True)
+    if searchLetter is None:
+        # Haven't specified which char to search for yet.
+        model._pending_motion = key
+        out.append(nop)
+        return out
+    else:
+        if not model.pending_clipboard:
+            # Request clipboard and return.
+            out.append(getAdapterMap(Operator.visualStart))
+            if backwards:
+                out.append(getAdapterMap(Motion.goLineStart))
+            else:
+                out.append(getAdapterMap(Motion.goLineEnd))
+            model.pending_clipboard = True
+            out.append(Keys.requestSelectedText)
+            return out
+        else:
+            # After f/t and seekLetter.
+            # First have to deselect back to previous spot.
+            # count from clipboard till index of next letter. TODO
+            # Do it count times?
+            clipboard = model.getCapturedClipboard()
+            if backwards:
+                out.append(getAdapterMap(Motion.right))
+                LR=Motion.left
+                clipboard = clipboard[::-1]  # Reverse.
+            else:
+                out.append(getAdapterMap(Motion.left))
+                LR=Motion.right
+            moveCount = getSeekCount(clipboard, model.getSearchLetter())
+            if stopBeforeLetter and moveCount > 0:
+                moveCount -= 1
+            out.append(getAdapterMap(LR) * moveCount)
+
+    return out
+
 
 def getSeekCount(string, searchLetter):
     try:
