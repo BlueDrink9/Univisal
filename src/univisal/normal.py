@@ -59,6 +59,8 @@ def normalCommand(out, key):
         out.append(getAdapterMap(Motion.goWordNext))
     elif key == "b":
         out.append(getAdapterMap(Motion.goWordPrevious))
+    elif key == "G":
+        out.append(getAdapterMap(Motion.goFileEnd))
     elif key == "f":
         out = seekLetter(out, key)
     elif key == "t":

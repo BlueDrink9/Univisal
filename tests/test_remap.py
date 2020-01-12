@@ -111,3 +111,12 @@ def test_map_with_joinchar(caplog, maps, test, expected, error_msg):
     for m in maps:
         imap(m)
 
+
+def test_basic_nmap(caplog):
+    caplog.set_level(logging.DEBUG)
+    setMode(Mode.normal)
+    expected = "<right>"
+    assert handleInput("l") == expected
+    nmap("x", "l")
+    assert handleInput("x") == expected, "basic nmap doesn't work"
+

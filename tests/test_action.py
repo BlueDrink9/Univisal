@@ -18,17 +18,25 @@ def setUp():
     init_univisal()
 
 
-@pytest.mark.parametrize("motion, expected, error_msg", [
-    ("l",
-        # getAdapterMap(motion.goRight.name),
-        (Motion.right),
-        "l returns wrong thing"),
+@pytest.mark.parametrize("motion, expected", [
+    ("l", Motion.right),
+    ("h", Motion.left),
+    ("j", Motion.down),
+    ("k", Motion.up),
+    ("w", Motion.goWordNext),
+    ("b", Motion.goWordPrevious),
+    ("$", Motion.goLineEnd),
+    ("0", Motion.goLineStart),
+    ("G", Motion.goFileEnd),
+    pytest.param("gg", Motion.goFileStart,
+                 marks=pytest.mark.xfail(reason = 'g not implemented')),
     ])
-def test_basic_motions(motion, expected, error_msg):
+def test_basic_motions(motion, expected):
+    setMode(Mode.normal)
     result = handleInput(motion)
-    assert result == expected, error_msg
+    assert result == expected, "{} returns wrong thing".format(motion)
 
-# @pytest.mark.xfail
+@pytest.mark.xfail(reason = 'unfinished test implementation')
 def test_f():
     assert Keys.requestSelectedText in translate_keys("fm")
     result = translate_keys("<clipboard>end of this is m and text")
