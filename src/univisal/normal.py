@@ -57,6 +57,8 @@ def normalCommand(out, key):
         out.append(getAdapterMap(Motion.goWordPrevious))
     elif key == "G":
         out.append(getAdapterMap(Motion.goFileEnd))
+    # elif key == "gg":
+    #     out.append(getAdapterMap(Motion.goFileStart))
     elif key == "$":
         out.append(getAdapterMap(Motion.goLineEnd))
     elif key == "0":
@@ -79,6 +81,19 @@ def normalCommand(out, key):
         out = seekLetter(out, key, backwards=True)
     elif key == "T":
         out = seekLetter(out, key, backwards=True, stopBeforeLetter=True)
+    elif key == "u":
+        out.append(getAdapterMap(operator.undo))
+    elif key == "<ctrl>r":
+        out.append(getAdapterMap(operator.redo))
+    elif key == "J":
+        out.extend([getAdapterMap(motion.goEndOfLine),
+            getAdapterMap(getAdapterMap(Keys.delete)),
+            getAdapterMap(getAdapterMap(keys.space))
+            ])
+    # elif key == "ZZ":
+    #     out.extend([getAdapterMap(operator.save),
+    #         getAdapterMap(getAdapterMap(operator.quit)])
+
     else:
         logger.info("Normal command not found: {}".format(key))
         return key

@@ -13,3 +13,6 @@ visualPause = "<visualStart>"
 # I can't think of an easy way to tell if it extended right or left, at least
 # not without copying the text a lot.
 visualEnd = "<right>"
+# These may use ctrl, may use something else. So let adapter map them.
+undo = "<undo>"
+redo = "<redo>"
