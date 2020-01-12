@@ -97,3 +97,9 @@ def setSearchLetter(l):
     global _search_letter, expecting_search_letter
     _search_letter = l
     expecting_search_letter = False
+
+def increaseRepeatCount(count):
+    if repeat_count == 1:
+        repeat_count = count
+    else:
+        repeat_count = 10*repeat_count + count

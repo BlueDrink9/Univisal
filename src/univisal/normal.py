@@ -39,10 +39,6 @@ def normalCommand(out, key):
         out.append(getAdapterMap(Motion.down))
     elif key == "k":
         out.append(getAdapterMap(Motion.up))
-    elif key == "0":
-        out.append(getAdapterMap(Motion.goLineStart))
-    elif key == "$":
-        out.append(getAdapterMap(Motion.goLineEnd))
     elif key == "i":
         setMode(Mode.insert)
         out.append(nop)
@@ -61,6 +57,20 @@ def normalCommand(out, key):
         out.append(getAdapterMap(Motion.goWordPrevious))
     elif key == "G":
         out.append(getAdapterMap(Motion.goFileEnd))
+    elif key == "$":
+        out.append(getAdapterMap(Motion.goLineEnd))
+    elif key == "0":
+        # If repeat count in progress, adds to that. Otherwise, BoL.
+        if model.repeat_count > 1:
+            model.increaseRepeatCount(key)
+            out.append(nop)
+        else:
+            out.append(getAdapterMap(Motion.goLineStart))
+    elif key in "123456789" and len(key == 1):
+        model.increaseRepeatCount(key)
+        out.append(nop)
+    elif key == "^":
+        out.append(getAdapterMap(Motion.goLineStart))
     elif key == "f":
         out = seekLetter(out, key)
     elif key == "t":
