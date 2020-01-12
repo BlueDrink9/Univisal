@@ -247,20 +247,26 @@ Based of [this post reply](https://www.reddit.com/r/vim/comments/el2rcl/describe
 make a data structure that will contain count and information about range for a command to operate on (empty range and no count initially). - This in model.
 
 Flag keys for operators as things that accept motion/selection.
+handleKey/normal.py is list of keys. Keys have flags and hander functions.
+Include gg in this list?
+
+Have additional list of selectors/motions (e.g., "j", "gg", "iw") along with handlers.
 
 built a list of builtin mappings with entries containing: key combination (e.g., "G" and "gg"), flags (e.g., "accepts selector"), handler (function that accepts data structure, can be read-only)
 
 built a list of selectors with entries containing: key combination (e.g., "j", "gg", "iw"), handler (function that accepts the same, but this time writable data structure)
 
-make main key handling function (KHF) which should accept current input buffer and as a result inform its caller about whether input was processed or not (command isn't complete yet), it should:
+Make main key handling function (KHF). It should:
+
+Accept current input buffer and as a result inform its caller about whether input was processed or not (nop/requestReturn?). If not finished, keep storing keys! If not finished, will not be ambiguous.
 
 Extract count from the beginning of input string if there is a count
 
-Look for the longest match among mappings
+Look for the **longest match among mappings**
 
-If there are no matches, discard the input, it's wrong (more Vim-like behaviour is to discard one character at a time and try to parse input again, you can do it this way)
+If there are **no matches**, discard the input, it's wrong (more Vim-like behaviour is to discard one character at a time and try to parse input again, you can do it this way)
 
-If there is more than one match, return keeping input (need more keys to disambiguate it)
+If there is *more than one match*, return keeping input (need more keys to disambiguate it)
 
 Otherwise, we have a match.
 
