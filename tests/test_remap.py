@@ -120,3 +120,12 @@ def test_basic_nmap(caplog):
     nmap("x", "l")
     assert handleInput("x") == expected, "basic nmap doesn't work"
 
+@pytest.mark.xfail(reason = "multi-char nmap won't work because \
+        you can't backspace a normal command")
+def test_multichar_nmap(caplog):
+    caplog.set_level(logging.DEBUG)
+    setMode(Mode.normal)
+    expected = "<right>" * 2
+    assert handleInput("ll") == expected
+    nmap("x", "ll")
+    assert handleInput("x") == expected, "multichar nmap doesn't work"
