@@ -280,6 +280,12 @@ Invoke mapping handler passing it range information (count shouldn't be needed h
 
 Outside of KHF you keep a buffer to which you append user's input and invoke KHF after which you either leave the buffer untouched, clear it or drop the first character and call KHF again (per txt in parenthesis in bullet #3 above).
 
+Check out [vim_ahk](https://github.com/rcmdnk/vim_ahk/blob/master/vim.ahk) for more implementation suggestions, esp for windows.
+
+Motions are done in a loop if operator pending, with shift down.
+
+In visual mode, all motions are prepended with shift down, finished with shift up.
+
 ## Language for main logic 
 
 Needs to be universal/easily ported.
@@ -391,3 +397,12 @@ None that I know of, which was the main motivation for writing this.
 
 I just decided that, if I was going to put time into another emulator, I wanted it to be a good one and therefore I wanted to use it on any OS.
 Hence, Univisal was born.
+
+
+# TODO
+
+VisualLine, VisualChar modes
+
+Replace mode?
+
+Record normal commands, insert commands for dot redo?
