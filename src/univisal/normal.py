@@ -28,9 +28,10 @@ logger = logging.getLogger(__name__)
 nop = "nop"
 
 def normalCommand(out, key):
-    if key == ":":
-        setMode(Mode.command)
-        out.append(nop)
+    # Command mode does nothing atm, so don't handle this key.
+    # if key == ":":
+        # setMode(Mode.command)
+        # out.append(nop)
     elif key == "h":
         out.append(getAdapterMap(Motion.left))
     elif key == "l":
@@ -73,6 +74,10 @@ def normalCommand(out, key):
         out.append(nop)
     elif key == "^":
         out.append(getAdapterMap(Motion.goLineStart))
+    elif key == "x":
+        out.append(getAdapterMap(Key.delete))
+    elif key == "X":
+        out.append(getAdapterMap(Key.backspace))
     elif key == "f":
         out = seekLetter(out, key)
     elif key == "t":
