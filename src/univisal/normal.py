@@ -24,6 +24,10 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+def convertForOutput(action):
+    return getAdapterMap(action)
+    # return getAdapterMap(action.name)
+
 # Reduce chance of a typo if returning nop
 nop = "nop"
 
@@ -34,51 +38,51 @@ def normalCommand(out, key):
         # out.append(nop)
     # elif key == "h":
     if key == "h":
-        out.append(getAdapterMap(Motion.left))
+        out.append(convertForOutput(Motion.left))
     elif key == "l":
-        out.append(getAdapterMap(Motion.right))
+        out.append(convertForOutput(Motion.right))
     elif key == "j":
-        out.append(getAdapterMap(Motion.down))
+        out.append(convertForOutput(Motion.down))
     elif key == "k":
-        out.append(getAdapterMap(Motion.up))
+        out.append(convertForOutput(Motion.up))
     elif key == "i":
         setMode(Mode.insert)
         out.append(nop)
     elif key == "a":
         setMode(Mode.insert)
-        out.append(getAdapterMap(Motion.right))
+        out.append(convertForOutput(Motion.right))
     elif key == "I":
         setMode(Mode.insert)
-        out.append(getAdapterMap(Motion.goLineStart))
+        out.append(convertForOutput(Motion.goLineStart))
     elif key == "A":
         setMode(Mode.insert)
-        out.append(getAdapterMap(Motion.goLineEnd))
+        out.append(convertForOutput(Motion.goLineEnd))
     elif key == "w":
-        out.append(getAdapterMap(Motion.goWordNext))
+        out.append(convertForOutput(Motion.goWordNext))
     elif key == "b":
-        out.append(getAdapterMap(Motion.goWordPrevious))
+        out.append(convertForOutput(Motion.goWordPrevious))
     elif key == "G":
-        out.append(getAdapterMap(Motion.goFileEnd))
+        out.append(convertForOutput(Motion.goFileEnd))
     # elif key == "gg":
-    #     out.append(getAdapterMap(Motion.goFileStart))
+    #     out.append(convertForOutput(Motion.goFileStart))
     elif key == "$":
-        out.append(getAdapterMap(Motion.goLineEnd))
+        out.append(convertForOutput(Motion.goLineEnd))
     elif key == "0":
         # If repeat count in progress, adds to that. Otherwise, BoL.
         if model.repeat_count > 1:
             model.increaseRepeatCount(key)
             out.append(nop)
         else:
-            out.append(getAdapterMap(Motion.goLineStart))
+            out.append(convertForOutput(Motion.goLineStart))
     elif key in "123456789" and len(key == 1):
         model.increaseRepeatCount(key)
         out.append(nop)
     elif key == "^":
-        out.append(getAdapterMap(Motion.goLineStart))
+        out.append(convertForOutput(Motion.goLineStart))
     elif key == "x":
-        out.append(getAdapterMap(Key.delete))
+        out.append(convertForOutput(Key.delete))
     elif key == "X":
-        out.append(getAdapterMap(Key.backspace))
+        out.append(convertForOutput(Key.backspace))
     elif key == "f":
         out = seekLetter(out, key)
     elif key == "t":
@@ -88,17 +92,17 @@ def normalCommand(out, key):
     elif key == "T":
         out = seekLetter(out, key, backwards=True, stopBeforeLetter=True)
     elif key == "u":
-        out.append(getAdapterMap(operator.undo))
+        out.append(convertForOutput(operator.undo))
     elif key == "<ctrl>r":
-        out.append(getAdapterMap(operator.redo))
+        out.append(convertForOutput(operator.redo))
     elif key == "J":
-        out.extend([getAdapterMap(motion.goEndOfLine),
-            getAdapterMap(getAdapterMap(Keys.delete)),
-            getAdapterMap(getAdapterMap(keys.space))
-            ])
+        out.extend([convertForOutput(motion.goEndOfLine),
+                    convertForOutput(Keys.delete),
+                    convertForOutput(keys.space)
+                    ])
     # elif key == "ZZ":
-    #     out.extend([getAdapterMap(operator.save),
-    #         getAdapterMap(getAdapterMap(operator.quit)])
+    #     out.extend([convertForOutput(operator.save),
+    #         convertForOutput(getAdapterMap(operator.quit)])
 
     else:
         logger.info("Normal command not found: {}".format(key))
@@ -136,16 +140,16 @@ def seekLetter(out, key, backwards=False, stopBeforeLetter=False):
             # Do it count times?
             clipboard = model.getCapturedClipboard()
             if backwards:
-                out.append(getAdapterMap(Motion.right))
-                LR=Motion.left
+                out.append(convertForOutput(Motion.right))
+                leftOrRight=Motion.left
                 clipboard = clipboard[::-1]  # Reverse.
             else:
-                out.append(getAdapterMap(Motion.left))
-                LR=Motion.right
+                out.append(convertForOutput(Motion.left))
+                leftOrRight=Motion.right
             moveCount = getSeekCount(clipboard, model.getSearchLetter())
             if stopBeforeLetter and moveCount > 0:
                 moveCount -= 1
-            out.append(getAdapterMap(LR) * moveCount)
+            out.append(convertForOutput(leftOrRight) * moveCount)
 
     return out
 
