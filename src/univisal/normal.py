@@ -32,7 +32,8 @@ def normalCommand(out, key):
     # if key == ":":
         # setMode(Mode.command)
         # out.append(nop)
-    elif key == "h":
+    # elif key == "h":
+    if key == "h":
         out.append(getAdapterMap(Motion.left))
     elif key == "l":
         out.append(getAdapterMap(Motion.right))
