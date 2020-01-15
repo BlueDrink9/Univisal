@@ -2,6 +2,7 @@
 # -*- coding: iso-8859-15 -*-
 import json
 import logging
+import enum
 import os
 try:
     from .library import *
@@ -37,7 +38,10 @@ def getAdapterMap(key):
     global adapter_maps
     if adapter_maps is None:
         return key
-    lookup = key
+    if isinstance(key, enum.Enum):
+        lookup = key.value
+    else:
+        lookup = key
     if lookup in adapter_maps:
         result = adapter_maps[lookup]
         logger.debug("Mapping {} to adapter key {}".format(lookup, result))
@@ -47,7 +51,7 @@ def getAdapterMap(key):
 
 
 def getJoinChar():
-    lookup = Keys.multikey_join_char.value
+    lookup = Keys.multikey_join_char
     joinChar = getAdapterMap(lookup)
     # This happens if the adapter doesn't have a map for this.
     if joinChar == lookup:
