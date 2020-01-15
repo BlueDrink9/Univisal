@@ -36,6 +36,13 @@ def test_basic_motions(motion, expected):
     result = handleInput(motion)
     assert result == expected.value, "{} returns wrong thing".format(motion)
 
+def test_escape():
+    setMode(Mode.insert)
+    assert getMode() == Mode.insert
+    result = handleInput(Keys.esc.value)
+    assert getMode() == Mode.normal
+    assert result == "nop"
+
 @pytest.mark.xfail(reason = 'unfinished test implementation')
 def test_f():
     assert Keys.requestSelectedText in translate_keys("fm")

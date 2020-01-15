@@ -9,6 +9,7 @@ import univisal
 from univisal.remap import *
 from univisal.model import *
 from univisal.motion import Motion
+from univisal.keys import Keys
 from univisal.handleInput import handleInput
 from tests.mock_setup import init_univisal, clear_maps, mock_adapter_maps
 from tests.translate_output import translate_keys
@@ -111,6 +112,13 @@ def test_map_with_joinchar(caplog, maps, test, expected, error_msg):
     # Remove imaps again
     for m in maps:
         imap(m)
+
+def test_imap_esc_followup(caplog):
+    imap("jk", Keys.esc.value)
+    setMode(Mode.insert)
+    result = translate_keys("jkl")
+    assert getMode() == Mode.normal
+    assert result == Motion.right.value
 
 
 def test_basic_nmap(caplog):
