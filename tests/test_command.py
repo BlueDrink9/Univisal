@@ -8,8 +8,8 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 import univisal
 from univisal.model import Mode, isMode, getMode, setMode
 from univisal.handleInput import handleInput
-from univisal import Keys
-from univisal import Motion
+from univisal.keys import Keys
+from univisal.motion import Motion
 from tests.mock_setup import init_univisal
 
 @pytest.fixture(autouse=True)
@@ -22,14 +22,14 @@ def test_disable():
     handleInput(":disable")
     assert getMode() == Mode.disabled, "Disable does not change mode"
     assert handleInput('l') == 'l', "Disabled univisal does not return normal key"
-    assert handleInput(Keys.esc) == ("<esc>"), \
+    assert handleInput(Keys.esc.value) == ("<esc>"), \
         "Disabled univisal does not return special keys"
 
 def test_enable():
     handleInput(":disable")
     assert getMode() == Mode.disabled, "Disable does not change mode"
     handleInput(":enable")
-    assert handleInput('l') == Motion.right, "re-enabled univisal does not return motion"
+    assert handleInput('l') == Motion.right.value, "re-enabled univisal does not return motion"
 
 def test_getMode():
     assert handleInput(':getMode') == "normal", "getMode doesn't return mode"

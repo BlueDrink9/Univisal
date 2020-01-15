@@ -4,18 +4,18 @@ try:
     from . import logging_
     from .model import Mode, getMode, setMode, isMode, getCapturedClipboard
     from . import model
-    from . import Motion
-    from . import Operator
+    from .motion import Motion
+    from .operator import Operator
     from .remap import resolve_map
-    from . import Keys
+    from .keys import Keys
 except ImportError:
     from library import *
     import logging_
     from model import Mode, getMode, setMode, isMode, getCapturedClipboard
     import model
-    import Keys
-    import Motion
-    import Operator
+    from keys import Keys
+    from motion import Motion
+    from operator import Operator
     from remap import resolve_map
 logger = logging.getLogger(__name__)
 

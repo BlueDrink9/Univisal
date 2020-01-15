@@ -6,8 +6,8 @@ try:
     from . import logging_
     from .normal import normalCommand
     from .model import *
-    from . import Motion
-    from . import Operator
+    from .motion import Motion
+    from .operator import Operator
     from .handleKey import processOutput
     from . import config
 except ImportError:
@@ -15,8 +15,8 @@ except ImportError:
     import logging_
     from normal import normalCommand
     from model import *
-    import Motion
-    import Operator
+    from motion import Motion
+    from operator import Operator
     from handleKey import processOutput
     import config
 

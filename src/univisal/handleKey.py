@@ -5,9 +5,9 @@ try:
     from .model import Mode, getMode, setMode, isMode
     from . import model
     from .normal import normalCommand
-    from . import Keys
-    from . import Motion
-    from . import Operator
+    from .keys import Keys
+    from .motion import Motion
+    from .operator import Operator
     from . import command
     from .remap import resolve_map
     from .adapter_maps import getAdapterMap
@@ -18,9 +18,9 @@ except ImportError:
     from model import Mode, getMode, setMode, isMode
     import model
     from normal import normalCommand
-    import Keys
-    import Motion
-    import Operator
+    from keys import Keys
+    from motion import Motion
+    from operator import Operator
     import command
     from remap import resolve_map
     from adapter_maps import getAdapterMap
@@ -30,11 +30,11 @@ logger = logging.getLogger(__name__)
 # Reduce chance of a typo if returning nop
 nop = "nop"
 def handleKey(key_):
-        logger.debug("key_: {}".format(key_))
+        logger.debug("handleKey key_: {}".format(key_))
 
         keys = resolve_map(key_)
 
-        logger.debug("keys: {}".format(keys))
+        logger.debug("handleKey keys after mapping: {}".format(keys))
         # a map may turn one key into many, which we need to handle
         # individually.
         out = []
@@ -43,7 +43,7 @@ def handleKey(key_):
                 logger.warning("Error, handled key is not a string: '{}'", key)
 
             # esc regardless of mode, for now. (Still permits mappings.)
-            if key.lower() == Keys.esc:
+            if key.lower() == Keys.esc.value:
                 setMode(Mode.normal)
                 out.append(nop)
                 continue
@@ -66,7 +66,8 @@ def processOutput(output):
         except ValueError:
             pass
 
+    # Convert enums like operator, motion, key into str.
     for i, action in enumerate(output):
-        output[i] = getAdapterMap(action)
-        # getAdapterMap(action.name)
+        if not isinstance(action, str):
+            output[i] = getAdapterMap(action.value)
     return adapter_maps.getJoinChar().join(output)

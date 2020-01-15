@@ -8,8 +8,8 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 import univisal
 from univisal.model import Mode, isMode, getMode, setMode
 from univisal.handleInput import handleInput
-from univisal import Keys
-from univisal import Motion
+from univisal.keys import Keys
+from univisal.motion import Motion
 from tests.mock_setup import init_univisal
 from tests.translate_output import translate_keys
 
@@ -34,7 +34,7 @@ def setUp():
 def test_basic_motions(motion, expected):
     setMode(Mode.normal)
     result = handleInput(motion)
-    assert result == expected, "{} returns wrong thing".format(motion)
+    assert result == expected.value, "{} returns wrong thing".format(motion)
 
 @pytest.mark.xfail(reason = 'unfinished test implementation')
 def test_f():

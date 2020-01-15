@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 import univisal
 from univisal.model import Mode, isMode, getMode, setMode
 from univisal.handleInput import handleInput
-from univisal import Keys
+from univisal.keys import Keys
 
 def mock_adapter_maps(_):
     univisal.adapter_maps.adapter_maps = {

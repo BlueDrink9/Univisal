@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 import univisal
 from univisal.remap import *
 from univisal.model import *
+from univisal.motion import Motion
 from univisal.handleInput import handleInput
 from tests.mock_setup import init_univisal, clear_maps, mock_adapter_maps
 from tests.translate_output import translate_keys
@@ -115,7 +116,7 @@ def test_map_with_joinchar(caplog, maps, test, expected, error_msg):
 def test_basic_nmap(caplog):
     caplog.set_level(logging.DEBUG)
     setMode(Mode.normal)
-    expected = "<right>"
+    expected = Motion.right.value
     assert handleInput("l") == expected
     nmap("x", "l")
     assert handleInput("x") == expected, "basic nmap doesn't work"
@@ -125,7 +126,7 @@ def test_basic_nmap(caplog):
 def test_multichar_nmap(caplog):
     caplog.set_level(logging.DEBUG)
     setMode(Mode.normal)
-    expected = "<right>" * 2
+    expected = Motion.right.value * 2
     assert handleInput("ll") == expected
     nmap("x", "ll")
     assert handleInput("x") == expected, "multichar nmap doesn't work"

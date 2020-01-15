@@ -1,4 +1,5 @@
 import univisal
+from univisal.keys import Keys
 from univisal.handleInput import handleInput
 
 def translate_backspace(out):
@@ -7,15 +8,15 @@ def translate_backspace(out):
     Expands <bs> as a backspace.
     Pass in a string if no special keys, else pass in a list.
     """
-    lookup = "<multikey_join_char>"
+    lookup = Keys.multikey_join_char.value
     joinChar = univisal.adapter_maps.getAdapterMap(lookup)
     if joinChar == lookup:  # Failed lookup.
         joinChar = ''
-    bs = ("<bs>" + joinChar)
+    bs = (Keys.backspace.value + joinChar)
     try:
         index = out.index(bs)
     except ValueError:
-        bs = "<bs>"
+        bs = Keys.backspace.value
         index = out.index(bs)
     out = out[:index -1] + out[index + len(bs):]
     return out
@@ -30,7 +31,7 @@ def translate_keys(keys):
         out += handleResult
     out = ''.join(out)
     # Simulate sending the backspaces
-    while "<bs>" in out:
+    while Keys.backspace.value in out:
         # need to iteratively replace <bs> with removed char
         out = translate_backspace(out)
     return ''.join(out)
