@@ -89,8 +89,8 @@ def resolve_map(key):
     expired_maps = []
     for map_ in maps_in_progress:
         index = maps_in_progress[map_]
-        logger.debug("map index {}; map[index] {}; key {}".format(
-            index, map_[index], key))
+        # logger.debug("map index {}; map[index] {}; key {}".format(
+        #     index, map_[index], key))
         if map_[index] == key:
             maps_in_progress[map_] += 1
         else:
@@ -99,7 +99,7 @@ def resolve_map(key):
         if maps_in_progress[map_] == len(map_):
             # Full sequence has been matched
             maps_in_progress = {}
-            backspaces = ""
+            backspaces = []
             if modeIsInsertLike():
                 # return appropriate number of backspaces.
                 backspaces = ["<bs>"] * (len(map_) - 1)
