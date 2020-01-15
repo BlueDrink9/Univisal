@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 def handleInput(input_):
     logger.debug("handleInput input_: {}".format(input_))
     try:
-        # nop = No op. Need to send something back to adapter to signal finish.
+        # nop = No operation. Need to send something back to adapter to signal finish.
         # Reduce chance of a typo if returning nop
         nop = "nop"
 

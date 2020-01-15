@@ -31,7 +31,9 @@ logger = logging.getLogger(__name__)
 nop = "nop"
 def handleKey(key_):
         logger.debug("key_: {}".format(key_))
+
         keys = resolve_map(key_)
+
         logger.debug("keys: {}".format(keys))
         # a map may turn one key into many, which we need to handle
         # individually.
@@ -39,6 +41,7 @@ def handleKey(key_):
         for key in keys:
             if not isinstance(key, str):
                 logger.warning("Error, handled key is not a string: '{}'", key)
+
             # esc regardless of mode, for now. (Still permits mappings.)
             if key.lower() == Keys.esc:
                 setMode(Mode.normal)
@@ -46,11 +49,11 @@ def handleKey(key_):
                 continue
 
             if isMode(Mode.insert):
-                out.append(getAdapterMap(key))
+                out.append(key)
             elif isMode(Mode.normal):
                 out = normalCommand(out, key)
             else:
-                out.append(getAdapterMap(key))
+                out.append(key)
 
         return processOutput(out)
 
@@ -62,4 +65,8 @@ def processOutput(output):
             output.remove(nop)
         except ValueError:
             pass
+
+    for i, action in enumerate(output):
+        output[i] = getAdapterMap(action)
+        # getAdapterMap(action.name)
     return adapter_maps.getJoinChar().join(output)
