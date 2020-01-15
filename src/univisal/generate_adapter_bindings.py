@@ -73,11 +73,11 @@ for key in keys:
 def isSpecialMap(key):
     if key == "<multikey_join_char>":
         return True
-    # enums = [motion.Motion, operation.Operation]
-    # for enum in enums:
-    #     for e in enum:
-    #         if e.name == key:
-    #             return True
+    enums = [motion.Motion, operation.Operation]
+    for enum in enums:
+        for e in enum:
+            if e.value == key:
+                return True
     return False
 
 # Add any keys in the adapter map that may have been missed.
