@@ -3,6 +3,7 @@ import os
 import pytest
 import unittest.mock
 import sys
+import logging
 # Add src dir to the python path so we can import.
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 import univisal
@@ -45,7 +46,7 @@ def test_escape():
 
 @pytest.mark.xfail(reason = 'unfinished test implementation')
 def test_f():
-    assert Keys.requestSelectedText in translate_keys("fm")
+    assert Keys.requestSelectedText.value in translate_keys("fm")
     result = translate_keys("<clipboard>end of this is m and text")
     # TODO Account for deselect, then movement.
     assert result == "<left>" + "<right>" * 16
