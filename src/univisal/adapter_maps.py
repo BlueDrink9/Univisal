@@ -20,25 +20,30 @@ def load_adapter_maps(adapter):
     global adapter_maps
     # Can dump a dict in python with `json.dumps(dict, sort_keys=True, indent=2)`
     try:
-        adapter_maps_path=os.path.join(get_script_path(),
-                "..", "..", "adapters", adapter, "mappings.json")
-        adapter_maps_file=open(adapter_maps_path, "r")
+        adapter_maps_path = getMappingPath(adapter)
+        with open(adapter_maps_path, "r") as adapter_maps_file:
+            adapter_maps = json.load(adapter_maps_file)
 
-        adapter_maps = json.load(adapter_maps_file)
-
-        adapter_maps_file.close()
         logger.info("Loaded adapter map file {}".format(adapter_maps_path))
 
-    except (IOError, JSONDecodeError) as e:
-        if isinstance(e, IOError):
-            errorAction = "loading"
-        else:
-            errorAction = "decoding"
-        logger.error("Error {} adapter map: {}".format(errorAction,
-                                                       adapter_maps_path),
-                     exc_info=True)
+    except (IOError, json.JSONDecodeError) as e:
+        logAdapterError(e, adapter_maps_path)
         adapter_maps = {}
     return adapter_maps
+
+def getMappingPath(adapter):
+    adapter_maps_path=os.path.join(get_script_path(),
+            "..", "..", "adapters", adapter, "mappings.json")
+    return adapter_maps_path
+
+def logAdapterError(e, path):
+    if isinstance(e, IOError):
+        errorAction = "loading"
+    else:
+        errorAction = "decoding"
+    logger.error("Error {} adapter map: {}".format(errorAction, path),
+                 exc_info=True)
+
 
 def getAdapterMap(key):
     global adapter_maps
