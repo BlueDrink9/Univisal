@@ -31,9 +31,11 @@ def main(args=sys.argv):
         sys.exit(1)
 
     logger.info("Starting univisal")
+    univisal_init(args[1])
 
-    load_adapter_maps(args[1])
 
+def univisal_init(adapter):
+    load_adapter_maps(adapter)
     config.init_config()
     model.init_model()
     init_message_interface()
