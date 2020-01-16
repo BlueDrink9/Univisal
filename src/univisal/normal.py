@@ -4,6 +4,7 @@ try:
     from . import logging_
     from .model import Mode, getMode, setMode, isMode, getCapturedClipboard
     from . import model
+    from . import config
     from .motion import Motion
     from .operator import Operator
     from .remap import resolve_map
@@ -13,6 +14,7 @@ except ImportError:
     import logging_
     from model import Mode, getMode, setMode, isMode, getCapturedClipboard
     import model
+    import config
     from keys import Keys
     from motion import Motion
     from operator import Operator
@@ -98,7 +100,10 @@ def normalCommand(out, key):
 
     else:
         logger.info("Normal command not found: {}".format(key))
-        return key
+        if config.getConfigOption("swallow_unused_normal_keys"):
+            return ""
+        else:
+            return key
     if isMode(Mode.operator_pending):
         out.insert(0, Operator.visualStart)
         out.append(0, Operator.visualPause)

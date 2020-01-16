@@ -16,11 +16,16 @@ Configuration is done by `config.json` in `$XDG_CONFIG_HOME/univisal/` or `~/.co
 
 If this file is not present, defaults will be created.
 
-| option | description | default |
-|--------|--------|---------|
-| load_config | A list of paths to alternative `json`s to load after the main config. `~` is expanded. | [] |
-| imaps | Map of key:value pairs to expand in insert mode. | {} |
-| nmaps, vmaps, cmaps | Map of key:value pairs to expand in normal, visual, or command modes. | {} |
+| option | description | default | Valid values |
+|--------|--------|---------|---------|
+| load_config | A list of paths to alternative `json`s to load after the main config. `~` is expanded. | [] | string |
+| log_level | Level of logs to output to stderr and the log files | "warning" | "debug", "info", "warning", "error", "critical" |
+| swallow_unused_normal_keys | Whether unused keys in normal mode should send the base key (false) or send nothing (true) | "false" | "true", "false" |
+| imaps | Map of key:value pairs to expand in insert mode. | {} |  |
+| nmaps |  Map of key:value pairs to expand in normal mode. | {} | Left hand side must be a single keypress |
+| vmaps, cmaps | Map of key:value pairs to expand in visual or command modes. | {} | None, currently unimplimented. |
+
+Due to technical limitations (can't undo normal commands) only single keypresses are permitted for normal map left hand sides.
 
 ## Installation
 

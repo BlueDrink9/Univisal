@@ -3,16 +3,17 @@ import os
 import pytest
 import unittest.mock
 import sys
+import logging
 # Add src dir to the python path so we can import.
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 from univisal.remap import *
-import univisal.config
+from univisal import config
 from univisal.config import *
 
 
 @pytest.fixture(scope="function", autouse=True)
 def clear_config():
-    univisal.config.config = {}
+    config.configStore = {}
 
 
 @pytest.mark.parametrize("test_opt, expected, error_msg", [
@@ -48,7 +49,7 @@ def test_config(caplog, tmpdir, conf, test_opt, expected, error_msg):
     with unittest.mock.patch('univisal.config.getConfigPath',
                              return_value=tmpdir / "univisal" / "config.json"):
         init_config()
-    univisal.config.config = conf
+    config.configStore = conf
     assert getConfigOption(test_opt) == expected, error_msg
 
 def test_additional_config(caplog, tmpdir):
@@ -57,7 +58,7 @@ def test_additional_config(caplog, tmpdir):
     with unittest.mock.patch('univisal.config.getConfigPath',
                              return_value=tmpdir / "univisal" / "config.json"):
         path = tmpdir / "config2.json"
-        univisal.config.defaults["load_configs"] = [str(path)]
+        config.defaults["load_configs"] = [str(path)]
         makeDefaults()
         test = {"imaps": {"vk": "<esc>"}}
         expected = {"vk": "<esc>"}
@@ -66,4 +67,20 @@ def test_additional_config(caplog, tmpdir):
             json.dump(test, outfile, indent=2, ensure_ascii=False)
         init_config()
     assert getConfigOption("imaps") == expected, error_msg
+
+@pytest.mark.parametrize("level, expected", [
+    ("debug", logging.DEBUG),
+    ("info", logging.INFO),
+    ("error", logging.ERROR),
+    ("warning", logging.WARNING),
+    ("info", logging.INFO),
+])
+def test_log_level(level, expected):
+    config.configStore={"log_level": level}
+    setLogLevel()
+    result = logging.getLogger().getEffectiveLevel()
+    assert result == expected, \
+        "Setting log level '{}' doesn't change effective level (is {})".format(
+            level, result)
+
 

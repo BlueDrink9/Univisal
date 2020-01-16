@@ -16,17 +16,19 @@ logger = logging.getLogger(__name__)
 # An error will be raised if a user sets an option not in defaults.
 defaults = {
     "load_configs" : [],
+    "log_level": "warning",
+    "swallow_unused_normal_keys": "false",
     "imaps" : {},
     "nmaps" : {},
     "cmaps" : {},
     "vmaps" : {},
 }
 
-config = {}
+configStore = {}
 
 def getConfigOption(opt):
     try:
-        return config[opt]
+        return configStore[opt]
     except KeyError:
         # Try to load a default if custom not set.
         logger.info("Loading default for option '{}'".format(opt))
@@ -48,13 +50,13 @@ def loadConfig(path = None):
         readInConfig(path, infile)
 
 def readInConfig(path, infile):
-    global config
+    global configStore
     try:
         logger.info("Loading config file at '{}'".format(path))
-        config = json.load(infile)
+        configStore = json.load(infile)
     except (IOError, json.JSONDecodeError) as e:
         logConfigLoadError(e, path)
-        config = defaults
+        configStore = defaults
 
 def logConfigLoadError(e, path):
     if isinstance(e, IOError):
@@ -96,7 +98,7 @@ def remove_invalid_config_options(subkey=None):
     if subkey:
         options = subkey
     else:
-        options = config
+        options = configStore
     removeInvalidOptions(options)
 
 def removeInvalidOptions(options):
@@ -117,7 +119,7 @@ def init_config():
     for conf in getConfigOption("load_configs"):
         loadConfig(conf)
     remove_invalid_config_options()
-    setMapsFromConfig()
+    applyOptions()
 
 def init_base_config():
     path = getConfigPath()
@@ -126,7 +128,26 @@ def init_base_config():
     else:
         makeDefaults()
 
-def setMapsFromConfig():
+
+def applyOptions():
+    setLogLevel()
+    setMaps()
+
+def setLogLevel():
+    levelStr = getConfigOption("log_level")
+    if levelStr == "debug":
+        level = logging.DEBUG
+    elif levelStr == "info":
+        level = logging.INFO
+    elif levelStr == "error":
+        level = logging.ERROR
+    elif levelStr == "warning":
+        level = logging.WARNING
+    elif levelStr == "info":
+        level = logging.INFO
+    logging.getLogger().setLevel(level)
+
+def setMaps():
     model.imaps = getConfigOption("imaps")
     model.nmaps = getConfigOption("nmaps")
     model.cmaps = getConfigOption("cmaps")

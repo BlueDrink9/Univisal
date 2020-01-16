@@ -41,13 +41,6 @@ def setup_logging(
     # logging.config.filename
 
 
-# setup_logging(os.path.join(get_script_path(), '..', 'logging_py.json'), logging.DEBUG)
-# logPath = os.path.join(gettempdir(), "univisal.log")
-
-# setup_logging(os.path.join(get_script_path(), 'logging_py.json'), logging.DEBUG)
-setup_logging(os.path.join(get_script_path(), '..', '..', 'logging_py.json'), logging.DEBUG)
-logger = logging.getLogger(__name__)
-
 # Any unhandled exceptions will be logged.
 def handle_unhandled_exception(exc_type, exc_value, exc_traceback):
     """Handler for unhandled exceptions that will write to the logs"""
@@ -61,3 +54,10 @@ sys.excepthook = handle_unhandled_exception
 
 # logger = logging.getLogger(__name__)
 # logger.config.filename(
+
+# setup_logging(os.path.join(get_script_path(), '..', 'logging_py.json'), logging.DEBUG)
+# logPath = os.path.join(gettempdir(), "univisal.log")
+
+# setup_logging(os.path.join(get_script_path(), 'logging_py.json'), logging.DEBUG)
+setup_logging(os.path.join(get_script_path(), '..', '..', 'logging_py.json'), logging.DEBUG)
+logger = logging.getLogger(__name__)

@@ -41,7 +41,7 @@ def init_univisal(with_interface=False):
             with unittest.mock.patch(interfaceInit, create=True):
                 from univisal.univisal import main
                 main()
-    univisal.config.config = {}
+    univisal.config.configStore = {}
     clear_maps()
 
 def clear_maps():
