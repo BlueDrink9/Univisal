@@ -20,7 +20,7 @@ If this file is not present, defaults will be created.
 |--------|--------|---------|---------|
 | load_config | A list of paths to alternative `json`s to load after the main config. `~` is expanded. | [] | string |
 | log_level | Level of logs to output to stderr and the log files | "warning" | "debug", "info", "warning", "error", "critical" |
-| swallow_unused_normal_keys | Whether unused keys in normal mode should send the base key (false) or send nothing (true) | "false" | "true", "false" |
+| swallow_unused_normal_keys | Whether unused keys in normal mode should send the base key (false) or send nothing (true) | false | true, false |
 | imaps | Map of key:value pairs to expand in insert mode. | {} |  |
 | nmaps |  Map of key:value pairs to expand in normal mode. | {} | Left hand side must be a single keypress |
 | vmaps, cmaps | Map of key:value pairs to expand in visual or command modes. | {} | None, currently unimplimented. |

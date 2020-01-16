@@ -94,31 +94,12 @@ def makeDefaults():
         json.dump(defaults, outfile, indent=2, ensure_ascii=False)
 
 
-def remove_invalid_config_options(subkey=None):
-    if subkey:
-        options = subkey
-    else:
-        options = configStore
-    removeInvalidOptions(options)
-
-def removeInvalidOptions(options):
-    toRemove = []
-    for opt in options:
-        if opt not in defaults:
-            logger.error("Not a valid option: '{}'".format(opt))
-            toRemove.append(opt)
-        if isinstance(opt, dict):
-            remove_invalid_config_options(opt)
-    for opt in toRemove:
-        del options[opt]
-
-
 def init_config():
     """ Initialise all user configurations. """
     init_base_config()
     for conf in getConfigOption("load_configs"):
         loadConfig(conf)
-    remove_invalid_config_options()
+    removeInvalidOptions(configStore)
     applyOptions()
 
 def init_base_config():
@@ -127,6 +108,17 @@ def init_base_config():
         loadConfig()
     else:
         makeDefaults()
+
+def removeInvalidOptions(options):
+    toRemove = []
+    for opt in options:
+        if opt not in defaults:
+            logger.error("Not a valid option: '{}'".format(opt))
+            toRemove.append(opt)
+        if isinstance(opt, dict):
+            removeInvalidOptions(opt)
+    for opt in toRemove:
+        del options[opt]
 
 
 def applyOptions():

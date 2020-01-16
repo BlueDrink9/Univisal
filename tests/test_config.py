@@ -3,7 +3,6 @@ import os
 import pytest
 import unittest.mock
 import sys
-import logging
 # Add src dir to the python path so we can import.
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 from univisal.remap import *
@@ -76,6 +75,7 @@ def test_additional_config(caplog, tmpdir):
     ("info", logging.INFO),
 ])
 def test_log_level(level, expected):
+    import logging
     config.configStore={"log_level": level}
     setLogLevel()
     result = logging.getLogger().getEffectiveLevel()
@@ -84,3 +84,21 @@ def test_log_level(level, expected):
             level, result)
 
 
+
+@pytest.mark.parametrize("opt, expected, msg", [
+    (False, "m", "Unused normal keys are swallowed when they should not be"),
+    (True, "", "Unused normal keys are not swallowed when they should be"),
+    ])
+def test_swallow_unused_normal(opt, expected, msg):
+    from tests.mock_setup import init_univisal
+    from univisal.handleInput import handleInput
+    from univisal.handleKey import handleKey
+
+    init_univisal()
+    config.configStore={"swallow_unused_normal_keys": opt}
+    setMode(Mode.normal)
+    # Test handling the single key, then the whole input to confirm.
+    result = handleKey("m")
+    assert result == expected, msg + " after handleKey"
+    result = handleInput("m")
+    assert result == expected, msg + " after handleInput"
