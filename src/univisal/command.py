@@ -5,7 +5,8 @@ try:
     from .library import *
     from . import logging_
     from .normal import normalCommand
-    from .model import *
+    from .import model
+    from .model import setMode, getMode, Mode
     from .motion import Motion
     from .operator import Operator
     from .handleKey import processOutput
@@ -14,11 +15,13 @@ except ImportError:
     from library import *
     import logging_
     from normal import normalCommand
-    from model import *
+    import model
+    from model import setMode, getMode, Mode
     from motion import Motion
     from operator import Operator
     from handleKey import processOutput
     import config
+logger = logging.getLogger(__name__)
 
 def handle(cmd):
     if cmd == ":disable":
@@ -44,6 +47,6 @@ def handlePendingClipboard(cmd):
                 but no pending motion.  cmd: '{}'".format(cmd))
     l = len(":clipboard:")
     cmd = cmd[l:]
-    captured_clipboard = cmd
+    model.captured_clipboard = cmd
     commandOut = normalCommand([], model.getPendingMotion())
     return processOutput(commandOut)
