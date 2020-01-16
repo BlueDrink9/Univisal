@@ -59,7 +59,7 @@ def getAdapterMap(key):
         logger.debug("Mapping {} to adapter key {}".format(lookup, result))
         return result
     else:
-        return key
+        return lookup
 
 
 def getJoinChar():
