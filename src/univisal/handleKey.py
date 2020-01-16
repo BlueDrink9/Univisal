@@ -30,28 +30,28 @@ logger = logging.getLogger(__name__)
 # Reduce chance of a typo if returning nop
 nop = "nop"
 def handleSingleInputKey(key_):
-        keys = preprocessKey(key_)
-        # a map may turn one key into many, which we need to handle
-        # individually.
-        out = []
-        for key in keys:
-            if not isinstance(key, str):
-                logger.warning("Error, handled key is not a string: '{}'".format(key))
+    keys = preprocessKey(key_)
+    # a map may turn one key into many, which we need to handle
+    # individually.
+    out = []
+    for key in keys:
+        if not isinstance(key, str):
+            logger.warning("Error, handled key is not a string: '{}'".format(key))
 
-            # esc regardless of mode, for now. (Still permits mappings.)
-            if key.lower() == Keys.esc.value:
-                setMode(Mode.normal)
-                out.append(nop)
-                continue
+        # esc regardless of mode, for now. (Still permits mappings.)
+        if key.lower() == Keys.esc.value:
+            setMode(Mode.normal)
+            out.append(nop)
+            continue
 
-            if isMode(Mode.insert):
-                out.append(key)
-            elif isMode(Mode.normal):
-                out = normalCommand(out, key)
-            else:
-                out.append(key)
+        if isMode(Mode.insert):
+            out.append(key)
+        elif isMode(Mode.normal):
+            out = normalCommand(out, key)
+        else:
+            out.append(key)
 
-        return processOutput(out)
+    return processOutput(out)
 
 def preprocessKey(key):
     logger.debug("handleSingleInputKey key_: {}".format(key))
