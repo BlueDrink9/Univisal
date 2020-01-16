@@ -9,9 +9,6 @@ from univisal.remap import *
 import univisal.config
 from univisal.config import *
 
-def fake_getConfigPath(tmp_path):
-    return tmp_path / "config.json"
-
 
 @pytest.fixture(scope="function", autouse=True)
 def clear_config():
@@ -26,7 +23,7 @@ def clear_config():
 def test_defaults(caplog, tmpdir, test_opt, expected, error_msg):
     caplog.set_level(logging.DEBUG)
     with unittest.mock.patch('univisal.config.getConfigPath',
-                             return_value=tmpdir / "config.json"):
+                             return_value=tmpdir / "univisal" / "config.json"):
         makeDefaults()
         loadConfig()
     assert getConfigOption(test_opt) == expected, error_msg
@@ -49,7 +46,7 @@ def test_defaults(caplog, tmpdir, test_opt, expected, error_msg):
 def test_config(caplog, tmpdir, conf, test_opt, expected, error_msg):
     caplog.set_level(logging.DEBUG)
     with unittest.mock.patch('univisal.config.getConfigPath',
-                             return_value=tmpdir / "config.json"):
+                             return_value=tmpdir / "univisal" / "config.json"):
         init_config()
     univisal.config.config = conf
     assert getConfigOption(test_opt) == expected, error_msg
@@ -58,7 +55,7 @@ def test_additional_config(caplog, tmpdir):
     import json
     caplog.set_level(logging.DEBUG)
     with unittest.mock.patch('univisal.config.getConfigPath',
-                             return_value=tmpdir / "config.json"):
+                             return_value=tmpdir / "univisal" / "config.json"):
         path = tmpdir / "config2.json"
         univisal.config.defaults["load_configs"] = [str(path)]
         makeDefaults()
