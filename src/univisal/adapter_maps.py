@@ -54,12 +54,15 @@ def getAdapterMap(key):
     else:
         lookup = key
 
-    if lookup in adapter_maps:
-        result = adapter_maps[lookup]
-        logger.debug("Mapping {} to adapter key {}".format(lookup, result))
-        return result
+    return lookupAdapterMap(lookup)
+
+def lookupAdapterMap(name):
+    if name in adapter_maps:
+        result = adapter_maps[name]
+        logger.debug("Mapping {} to adapter key {}".format(name, result))
     else:
-        return lookup
+        result = name
+    return result
 
 
 def getJoinChar():
