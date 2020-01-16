@@ -18,11 +18,16 @@ def mock_adapter_maps(_):
 def ret_arg(arg):
     return arg
 
-def init_univisal():
+
+def init_univisal(with_interface=False):
     mockargs=['1', '2']
+    if not with_interface:
+        interfaceInit = "univisal.message_interface.init_message_interface"
+        interfacePatch = unittest.mock.patch(interfaceInit, create=True)
+    else:
+        interfacePatch=None
     with unittest.mock.patch('sys.argv', mockargs), \
-    unittest.mock.patch("univisal.message_interface.init_message_interface",
-        create=True), \
+    interfacePatch, \
     unittest.mock.patch("univisal.adapter_maps.load_adapter_maps",
             side_effect=mock_adapter_maps), \
     unittest.mock.patch("univisal.adapter_maps.getAdapterMap",
