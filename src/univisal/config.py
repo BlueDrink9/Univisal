@@ -28,22 +28,23 @@ def getConfigOption(opt):
     try:
         return config[opt]
     except KeyError:
+        # Try to load a default if custom not set.
         logger.info("Loading default for option '{}'".format(opt))
         try:
             return defaults[opt]
         except KeyError:
-            logger.warning("No config option detected for '{}'".format(opt),
+            logger.error("No default config option detected for '{}'. Option is not valid".format(opt),
                         exc_info=1)
         return None
 
 def getConfigDir():
     # Not using appdirs (https://pypi.org/project/appdirs/), because we want
     # OSX to be treated ike unix.
-    # Windows
     if os.name == "nt":
+        # Windows
         config_dir = pathlib.Path(os.getenv("APPDATA") / "univisal")
     else:
-        config_dir = pathlib.Path(os.getenv("XDG_CONFIG_HOME", "~/.config"))
+        config_dir = pathlib.Path(os.getenv("XDG_CONFIG_HOME", "~/.config")) / "univisal"
     return config_dir
 
 def getConfigPath():
