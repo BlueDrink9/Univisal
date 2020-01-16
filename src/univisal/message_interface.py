@@ -33,16 +33,28 @@ def outpt_write(key):
 def inpt_read():
     return readPipe()
 
+
+def init_message_interface():
+    while True:
+        data = inpt_read()
+        logger.debug("data :'{}'".format(data))
+        # logger.debug("Data: " + data)
+        output = process_input(data)
+        if output:
+            outpt_write(output)
+        else:
+            # If processing returns None, was HUP. End processing.
+            break
+
+
 def process_input(data):
-    global reading_input
     if len(data) == 0:
         output = ""
     key = data.rstrip()
     logger.debug("Key: " + key)
     if key == "HUP":
         logger.info("HUP. End reading.")
-        reading_input = False
-        return False
+        return None
     try:
         output = handleInput(key)
     except:
@@ -51,20 +63,7 @@ def process_input(data):
     logger.debug("Output: " + output)
     if not isinstance(output, str):
         logger.error("""
-        Error: No key sent. Output is not str. Returning input key instead.
+        Error: No key outputted. Output is not str. Returning input key instead.
         """)
         output = key
-    outpt_write(output)
-    return True
-
-
-def init_message_interface():
-    global reading_input
-    reading_input = True
-    while reading_input:
-        data = inpt_read()
-        logger.debug("data :'{}'".format(data))
-        # logger.debug("Data: " + data)
-        # If processing returns False, was HUP. End processing.
-        if not process_input(data):
-            break
+    return output
