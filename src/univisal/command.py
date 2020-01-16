@@ -38,15 +38,20 @@ def handle(cmd):
         logger.error("Not a valid command: {cmd}".format(cmd))
     return None
 
+
 def handlePendingClipboard(cmd):
+    verifyPendingClipboard(cmd)
+    l = len(":clipboard:")
+    cmd = cmd[l:]
+    model.captured_clipboard = cmd
+    commandOut = normalCommand([], model.getPendingMotion())
+    return processOutput(commandOut)
+
+def verifyPendingClipboard(cmd):
     if not model.expecting_clipboard:
         logger.warning("Received command ':clipboard', \
                 but not expecding it.  cmd: '{}'".format(cmd))
     if model.pending_motion is None:
         logger.warning("Received command ':clipboard', \
                 but no pending motion.  cmd: '{}'".format(cmd))
-    l = len(":clipboard:")
-    cmd = cmd[l:]
-    model.captured_clipboard = cmd
-    commandOut = normalCommand([], model.getPendingMotion())
-    return processOutput(commandOut)
+
