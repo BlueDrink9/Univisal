@@ -39,26 +39,31 @@ def getConfigOption(opt):
 
 
 def loadConfig(path = None):
-    global config
     if path is None:
         path = pathlib.Path(getConfigPath())
     else:
         path = pathlib.Path(path)
+    path = path.expanduser()
+    with open(path, 'r') as infile:
+        readInConfig(path, infile)
 
-    with open(path.expanduser(), 'r') as infile:
-        try:
-            logger.info("Loading config file at '{}'".format(path))
-            config = json.load(infile)
-        except (IOError, JSONDecodeError) as e:
-            if isinstance(e, IOError):
-                errorAction = "loading"
-            else:
-                errorAction = "decoding"
-            logger.warning("Error {} config filemap: '{}'. \
-                           Using defaults.".format(errorAction, path),
-                           exc_info=True)
+def readInConfig(path, infile):
+    global config
+    try:
+        logger.info("Loading config file at '{}'".format(path))
+        config = json.load(infile)
+    except (IOError, json.JSONDecodeError) as e:
+        logConfigLoadError(e, path)
+        config = defaults
 
-            config = defaults
+def logConfigLoadError(e, path):
+    if isinstance(e, IOError):
+        errorAction = "loading"
+    else:
+        errorAction = "decoding"
+    logger.warning("Error {} config filemap: '{}'. \
+                   Using defaults.".format(errorAction, path),
+                   exc_info=True)
 
 
 def getConfigDir():
@@ -107,15 +112,21 @@ def removeInvalidOptions(options):
 
 
 def init_config():
+    """ Initialise all user configurations. """
+    init_base_config()
+    for conf in getConfigOption("load_configs"):
+        loadConfig(conf)
+    remove_invalid_config_options()
+    setMapsFromConfig()
+
+def init_base_config():
     path = getConfigPath()
     if path.exists():
         loadConfig()
     else:
         makeDefaults()
-    for conf in getConfigOption("load_configs"):
-        loadConfig(conf)
-    remove_invalid_config_options()
 
+def setMapsFromConfig():
     model.imaps = getConfigOption("imaps")
     model.nmaps = getConfigOption("nmaps")
     model.cmaps = getConfigOption("cmaps")
