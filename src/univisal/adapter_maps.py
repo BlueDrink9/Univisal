@@ -20,17 +20,23 @@ def load_adapter_maps(adapter):
     global adapter_maps
     # Can dump a dict in python with `json.dumps(dict, sort_keys=True, indent=2)`
     try:
-        adapter_maps_p=os.path.join(get_script_path(),
+        adapter_maps_path=os.path.join(get_script_path(),
                 "..", "..", "adapters", adapter, "mappings.json")
-        adapter_maps_f=open(adapter_maps_p, "r")
-        adapter_maps = json.load(adapter_maps_f)
-        adapter_maps_f.close()
-        logger.info("Loaded adapter map file {}".format(adapter_maps_p))
-    except IOError as e:
-        logger.error("Error loading adapter map: {}".format(adapter_maps_p), exc_info=True)
-        adapter_maps = {}
-    except JSONDecodeError as e:
-        logger.error("Error decoding adapter map {}".format(adapter_maps_p), exc_info=True)
+        adapter_maps_file=open(adapter_maps_path, "r")
+
+        adapter_maps = json.load(adapter_maps_file)
+
+        adapter_maps_file.close()
+        logger.info("Loaded adapter map file {}".format(adapter_maps_path))
+
+    except (IOError, JSONDecodeError) as e:
+        if isinstance(e, IOError):
+            errorAction = "loading"
+        else:
+            errorAction = "decoding"
+        logger.error("Error {} adapter map: {}".format(errorAction,
+                                                       adapter_maps_path),
+                     exc_info=True)
         adapter_maps = {}
     return adapter_maps
 
@@ -42,6 +48,7 @@ def getAdapterMap(key):
         lookup = key.value
     else:
         lookup = key
+
     if lookup in adapter_maps:
         result = adapter_maps[lookup]
         logger.debug("Mapping {} to adapter key {}".format(lookup, result))
