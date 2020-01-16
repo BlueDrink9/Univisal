@@ -37,6 +37,30 @@ def getConfigOption(opt):
                         exc_info=1)
         return None
 
+
+def loadConfig(path = None):
+    global config
+    if path is None:
+        path = pathlib.Path(getConfigPath())
+    else:
+        path = pathlib.Path(path)
+
+    with open(path.expanduser(), 'r') as infile:
+        try:
+            logger.info("Loading config file at '{}'".format(path))
+            config = json.load(infile)
+        except (IOError, JSONDecodeError) as e:
+            if isinstance(e, IOError):
+                errorAction = "loading"
+            else:
+                errorAction = "decoding"
+            logger.warning("Error {} config filemap: '{}'. \
+                           Using defaults.".format(errorAction, path),
+                           exc_info=True)
+
+            config = defaults
+
+
 def getConfigDir():
     # Not using appdirs (https://pypi.org/project/appdirs/), because we want
     # OSX to be treated ike unix.
@@ -54,6 +78,7 @@ def getConfigPath():
 
 def makeDefaults():
     path = getConfigPath()
+    # only PurePath has .parent, only Path has .exists()
     dir_ = pathlib.Path(pathlib.PurePath(path).parent)
     if not dir_.exists():
         dir_.mkdir(parents=True)
@@ -62,30 +87,15 @@ def makeDefaults():
         json.dump(defaults, outfile, indent=2, ensure_ascii=False)
 
 
-def loadConfig(path = None):
-    global config
-    if path is None:
-        path = pathlib.Path(getConfigPath())
-    else:
-        path = pathlib.Path(path)
-    with open(path.expanduser(), 'r') as infile:
-        try:
-            logger.info("Loading config file at '{}'".format(path))
-            config = json.load(infile)
-        except IOError as e:
-            logger.warning("Error loading config filemap: '{}'. \
-                           Using defaults.".format(path), exc_info=True)
-            config = defaults
-        except JSONDecodeError as e:
-            logger.warning("Error decoding config file '{}'. \
-                           Using defaults.".format(path), exc_info=True)
-            config = defaults
-
-
-def validate_config():
+# Note, this isn't recursive, so supkeys won't get validated. TODO?
+def remove_invalid_config_options():
+    toRemove = []
     for opt in config:
         if opt not in defaults:
-            raise ValueError("Not a valid option: '{}'".format(opt))
+            logger.error("Not a valid option: '{}'".format(opt))
+            toRemove.append(opt)
+    for opt in toRemove:
+        del config[opt]
 
 
 def init_config():
@@ -94,13 +104,13 @@ def init_config():
         loadConfig()
     else:
         makeDefaults()
+    for conf in getConfigOption("load_configs"):
+        loadConfig(conf)
+    remove_invalid_config_options()
 
     model.imaps = getConfigOption("imaps")
     model.nmaps = getConfigOption("nmaps")
     model.cmaps = getConfigOption("cmaps")
     model.vmaps = getConfigOption("vmaps")
-    for conf in getConfigOption("load_configs"):
-        loadConfig(conf)
-    validate_config()
 
 
