@@ -72,9 +72,9 @@ def normalCommand(out, key):
     elif key == "^":
         out.append(Motion.goLineStart)
     elif key == "x":
-        out.append(Key.delete)
+        out.append(Keys.delete)
     elif key == "X":
-        out.append(Key.backspace)
+        out.append(Keys.backspace)
     elif key == "f":
         out = seekLetter(out, key)
     elif key == "t":
@@ -84,13 +84,13 @@ def normalCommand(out, key):
     elif key == "T":
         out = seekLetter(out, key, backwards=True, stopBeforeLetter=True)
     elif key == "u":
-        out.append(operator.undo)
+        out.append(Operator.undo)
     elif key == "<ctrl>r":
-        out.append(operator.redo)
+        out.append(Operator.redo)
     elif key == "J":
-        out.extend([motion.goEndOfLine,
+        out.extend([Motion.goEndOfLine,
                     Keys.delete,
-                    keys.space
+                    Keys.space
                     ])
     # elif key == "ZZ":
     #     out.extend([operator.save,
