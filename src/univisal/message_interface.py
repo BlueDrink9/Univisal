@@ -49,12 +49,17 @@ def readMessagesLoop():
 
 def process_input(data):
     if len(data) == 0:
-        output = ""
+        return ""
     key = data.rstrip()
     logger.debug("Key: " + key)
     if key == "HUP":
         logger.info("HUP. End reading.")
         return None
+    output = tryHandle(key)
+    return output
+
+
+def tryHandle(key):
     try:
         output = handleInput(key)
     except:
