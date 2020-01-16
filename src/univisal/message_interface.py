@@ -34,7 +34,7 @@ def inpt_read():
     return readPipe()
 
 
-def init_message_interface():
+def readMessagesLoop():
     while True:
         data = inpt_read()
         logger.debug("data :'{}'".format(data))

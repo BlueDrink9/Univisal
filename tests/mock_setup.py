@@ -25,7 +25,7 @@ def ret_joinChar():
 
 def init_univisal(with_interface=False):
     mockargs=['1', '2']
-    interfaceInit = "univisal.message_interface.init_message_interface"
+    interfaceInit = "univisal.message_interface.readMessagesLoop"
     with unittest.mock.patch('sys.argv', mockargs), \
             unittest.mock.patch("univisal.adapter_maps.load_adapter_maps",
                                 side_effect=mock_adapter_maps), \
@@ -36,7 +36,7 @@ def init_univisal(with_interface=False):
         if with_interface:
             from univisal.univisal import main
             main()
-            univisal.message_interface.init_message_interface()
+            univisal.message_interface.readMessagesLoop()
         else:
             with unittest.mock.patch(interfaceInit, create=True):
                 from univisal.univisal import main

@@ -7,14 +7,14 @@ import logging
 # import importlib
 
 try:
-    from .message_interface import init_message_interface
+    from .message_interface import readMessagesLoop
     from .library import *
     from .adapter_maps import load_adapter_maps
     from . import model
     from . import config
     from . import logging_
 except ImportError:
-    from message_interface import init_message_interface
+    from message_interface import readMessagesLoop
     from library import *
     from adapter_maps import load_adapter_maps
     import model
@@ -38,6 +38,6 @@ def univisal_init(adapter):
     load_adapter_maps(adapter)
     config.init_config()
     model.init_model()
-    init_message_interface()
+    readMessagesLoop()
 
 main()
