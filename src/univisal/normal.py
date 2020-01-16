@@ -99,16 +99,20 @@ def normalCommand(out, key):
     #         operator.quit])
 
     else:
-        logger.info("Normal command not found: {}".format(key))
-        if config.getConfigOption("swallow_unused_normal_keys"):
-            return ""
-        else:
-            return key
+        return unfoundKeyFallback(key)
+    # TODO
     if isMode(Mode.operator_pending):
         out.insert(0, Operator.visualStart)
         out.append(0, Operator.visualPause)
         # TODO
     return out
+
+def unfoundKeyFallback(key):
+    logger.info("Normal command not found: {}".format(key))
+    if config.getConfigOption("swallow_unused_normal_keys"):
+        return ""
+    else:
+        return key
 
 
 def seekLetter(out, key, backwards=False, stopBeforeLetter=False):
@@ -122,32 +126,44 @@ def seekLetter(out, key, backwards=False, stopBeforeLetter=False):
     else:
         if not model.expecting_clipboard:
             # Request clipboard and return.
-            out.append(Operator.visualStart)
-            if backwards:
-                out.append(Motion.goLineStart)
-            else:
-                out.append(Motion.goLineEnd)
-            model.expecting_clipboard = True
-            out.append(Keys.requestSelectedText)
-            return out
+            out = requestClipboard(out, backwards)
         else:
             # After f/t and seekLetter.
             # First have to deselect back to previous spot.
             # count from clipboard till index of next letter. TODO
             # Do it count times?
-            clipboard = model.getCapturedClipboard()
-            if backwards:
-                out.append(Motion.right)
-                leftOrRight=Motion.left
-                clipboard = clipboard[::-1]  # Reverse.
-            else:
-                out.append(Motion.left)
-                leftOrRight=Motion.right
-            moveCount = getSeekCount(clipboard, model.getSearchLetter())
-            if stopBeforeLetter and moveCount > 0:
-                moveCount -= 1
-            out.append(leftOrRight * moveCount)
+            out = getMovements(backwards, out, stopBeforeLetter)
 
+    return out
+
+def getMovements(backwards, out, stopBeforeLetter):
+    # First have to deselect back to previous spot.
+    # count from clipboard till index of next letter. TODO
+    # Do it count times?
+    clipboard = model.getCapturedClipboard()
+    if backwards:
+        out.append(Motion.right)  # deselect
+        leftOrRight=Motion.left
+        clipboard = clipboard[::-1]  # Reverse.
+    else:
+        out.append(Motion.left)  # deselect
+        leftOrRight=Motion.right
+
+    moveCount = getSeekCount(clipboard, model.getSearchLetter())
+    if stopBeforeLetter and moveCount > 0:
+        moveCount -= 1
+    out.append(leftOrRight * moveCount)
+    return out
+
+def requestClipboard(out, backwards):
+    # Request clipboard and return.
+    out.append(Operator.visualStart)
+    if backwards:
+        out.append(Motion.goLineStart)
+    else:
+        out.append(Motion.goLineEnd)
+    model.expecting_clipboard = True
+    out.append(Keys.requestSelectedText)
     return out
 
 
