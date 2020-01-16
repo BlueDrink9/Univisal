@@ -87,15 +87,20 @@ def makeDefaults():
         json.dump(defaults, outfile, indent=2, ensure_ascii=False)
 
 
-# Note, this isn't recursive, so supkeys won't get validated. TODO?
-def remove_invalid_config_options():
+def remove_invalid_config_options(subkey=None):
+    if subkey:
+        options = subkey
+    else:
+        options = config
     toRemove = []
-    for opt in config:
+    for opt in options:
         if opt not in defaults:
             logger.error("Not a valid option: '{}'".format(opt))
             toRemove.append(opt)
+        if isinstance(opt, dict):
+            remove_invalid_config_options(opt)
     for opt in toRemove:
-        del config[opt]
+        del options[opt]
 
 
 def init_config():
