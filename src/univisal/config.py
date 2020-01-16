@@ -92,6 +92,9 @@ def remove_invalid_config_options(subkey=None):
         options = subkey
     else:
         options = config
+    removeInvalidOptions(options)
+
+def removeInvalidOptions(options):
     toRemove = []
     for opt in options:
         if opt not in defaults:
