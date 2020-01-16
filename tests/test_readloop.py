@@ -11,14 +11,17 @@ from univisal.keys import Keys
 from univisal.motion import Motion
 from tests.mock_setup import init_univisal
 
-# @pytest.fixture(autouse=True)
-# def setUp():
-#     init_univisal(with_interface=True)
+@pytest.fixture(autouse=True)
+def init_store():
+    global inI, outI, outpts, inpts
+    inI=-1
+    outI=-1
+    outpts=[]
+    inpts=[]
 
 outpts=[]
 outI=-1
 def addOutput(key):
-    print(key)
     global outpts
     outpts.append(key)
 inpts=[]
@@ -59,7 +62,5 @@ def loop(keys):
 def test_loop(keys, expected):
     if not isinstance(keys, list):
         keys = [keys]
-    if not isinstance(expected, list):
-        expected = [expected]
     loop(keys)
-    assert outpts==expected, "Main loop failed with keys {}".format(keys)
+    assert ''.join(outpts)==expected, "Main loop failed with keys {}".format(keys)
