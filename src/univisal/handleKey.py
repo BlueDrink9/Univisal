@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 # Reduce chance of a typo if returning nop
 nop = "nop"
-def handleKey(key_):
+def handleSingleInputKey(key_):
         logger.debug("handleKey key_: {}".format(key_))
 
         keys = resolve_map(key_)

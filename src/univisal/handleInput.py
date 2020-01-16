@@ -6,7 +6,7 @@ try:
     from . import model
     from .normal import normalCommand
     from . import command
-    from .handleKey import handleKey
+    from .handleKey import handleSingleInputKey
     from .adapter_maps import getAdapterMap
 except ImportError:
     from library import *
@@ -15,7 +15,7 @@ except ImportError:
     import model
     from normal import normalCommand
     import command
-    from handleKey import handleKey
+    from handleKey import handleSingleInputKey
     from adapter_maps import getAdapterMap
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ def handleInput(input_):
             model.setSearchLetter(input_)
             return normalCommand([], model.pending_motion)
 
-        return handleKey(input_)
+        return handleSingleInputKey(input_)
     except:
         logger.critical("Unhandled exception", exc_info=True)
         try:
