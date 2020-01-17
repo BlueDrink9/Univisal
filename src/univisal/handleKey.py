@@ -75,7 +75,9 @@ def convertOuputEnumsToStrings(output):
     return output
 
 def stripNoOp(output):
-    # Only need nop if it's the only thing being returned.
+    # Only need nop if it's the only thing being returned, and only need one.
+    while output.count(nop) > 1:
+        output.remove(nop)
     if len(output) > 1:
         try:
             output.remove(nop)
