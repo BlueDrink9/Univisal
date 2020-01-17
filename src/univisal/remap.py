@@ -43,7 +43,7 @@ def nmap(sequence, result=None):
 
 
 def set_current_maps():
-    global current_mode, current_maps
+    global current_mode, current_maps, maps_in_progress
     # If we switch modes, discard progress.
     if current_mode != getMode():
         maps_in_progress = {}

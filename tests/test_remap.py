@@ -129,6 +129,22 @@ def test_basic_nmap(caplog):
     nmap("x", "l")
     assert handleInput("x") == expected, "basic nmap doesn't work"
 
+def test_mode_change(caplog):
+    caplog.set_level(logging.DEBUG)
+    iLhs="savag"
+    iRhs="role"
+    imap(iLhs, iRhs)
+    nmap("g", "l")
+    setMode(Mode.insert)
+    # maps_in_progress should be xavier
+    insertExpected = (iLhs[:-1])
+    assert translate_keys(insertExpected) == insertExpected
+    setMode(Mode.normal)
+    assert translate_keys("g") == Motion.right.value
+    setMode(Mode.insert)
+    assert translate_keys("g") == "g"
+    assert translate_keys(iLhs) == iRhs
+
 @pytest.mark.xfail(reason = "multi-char nmap won't work because \
         you can't backspace a normal command")
 def test_multichar_nmap(caplog):
