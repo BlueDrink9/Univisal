@@ -2,6 +2,7 @@ import univisal
 from univisal.keys import Keys
 from univisal.handleInput import handleInput
 
+nop="nop"
 def translate_backspace(out):
     """
     Converts a string/list of keypresses according to univisal rules.
@@ -28,9 +29,12 @@ def translate_keys(keys):
     out = []
     for char in keys:
         handleResult = handleInput(char)
-        out += handleResult
+        out.append(handleResult)
+    while nop in out:
+        out.remove(nop)
     out = ''.join(out)
-    # Simulate sending the backspaces
+    # Simulate sending the backspaces. Do with string, not array, to ensure
+    # normal commands not affected.
     while Keys.backspace.value in out:
         # need to iteratively replace <bs> with removed char
         out = translate_backspace(out)
