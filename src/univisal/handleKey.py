@@ -7,7 +7,7 @@ try:
     from .normal import normalCommand
     from .keys import Keys
     from .motion import Motion
-    from .operator import Operator
+    from .vim_operator import Operator
     from . import command
     from .remap import resolve_map
     from .adapter_maps import getAdapterMap
@@ -20,7 +20,7 @@ except ImportError:
     from normal import normalCommand
     from keys import Keys
     from motion import Motion
-    from operator import Operator
+    from vim_operator import Operator
     import command
     from remap import resolve_map
     from adapter_maps import getAdapterMap

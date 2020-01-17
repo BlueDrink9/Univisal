@@ -6,7 +6,7 @@ try:
     from . import model
     from . import config
     from .motion import Motion
-    from .operator import Operator
+    from .vim_operator import Operator
     from .remap import resolve_map
     from .keys import Keys
 except ImportError:
@@ -17,7 +17,7 @@ except ImportError:
     import config
     from keys import Keys
     from motion import Motion
-    from operator import Operator
+    from vim_operator import Operator
     from remap import resolve_map
 logger = logging.getLogger(__name__)
 

@@ -8,7 +8,7 @@ try:
     from .import model
     from .model import setMode, getMode, Mode
     from .motion import Motion
-    from .operator import Operator
+    from .vim_operator import Operator
     from .handleKey import processOutput
     from . import config
 except ImportError:
@@ -18,7 +18,7 @@ except ImportError:
     import model
     from model import setMode, getMode, Mode
     from motion import Motion
-    from operator import Operator
+    from vim_operator import Operator
     from handleKey import processOutput
     import config
 logger = logging.getLogger(__name__)
