@@ -40,8 +40,8 @@ def checkArgs(args):
 
 
 def univisal_init(adapter):
-    load_adapter_maps(adapter)
     config.init_config()
+    load_adapter_maps(adapter)
     model.init_model()
     readMessagesLoop()
 

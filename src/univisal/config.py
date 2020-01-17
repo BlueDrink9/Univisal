@@ -135,8 +135,8 @@ def setLogLevel():
         level = logging.ERROR
     elif levelStr == "warning":
         level = logging.WARNING
-    elif levelStr == "info":
-        level = logging.INFO
+    elif levelStr == "critical":
+        level = logging.CRITICAL
     logging.getLogger().setLevel(level)
 
 def setMaps():

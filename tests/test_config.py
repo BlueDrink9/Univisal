@@ -72,7 +72,7 @@ def test_additional_config(caplog, tmpdir):
     ("info", logging.INFO),
     ("error", logging.ERROR),
     ("warning", logging.WARNING),
-    ("info", logging.INFO),
+    ("critical", logging.CRITICAL),
 ])
 def test_log_level(level, expected):
     import logging
