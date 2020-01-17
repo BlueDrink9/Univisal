@@ -37,6 +37,19 @@ def test_basic_motions(motion, expected):
     result = handleInput(motion)
     assert result == expected.value, "{} returns wrong thing".format(motion)
 
+
+# Handles 1, single digit, double digit with 0, double digit without 0.
+@pytest.mark.parametrize("count", [1, 10, 12, 26])
+def test_basic_motion_with_count(count):
+    motion='l'
+    motionVal=Motion.right.value
+    inpt = str(count) + motion
+    expected=motionVal * count
+    setMode(Mode.normal)
+    result = translate_keys(inpt)
+    print("number of repeats in result: {}".format(result.count(motionVal)))
+    assert result == expected, "motion with count {} returns wrong thing".format(count)
+
 def test_escape():
     setMode(Mode.insert)
     assert getMode() == Mode.insert
