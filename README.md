@@ -27,6 +27,8 @@ If this file is not present, defaults will be created.
 
 Due to technical limitations (can't undo normal commands) only single keypresses are permitted for normal map left hand sides.
 
+Log level is set to DEBUG until configuration is loaded, so you will see any log messages related to initialising univisal config.
+
 ## Installation
 
 ### Dependencies
