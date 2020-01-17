@@ -99,6 +99,7 @@ def setSearchLetter(l):
     expecting_search_letter = False
 
 def increaseRepeatCount(count):
+    global repeat_count
     if repeat_count == 1:
         repeat_count = count
     else:

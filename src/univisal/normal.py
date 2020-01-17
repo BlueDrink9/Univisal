@@ -64,12 +64,12 @@ def normalCommand(out, key):
     elif key == "0":
         # If repeat count in progress, adds to that. Otherwise, BoL.
         if model.repeat_count > 1:
-            model.increaseRepeatCount(key)
+            model.increaseRepeatCount(int(key))
             out.append(nop)
         else:
             out.append(Motion.goLineStart)
-    elif key in "123456789" and len(key == 1):
-        model.increaseRepeatCount(key)
+    elif key in "123456789" and len(key) == 1:
+        model.increaseRepeatCount(int(key))
         out.append(nop)
     elif key == "^":
         out.append(Motion.goLineStart)
@@ -105,7 +105,7 @@ def normalCommand(out, key):
         out.insert(0, Operator.visualStart)
         out.append(0, Operator.visualPause)
         # TODO
-    return out
+    return out * model.repeat_count
 
 def unfoundKeyFallback(key):
     logger.info("Normal command not found: {}".format(key))
