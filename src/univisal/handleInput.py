@@ -44,9 +44,12 @@ def handleInput(input_):
 
         return handleSingleInputKey(input_)
     except:
-        logger.critical("Unhandled exception", exc_info=True)
-        try:
-            return getAdapterMap(input_)
-        except:
-            logger.critical("Unhandled exception while mapping adapter", exc_info=True)
-            return input_
+        return getFallbackOutput(input_)
+
+def getFallbackOutput(input_):
+    logger.critical("Unhandled exception handling input", exc_info=True)
+    try:
+        return getAdapterMap(input_)
+    except:
+        logger.critical("Unhandled exception while mapping adapter", exc_info=True)
+        return input_
