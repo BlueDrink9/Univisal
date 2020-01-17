@@ -48,6 +48,7 @@ def test_basic_motion_with_count(count):
     setMode(Mode.normal)
     result = translate_keys(inpt)
     print("number of repeats in result: {}".format(result.count(motionVal)))
+    print("current repeat count: {}".format(univisal.model.getRepeatCount()))
     assert result == expected, "motion with count {} returns wrong thing".format(count)
 
 def test_escape():

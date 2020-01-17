@@ -24,7 +24,7 @@ _pending_motion = None
 _captured_clipboard = None
 expecting_clipboard = None
 expecting_search_letter = None
-repeat_count = None
+__repeat_count = None
 
 insertlike_modes = [
         Mode.insert,
@@ -61,12 +61,16 @@ def init_model():
     clear_pending()
 
 def clear_pending():
-    global repeat_count, expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter
-    repeat_count = 1
+    global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter
     expecting_clipboard = False
     expecting_search_letter = False
-    pending_motion = None
-    captured_clipboard = None
+    _pending_motion = None
+    _captured_clipboard = None
+    resetRepeatCount()
+
+def resetRepeatCount():
+    global __repeat_count
+    __repeat_count = 0
 
 def getCapturedClipboard():
     global _captured_clipboard
@@ -98,9 +102,19 @@ def setSearchLetter(l):
     _search_letter = l
     expecting_search_letter = False
 
-def increaseRepeatCount(count):
-    global repeat_count
-    if repeat_count == 1:
-        repeat_count = count
+def getRepeatCount():
+    if repeatInProgress():
+        return __repeat_count
     else:
-        repeat_count = 10*repeat_count + count
+        return 1
+
+def repeatInProgress():
+    return __repeat_count > 0
+
+def increaseRepeatCount(count):
+    global __repeat_count
+    # Will never be 12 because 12 == 1 2
+    if repeatInProgress():
+        __repeat_count = 10*__repeat_count + count
+    else:
+        __repeat_count = count
