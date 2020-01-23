@@ -12,9 +12,6 @@ if not sys.platform.startswith("win"):
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 from univisal.pipes_windows import readPipe, writePipe
 
-# TODO: Thread this so that messages can be read after writing, without
-# waiting for connection to finish.
-# (Probably try reading first to get fastest results?)
 def round_trip_msg(msg, pipe=None):
     if pipe is None:
         # TODO make this a unique generation to prevent 1 broken test holding
