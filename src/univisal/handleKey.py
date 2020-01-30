@@ -29,29 +29,28 @@ logger = logging.getLogger(__name__)
 
 # Reduce chance of a typo if returning nop
 nop = "nop"
-def handleSingleInputKey(key_):
-    keys = preprocessKey(key_)
+def handleVimInputKey(inputKey):
+    mappedKeys = preprocessKey(inputKey)
     # a map may turn one key into many, which we need to handle
     # individually.
-    out = []
-    for key in keys:
+    for key in mappedKeys:
         if not isinstance(key, str):
             logger.warning("Error, handled key is not a string: '{}'".format(key))
 
         # esc regardless of mode, for now. (Still permits mappings.)
-        if key.lower() == Keys.esc.value:
+        if isEsc(key):
             setMode(Mode.normal)
-            out.append(nop)
+            addToOutput(nop)
             continue
 
         if isMode(Mode.insert):
-            out.append(key)
+            addToOutput(key)
         elif isMode(Mode.normal):
-            out = normalCommand(out, key)
+            normalCommand(key)
         else:
-            out.append(key)
+            addToOutput(key)
 
-    return processOutput(out)
+    return getOutputForAdapter()
 
 def preprocessKey(key):
     logger.debug("handleSingleInputKey key_: {}".format(key))
@@ -59,6 +58,14 @@ def preprocessKey(key):
     logger.debug("handleSingleInputKey keys after mapping: {}".format(keys))
     return keys
 
+def addToOutput(*keys):
+    model.extendOutputKeys(*keys)
+
+def isEsc(key):
+    return key.lower() == Keys.esc.value
+
+def getOutputForAdapter():
+    return processOutput(model.popOutputKeys())
 
 def processOutput(output):
     # Only need nop if it's the only thing being returned.

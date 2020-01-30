@@ -103,9 +103,10 @@ def resolve_map(key):
             if modeIsInsertLike():
                 # return appropriate number of backspaces.
                 backspaces = ["<bs>"] * (len(map_) - 1)
-            out = backspaces + [current_maps[map_]]
-            logger.info("Expanded map '{}' as '{}'".format(map_, out))
-            return out
+            remappedKeys = backspaces + [current_maps[map_]]
+            logger.info("Expanded map '{}' as '{}'".format(map_,
+                                                           remappedKeys))
+            return remappedKeys
     for k in expired_maps:
         del maps_in_progress[k]
     return [key]

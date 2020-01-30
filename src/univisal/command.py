@@ -36,6 +36,7 @@ def handle(cmd):
         return handlePendingClipboard(cmd)
     else:
         logger.error("Not a valid command: {cmd}".format(cmd))
+        # TODO: Raise InvalidCommandError and catch in caller.
     return None
 
 
@@ -44,7 +45,7 @@ def handlePendingClipboard(cmd):
     l = len(":clipboard:")
     cmd = cmd[l:]
     model.captured_clipboard = cmd
-    commandOut = normalCommand([], model.getPendingMotion())
+    commandOut = normalCommand(model.getPendingMotion())
     return processOutput(commandOut)
 
 def verifyPendingClipboard(cmd):

@@ -25,6 +25,8 @@ _captured_clipboard = None
 expecting_clipboard = None
 expecting_search_letter = None
 __repeat_count = None
+__outputKeys = None
+
 
 insertlike_modes = [
         Mode.insert,
@@ -38,7 +40,9 @@ def setMode(m):
     checkValidMode(m)
     _current_mode = m
     if isMode(Mode.normal):
+        # This is a hidden behavior. Should it really be here?
         clear_pending()
+    logger.info("Mode set to '{}'".format(m))
 
 def getMode():
     return _current_mode
@@ -53,12 +57,13 @@ def checkValidMode(m):
 
 # Declare globals within a function to access them.
 def init_model():
-    global _registers
+    global _registers, __outputKeys
     setMode(Mode.normal)
     registers = {}
     for l in string.ascii_letters:
         registers[l] = ""
     clear_pending()
+    __outputKeys = []
 
 def clear_pending():
     global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter
@@ -118,3 +123,16 @@ def increaseRepeatCount(count):
         __repeat_count = 10*__repeat_count + count
     else:
         __repeat_count = count
+
+def popOutputKeys():
+    global __outputKeys
+    tmp = __outputKeys
+    __outputKeys = []
+    return tmp
+
+def extendOutputKeys(*keys):
+    __outputKeys.extend(list(keys))
+
+def repeatOutputKeys():
+    global __outputKeys
+    __outputKeys *= getRepeatCount()

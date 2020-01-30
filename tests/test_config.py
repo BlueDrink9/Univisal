@@ -92,13 +92,13 @@ def test_log_level(level, expected):
 def test_swallow_unused_normal(opt, expected, msg):
     from tests.mock_setup import init_univisal
     from univisal.handleInput import handleInput
-    from univisal.handleKey import handleSingleInputKey
+    from univisal.handleKey import handleVimInputKey
 
     init_univisal()
     config.configStore={"swallow_unused_normal_keys": opt}
     setMode(Mode.normal)
     # Test handling the single key, then the whole input to confirm.
-    result = handleSingleInputKey("m")
+    result = handleVimInputKey("m")
     assert result == expected, msg + " after handleSingleInputKey"
     result = handleInput("m")
     assert result == expected, msg + " after handleInput"

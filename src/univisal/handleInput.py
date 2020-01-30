@@ -6,7 +6,7 @@ try:
     from . import model
     from .normal import normalCommand
     from . import command
-    from .handleKey import handleSingleInputKey
+    from .handleKey import handleVimInputKey
     from .adapter_maps import getAdapterMap
 except ImportError:
     from library import *
@@ -15,7 +15,7 @@ except ImportError:
     import model
     from normal import normalCommand
     import command
-    from handleKey import handleSingleInputKey
+    from handleKey import handleVimInputKey
     from adapter_maps import getAdapterMap
 logger = logging.getLogger(__name__)
 
@@ -29,20 +29,22 @@ def handleInput(input_):
         # For specific commands sent from adapter, e.g. `:disable`.
         # These should be handled specially, before other logic.
         if len(input_) > 1 and input_[0] == ":":
-            out = command.handle(input_)
-            if out is None:
+            commandResult = command.handle(input_)
+            if commandResult is None:
                 return nop
             else:
-                return out
+                return commandResult
+            return
         # Disabled: always return input key.
         if isMode(Mode.disabled):
             return input_
 
         if model.expecting_search_letter:
             model.setSearchLetter(input_)
-            return normalCommand([], model.pending_motion)
+            normalCommand(model.pending_motion)
+            return model.popOutputKeys()
 
-        return handleSingleInputKey(input_)
+        return handleVimInputKey(input_)
     except:
         return getFallbackOutput(input_)
 
@@ -53,3 +55,4 @@ def getFallbackOutput(input_):
     except:
         logger.critical("Unhandled exception while mapping adapter", exc_info=True)
         return input_
+
