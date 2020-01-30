@@ -25,6 +25,11 @@ setup(
     ],
     package_dir={'': 'src'},
     include_package_data=True,
+    setup_requires=["pytest-runner"],
+    tests_require=[
+        "pytest",
+    ],
+    test_suite="pytest",
     python_requires='>=3',
 )
 
