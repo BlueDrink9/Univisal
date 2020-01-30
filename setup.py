@@ -9,11 +9,11 @@ setup(
     version="0.0.1",
     author="bluedrink9",
     description="universal vi emulation",
-    entry_points={
-        # FIXME
-        "univisal-autokey": "adapters/autokey/...",
-    }
-    keywords="vi-emulator vi emulator windows Xorg linux X11 OSX Mac"
+    # entry_points={
+    #
+    #     "univisal-autokey": "adapters/autokey/...",
+    # },
+    keywords="vi-emulator vi emulator windows Xorg linux X11 OSX Mac",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages = find_packages("src"),
