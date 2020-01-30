@@ -9,15 +9,22 @@ setup(
     version="0.0.1",
     author="bluedrink9",
     description="universal vi emulation",
+    entry_points={
+        # FIXME
+        "univisal-autokey": "adapters/autokey/...",
+    }
+    keywords="vi-emulator vi emulator windows Xorg linux X11 OSX Mac"
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages = find_packages(),
+    packages = find_packages("src"),
     url="https://github.com/bluedrink9/univisal",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.0',
+    package_dir={'': 'src'},
+    include_package_data=True,
+    python_requires='>=3',
 )
 
