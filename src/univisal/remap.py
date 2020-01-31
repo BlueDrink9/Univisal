@@ -122,7 +122,7 @@ def resolve_map(key):
 
         if isCompleteMatch(map_):
             resetMapsInProgress()
-            return getRemappedKeys(map_)
+            return getOutputMapExpansion(map_)
 
     for m in maps_no_longer_in_progress:
         del maps_in_progress[m]
@@ -135,7 +135,7 @@ def getEnoughBackspacesToErase(map_):
         backspaces = ["<bs>"] * (len(map_) - 1)
     return backspaces
 
-def getRemappedKeys(map_):
+def getOutputMapExpansion(map_):
     backspaces = getEnoughBackspacesToErase(map_)
     remappedKeys = backspaces + [current_maps[map_]]
     logger.info("Expanded map '{}' as '{}'".format(map_,
