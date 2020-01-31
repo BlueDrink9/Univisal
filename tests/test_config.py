@@ -2,14 +2,25 @@
 import pytest
 import unittest.mock
 
-from univisal.remap import *
+from univisal import remap
+from univisal.model import Mode, getMode, setMode, isMode
 from univisal import config
+from univisal.keys import Keys
 from univisal.config import *
 
 
 @pytest.fixture(scope="function", autouse=True)
 def clear_config():
     config.configStore = {}
+
+@pytest.fixture(scope="function", autouse=True)
+def setup(caplog, tmpdir):
+    caplog.set_level(logging.DEBUG)
+    config.configStore = {}
+    # with unittest.mock.patch('univisal.config.getConfigPath',
+    #                          return_value=tmpdir / "univisal" / "config.json"):
+    #     init_config()
+    remap.resetMapData()
 
 
 @pytest.mark.parametrize("test_opt, expected, error_msg", [
@@ -42,9 +53,6 @@ def test_defaults(caplog, tmpdir, test_opt, expected, error_msg):
 ])
 def test_config(caplog, tmpdir, conf, test_opt, expected, error_msg):
     caplog.set_level(logging.DEBUG)
-    with unittest.mock.patch('univisal.config.getConfigPath',
-                             return_value=tmpdir / "univisal" / "config.json"):
-        init_config()
     config.configStore = conf
     assert getConfigOption(test_opt) == expected, error_msg
 
@@ -63,6 +71,28 @@ def test_additional_config(caplog, tmpdir):
             json.dump(test, outfile, indent=2, ensure_ascii=False)
         init_config()
     assert getConfigOption("imaps") == expected, error_msg
+
+@pytest.mark.parametrize("mapConfEntry, error_msg", [
+    ({"imaps": {"jk": "<esc>"}}, "configured imaps did not expand"),
+    ({"nmaps": {"j": "<left>"}}, "configured nmaps did not expand"),
+])
+def test_config_setMaps(mapConfEntry, error_msg):
+    config.configStore = mapConfEntry
+    config.setMaps()
+    for mapModeType, maps in mapConfEntry.items():
+        mode = getMapMode(mapModeType)
+        model.setMode(mode)
+        for sequence, expansion in maps.items():
+            for char in sequence:
+                # Deliberately overwrite, we only want the last result.
+                result = remap.resolve_map(char)
+            removeBackspaces(result)
+            assert result == [expansion], error_msg
+
+def removeBackspaces(lst):
+    bs = Keys.backspace.value
+    lst.remove(bs) if (bs in lst) else ''
+
 
 @pytest.mark.parametrize("level, expected", [
     ("debug", logging.DEBUG),
