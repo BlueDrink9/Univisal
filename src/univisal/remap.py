@@ -42,12 +42,13 @@ def nmap(sequence, result=None):
     remap(nmaps, sequence, result)
 
 
-def set_current_maps():
+def set_current_maps_for_mode():
     global current_mode, current_maps, maps_in_progress
     # If we switch modes, discard progress.
     if current_mode != getMode():
         maps_in_progress = {}
         current_mode = getMode()
+        logger.debug("Mode changed, discarding maps_in_progress")
 
     if isMode(Mode.insert):
         current_maps = imaps
@@ -79,7 +80,7 @@ def resolve_map(key):
     global maps_in_progress
     # logger.debug("checking {} for maps".format(key))
 
-    set_current_maps()
+    set_current_maps_for_mode()
     check_starts_map(key)
 
     # What if there are other maps that fit the sequence, but are longer? Need
@@ -113,3 +114,14 @@ def resolve_map(key):
     return [key]
 
 
+def resetMapData():
+    global imaps, nmaps, vmaps, cmaps, current_mode, current_maps, current_sequence, maps_in_progress
+    imaps = {}
+    nmaps = {}
+    vmaps = {}
+    cmaps = {}
+
+    current_mode = None
+    current_maps = None
+    current_sequence = []
+    maps_in_progress = {}
