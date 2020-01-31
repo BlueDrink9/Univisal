@@ -13,9 +13,8 @@ from tests.mock_setup import init_univisal, clear_maps, mock_adapter_maps
 from tests.translate_output import translate_keys
 
 
-@pytest.fixture(scope="function")
-def setUp():
-    clear_maps()
+def setup_function():
+    univisal.remap.resetMapData()
 
 
 @pytest.mark.parametrize("maps, test, expected, error_msg", [
