@@ -6,10 +6,14 @@ try:
     from .library import *
     from . import logging_
     from . import model
+    from .model import Mode
+    from . import remap
 except ImportError:
     from library import *
     import logging_
     import model
+    from model import Mode
+    import remap
 logger = logging.getLogger(__name__)
 
 # All valid options must have a default.
@@ -140,9 +144,21 @@ def setLogLevel():
     logging.getLogger().setLevel(level)
 
 def setMaps():
-    model.imaps = getConfigOption("imaps")
-    model.nmaps = getConfigOption("nmaps")
-    model.cmaps = getConfigOption("cmaps")
-    model.vmaps = getConfigOption("vmaps")
+    for maps in ["imaps", "nmaps", "cmaps", "vmaps"]:
+        mode = getMapMode(maps)
+        remap.addMapsFromDict(mode, getConfigOption(maps))
 
+def getMapMode(mapstype):
+    if mapstype == "imaps":
+        return Mode.insert
+    elif mapstype == "nmaps":
+        return Mode.normal
+    elif mapstype == "cmaps":
+        return Mode.command
+    elif mapstype == "vmaps":
+        return Mode.visual
+    else:
+        # Should only ever raise if someone modifies the above function, not if
+        # a user enters a strange config.
+        raise KeyError
 

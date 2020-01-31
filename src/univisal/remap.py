@@ -13,18 +13,31 @@ logger = logging.getLogger(__name__)
 # This is going to want a better algorithm. Figure it out later, TODO.
 # How to efficiently map gradual input onto a list of sequences
 
-maps = {
-    Mode.insert: {},
-    Mode.normal: {},
-    Mode.visual: {},
-    Mode.command: {},
-}
-
+maps = None
 current_mode = None
 current_maps = None
 # Map of sequence : index, where index is the current part of the sequence we
 # are up to.
 maps_in_progress = {}
+
+def resetMapData():
+    global maps, current_mode, current_maps
+    maps = {
+        Mode.insert: {},
+        Mode.normal: {},
+        Mode.visual: {},
+        Mode.command: {},
+    }
+
+    current_mode = None
+    current_maps = None
+    resetMapsInProgress()
+
+def resetMapsInProgress():
+    global maps_in_progress
+    maps_in_progress = {}
+
+resetMapData()
 
 def remap(maps, sequence, result=None):
     # if sequence in imaps or a subsequence of a current map:
@@ -41,6 +54,14 @@ def imap(sequence, result=None):
     remap(maps[Mode.insert], sequence, result)
 def nmap(sequence, result=None):
     remap(maps[Mode.normal], sequence, result)
+def vmap(sequence, result=None):
+    remap(maps[Mode.visual], sequence, result)
+def cmap(sequence, result=None):
+    remap(maps[Mode.command], sequence, result)
+
+def addMapsFromDict(mode, newmaps):
+    for sequence, result in newmaps.items():
+       remap(maps[mode], sequence, result)
 
 
 def set_current_maps_for_mode():
@@ -128,15 +149,3 @@ def incrementMapProgress(map_):
     maps_in_progress[map_] += 1
 
 
-def resetMapData():
-    global maps, current_mode, current_maps
-    for mode in maps:
-        maps[mode] = {}
-
-    current_mode = None
-    current_maps = None
-    resetMapsInProgress()
-
-def resetMapsInProgress():
-    global maps_in_progress
-    maps_in_progress = {}
