@@ -82,14 +82,25 @@ def test_config_setMaps(mapConfEntry, error_msg):
     config.configStore = mapConfEntry
     config.setMaps()
     for mapModeType, maps in mapConfEntry.items():
-        mode = getMapMode(mapModeType)
-        model.setMode(mode)
-        for sequence, expansion in maps.items():
-            for char in sequence:
-                # Deliberately overwrite, we only want the last result.
-                result = remap.resolve_map(char)
-            removeBackspaces(result)
-            assert result == [expansion], error_msg
+        setCorrectModeForMap(mapModeType)
+        assertMapsExpandCorrectly(maps, error_msg)
+
+def setCorrectModeForMap(mapModeType):
+    mode = getMapMode(mapModeType)
+    model.setMode(mode)
+
+def assertMapsExpandCorrectly(maps, error_msg):
+    for sequence, expansion in maps.items():
+        result = expandMap(sequence)
+        assert result == [expansion], error_msg
+
+def expandMap(sequence):
+    for char in sequence:
+        # Deliberately overwrite, we only want the last result (the
+        # expansion).
+        result = remap.resolve_map(char)
+    removeBackspaces(result)
+    return result
 
 def removeBackspaces(lst):
     bs = Keys.backspace.value
