@@ -75,6 +75,8 @@ def test_additional_config(caplog, tmpdir):
 @pytest.mark.parametrize("mapConfEntry, error_msg", [
     ({"imaps": {"jk": "<esc>"}}, "configured imaps did not expand"),
     ({"nmaps": {"j": "<left>"}}, "configured nmaps did not expand"),
+    ({"nmaps": {"j": "<left>", "k": "<right>"}},
+    "configured nmaps did not expand when multiple are configured"),
 ])
 def test_config_setMaps(mapConfEntry, error_msg):
     config.configStore = mapConfEntry
