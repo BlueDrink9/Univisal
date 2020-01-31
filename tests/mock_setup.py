@@ -43,7 +43,4 @@ def init_univisal(with_interface=False):
     clear_maps()
 
 def clear_maps():
-    imaps = {}
-    nmaps = {}
-    vmaps = {}
-    cmaps = {}
+    univisal.remap.resetMapData()

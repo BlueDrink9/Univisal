@@ -131,11 +131,15 @@ def test_mode_change_clears_maps_in_progress(caplog):
     iLhs="savag"
     iRhs="role"
     imap(iLhs, iRhs)
+    nmap("g", "l")
     setMode(Mode.insert)
+    # maps_in_progress should be iLhs minus end char (sava)
     insertExpected = (iLhs[:-1])
     assert translate_keys(insertExpected) == insertExpected
     assert not maps_in_progress_is_blank()
     setMode(Mode.normal)
+    # Need to send one more key to trigger the map check.
+    translate_keys("l")
     assert maps_in_progress_is_blank()
 
 def test_mode_change_not_affects_remaps(caplog):
@@ -148,8 +152,8 @@ def test_mode_change_not_affects_remaps(caplog):
     # maps_in_progress should be iLhs minus end char (sava)
     insertExpected = (iLhs[:-1])
     assert translate_keys(insertExpected) == insertExpected
+    assert not maps_in_progress_is_blank()
     setMode(Mode.normal)
-    assert maps_in_progress_is_blank()
     assert translate_keys("g") == Motion.right.value
     setMode(Mode.insert)
     assert translate_keys("g") == "g"
