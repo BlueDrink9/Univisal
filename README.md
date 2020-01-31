@@ -146,7 +146,7 @@ Any key without an adapter map will be send as the input string.
 
 Download [`pytest`](https://docs.pytest.org/en/latest/getting-started.html) using `pip install pytest`.
 
-Run from the root repo dir using `python -m pytest` (or just `pytest` seems to work, but [may have issues with which directory it is run by)](https://docs.pytest.org/en/latest/pythonpath.html#pytest-vs-python-m-pytest).
+Run from the root repo dir using `python3 setup.py test`
 
 ## Key representations (documentation under construction).
 
