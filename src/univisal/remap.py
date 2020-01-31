@@ -13,14 +13,15 @@ logger = logging.getLogger(__name__)
 # This is going to want a better algorithm. Figure it out later, TODO.
 # How to efficiently map gradual input onto a list of sequences
 
-imaps = {}
-nmaps = {}
-vmaps = {}
-cmaps = {}
+maps = {
+    Mode.insert: {},
+    Mode.normal: {},
+    Mode.visual: {},
+    Mode.command: {},
+}
 
 current_mode = None
 current_maps = None
-current_sequence = []
 # Map of sequence : index, where index is the current part of the sequence we
 # are up to.
 maps_in_progress = {}
@@ -37,33 +38,33 @@ def remap(maps, sequence, result=None):
         logger.info("removing map for {}".format(sequence))
 
 def imap(sequence, result=None):
-    remap(imaps, sequence, result)
+    remap(maps[Mode.insert], sequence, result)
 def nmap(sequence, result=None):
-    remap(nmaps, sequence, result)
+    remap(maps[Mode.normal], sequence, result)
 
 
 def set_current_maps_for_mode():
-    global current_mode, current_maps, maps_in_progress
+    global current_maps
+    # If we switch modes, discard progress.
+    updateCurrentMode()
+
+    try:
+        current_maps = maps[current_mode]
+    except KeyError:
+        if isMode(Mode.operator_pending):
+            current_maps = maps[Mode.normal]
+        else:
+            logger.warning("Unknown mode for mapping: {}. \
+                            No mappings exist for this mode".format(getMode()))
+            current_maps = {}
+
+def updateCurrentMode():
+    global current_mode
     # If we switch modes, discard progress.
     if current_mode != getMode():
-        maps_in_progress = {}
         current_mode = getMode()
+        resetMapsInProgress()
         logger.debug("Mode changed, discarding maps_in_progress")
-
-    if isMode(Mode.insert):
-        current_maps = imaps
-    elif isMode(Mode.normal):
-        current_maps = nmaps
-    elif isMode(Mode.visual):
-        current_maps = vmaps
-    elif isMode(Mode.command):
-        current_maps = cmaps
-    elif isMode(Mode.operator_pending):
-        current_maps = nmaps
-    else:
-        logger.warning("Unknown mode for mapping: {}. \
-                        No mappings exist for this mode".format(getMode()))
-        current_maps = {}
 
 
 def check_starts_map(key):
@@ -87,6 +88,7 @@ def resolve_map(key):
     # to wait to see what next key is. If it isn't part of a map, expand. But
     # what about timing? What if there is no next key? Probably best to not
     # allow maps inside maps.
+
     maps_no_longer_in_progress = []
     for map_, progress in maps_in_progress.items():
         thisKeyIsNextInMap = map_[progress] == key
@@ -127,17 +129,14 @@ def incrementMapProgress(map_):
 
 
 def resetMapData():
-    global imaps, nmaps, vmaps, cmaps, current_mode, current_maps
-    imaps = {}
-    nmaps = {}
-    vmaps = {}
-    cmaps = {}
+    global maps, current_mode, current_maps
+    for mode in maps:
+        maps[mode] = {}
 
     current_mode = None
     current_maps = None
     resetMapsInProgress()
 
 def resetMapsInProgress():
-    global current_sequence, maps_in_progress
-    current_sequence = []
+    global maps_in_progress
     maps_in_progress = {}
