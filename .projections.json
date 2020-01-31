@@ -1,0 +1,11 @@
+{
+    "src/univisal/*.py": {
+        "type": "src",
+        "alternate": "tests/test_{}.py"
+    },
+    "tests/test_*.py": {
+        "type": "test",
+        "alternate": "src/univisal/{}.py",
+        "dispatch": "python setup.py test --addopts {file}"
+    }
+}
