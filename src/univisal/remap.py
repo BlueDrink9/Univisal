@@ -71,13 +71,13 @@ def check_starts_map(key):
         # logger.debug("map {} in maps_in_progress {}: {}".format(map_,
             # maps_in_progress, (map_ in maps_in_progress)))
         if map_[0] == key and map_ not in maps_in_progress:
-            logger.debug("Key {} starts map {}, added to maps_in_progress".format(key, map_))
+            # logger.debug("Key {} starts map {}, added to maps_in_progress".format(key, map_))
             maps_in_progress[map_] = 0
 
 
 def resolve_map(key):
     global maps_in_progress
-    logger.debug("checking {} for maps".format(key))
+    # logger.debug("checking {} for maps".format(key))
 
     set_current_maps()
     check_starts_map(key)
@@ -92,6 +92,7 @@ def resolve_map(key):
         # logger.debug("map index {}; map[index] {}; key {}".format(
         #     index, map_[index], key))
         if map_[index] == key:
+            logger.debug("Key '{}' is member {} of mapped sequence '{}'".format(key, index+1, map_))
             maps_in_progress[map_] += 1
         else:
             # Broken sequence

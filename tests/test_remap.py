@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import pytest
 import unittest
+import logging
 
 import univisal
-from univisal.remap import *
-from univisal.model import *
+from univisal.remap import imap, nmap
+from univisal.model import Mode, isMode, setMode, getMode
 from univisal.motion import Motion
 from univisal.keys import Keys
 from univisal.handleInput import handleInput
@@ -126,21 +127,37 @@ def test_basic_nmap(caplog):
     nmap("x", "l")
     assert handleInput("x") == expected, "basic nmap doesn't work"
 
-def test_mode_change(caplog):
+def test_mode_change_clears_maps_in_progress(caplog):
+    caplog.set_level(logging.DEBUG)
+    iLhs="savag"
+    iRhs="role"
+    imap(iLhs, iRhs)
+    setMode(Mode.insert)
+    insertExpected = (iLhs[:-1])
+    assert translate_keys(insertExpected) == insertExpected
+    assert not maps_in_progress_is_blank()
+    setMode(Mode.normal)
+    assert maps_in_progress_is_blank()
+
+def test_mode_change_not_affects_remaps(caplog):
     caplog.set_level(logging.DEBUG)
     iLhs="savag"
     iRhs="role"
     imap(iLhs, iRhs)
     nmap("g", "l")
     setMode(Mode.insert)
-    # maps_in_progress should be xavier
+    # maps_in_progress should be iLhs minus end char (sava)
     insertExpected = (iLhs[:-1])
     assert translate_keys(insertExpected) == insertExpected
     setMode(Mode.normal)
+    assert maps_in_progress_is_blank()
     assert translate_keys("g") == Motion.right.value
     setMode(Mode.insert)
     assert translate_keys("g") == "g"
     assert translate_keys(iLhs) == iRhs
+
+def maps_in_progress_is_blank():
+    return len(univisal.remap.maps_in_progress) == 0
 
 @pytest.mark.xfail(reason = "multi-char nmap won't work because \
         you can't backspace a normal command")
