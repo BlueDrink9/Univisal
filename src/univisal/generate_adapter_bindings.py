@@ -39,7 +39,7 @@ if len(sys.argv) != 3:
 
 adapter = expand_escapes(str(sys.argv[1]))
 cmdformat = expand_escapes(str(sys.argv[2]))
-adapter_maps = load_adapter_maps(adapter)
+adapter_maps = loadAdapterMaps(adapter)
 
 generated_file=open(get_script_path() + \
                     "/../../adapters/{}/bindings.{}".format(adapter, adapter), "w")

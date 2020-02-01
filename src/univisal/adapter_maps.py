@@ -13,19 +13,21 @@ logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 adapter_maps = None
 
-def load_adapter_maps(adapter):
+def loadAdapterMaps(adapter):
     global adapter_maps
     # Can dump a dict in python with `json.dumps(dict, sort_keys=True, indent=2)`
+    adapter_maps_path = getMappingPath(adapter)
     try:
-        adapter_maps_path = getMappingPath(adapter)
-        with open(adapter_maps_path, "r") as adapter_maps_file:
-            adapter_maps = json.load(adapter_maps_file)
-
-        logger.info("Loaded adapter map file {}".format(adapter_maps_path))
-
+        adapter_maps = loadAdapterMapsFromPath(adapter)
     except (IOError, json.JSONDecodeError) as e:
         logAdapterError(e, adapter_maps_path)
         adapter_maps = {}
+    return adapter_maps
+
+def loadAdapterMapsFromPath(adapter_maps_path):
+    with open(adapter_maps_path, "r") as adapter_maps_file:
+        adapter_maps = json.load(adapter_maps_file)
+    logger.info("Loaded adapter map file {}".format(adapter_maps_path))
     return adapter_maps
 
 def getMappingPath(adapter):

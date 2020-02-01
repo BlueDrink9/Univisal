@@ -91,7 +91,7 @@ def test_imap_to_esc_one_at_a_time(caplog):
     assert isMode(Mode.normal)
     imap("jk")
 
-@unittest.mock.patch("univisal.adapter_maps.load_adapter_maps",
+@unittest.mock.patch("univisal.adapter_maps.loadAdapterMaps",
             side_effect=mock_adapter_maps)
 @pytest.mark.parametrize("maps, test, expected, error_msg", [
     ({"rep": "set"},

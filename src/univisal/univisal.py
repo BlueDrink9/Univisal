@@ -8,13 +8,13 @@ import sys
 try:
     from .message_interface import readMessagesLoop
     from .library import *
-    from .adapter_maps import load_adapter_maps
+    from .adapter_maps import loadAdapterMaps
     from . import model
     from . import config
 except ImportError:
     from message_interface import readMessagesLoop
     from library import *
-    from adapter_maps import load_adapter_maps
+    from adapter_maps import loadAdapterMaps
     import model
     import config
 logger = __import__("univisal.logger").logger.get_logger(__name__)
@@ -38,7 +38,7 @@ def checkArgs(args):
 
 def univisal_init(adapter):
     config.init_config()
-    load_adapter_maps(adapter)
+    loadAdapterMaps(adapter)
     model.init_model()
     readMessagesLoop()
 
