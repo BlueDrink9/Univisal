@@ -9,7 +9,7 @@ from univisal import adapter_maps
 
 @pytest.fixture(scope="function", autouse=True)
 def setup(caplog, tmpdir):
-    pass
+    adapter_maps.adapter_maps = {}
     # caplog.set_level(logging.DEBUG)
     # with unittest.mock.patch('univisal.config.getConfigPath',
     #                          return_value=tmpdir / "univisal" / "config.json"):
@@ -35,10 +35,21 @@ def mapPath(tmpdir):
     ({"not a valid key": "non-valid"}, "unmapped key", "unmapped key",
      "unmapped adapter key isn't returned as original key"),
 ])
-def test_getMap(caplog, mock_maps, key, expected, error_msg):
+def test_getAdapterMap(caplog, mock_maps, key, expected, error_msg):
     # caplog.set_level(logging.DEBUG)
     adapter_maps.adapter_maps = mock_maps
     assert adapter_maps.getAdapterMap(key) == expected, error_msg
+
+@pytest.mark.parametrize("mock_maps, key, expected, error_msg", [
+    ({Keys.multikey_join_char.value: "{+}"}, "", "{+}",
+     "getJoinChar returns wrong value"),
+    ({}, "", "",
+     "getJoinChar doesn't return blank when no multikey_join_char map exists"),
+])
+def test_getJoinChar(caplog, mock_maps, key, expected, error_msg):
+    # caplog.set_level(logging.DEBUG)
+    adapter_maps.adapter_maps = mock_maps
+    assert adapter_maps.getJoinChar() == expected, error_msg
 
 
 # @pytest.mark.parametrize("test_opt, expected, error_msg", [
