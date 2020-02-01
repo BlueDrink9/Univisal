@@ -1,12 +1,11 @@
 # enum from py >= 3.4
 from enum import Enum, auto
 import string
-import logging
 try:
-    from . import logging_
+    pass
 except ImportError:
-    import logging_
-logger = logging.getLogger(__name__)
+    pass
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 # Not using terms "edit" or "Ex" because they are less familiar.
 class Mode(Enum):

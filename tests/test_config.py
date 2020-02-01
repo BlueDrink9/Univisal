@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import pytest
 import unittest.mock
+import logging
 
 from univisal import remap
 from univisal.model import Mode, getMode, setMode, isMode

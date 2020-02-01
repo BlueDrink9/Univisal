@@ -1,14 +1,11 @@
 from json import loads as json_load
-import logging
 try:
     from .library import *
-    from . import logging_
     from .model import *
 except ImportError:
     from library import *
-    import logging_
     from model import *
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 # This is going to want a better algorithm. Figure it out later, TODO.
 # How to efficiently map gradual input onto a list of sequences

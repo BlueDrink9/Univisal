@@ -4,13 +4,11 @@ import os
 import errno
 import sys
 from tempfile import gettempdir
-import logging
 try:
     from .library import *
-    from . import logging_
 except ImportError:
     from library import *
-    import logging_
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 def makePipes():
     # Read http://man7.org/linux/man-pages/man7/fifo.7.html for reference.

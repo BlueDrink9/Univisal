@@ -4,17 +4,15 @@ import os
 import pathlib
 try:
     from .library import *
-    from . import logging_
     from . import model
     from .model import Mode
     from . import remap
 except ImportError:
     from library import *
-    import logging_
     import model
     from model import Mode
     import remap
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 # All valid options must have a default.
 # An error will be raised if a user sets an option not in defaults.

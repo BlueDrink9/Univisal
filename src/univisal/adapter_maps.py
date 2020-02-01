@@ -1,18 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-15 -*-
 import json
-import logging
 import enum
 import os
 try:
     from .library import *
-    from . import logging_
     from .keys import Keys
 except ImportError:
     from library import *
-    import logging_
     from keys import Keys
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 adapter_maps = None
 

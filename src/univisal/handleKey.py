@@ -1,7 +1,7 @@
 import logging
 try:
     from .library import *
-    from . import logging_
+    from . import logger
     from .model import Mode, getMode, setMode, isMode
     from . import model
     from .normal import normalCommand
@@ -14,7 +14,7 @@ try:
     from . import adapter_maps
 except ImportError:
     from library import *
-    import logging_
+    import logger
     from model import Mode, getMode, setMode, isMode
     import model
     from normal import normalCommand

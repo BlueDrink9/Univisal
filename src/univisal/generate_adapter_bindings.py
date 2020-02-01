@@ -7,12 +7,12 @@ import sys
 import codecs
 try:
     from .library import *
-    from . import logging_
+    from . import logger
     from .adapter_maps import *
     from . import motion, operation
 except ImportError:
     from library import *
-    import logging_
+    import logger
     from adapter_maps import *
     import motion, operation
 

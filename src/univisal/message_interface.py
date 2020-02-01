@@ -3,11 +3,9 @@
 """
 Handles sending and receiving messages from adapters via a univi client
 """
-import logging
 import os
 try:
     from .library import *
-    from . import logging_
     from .handleInput import handleInput
     # If Windows, else assume Unix.
     if os.name == "nt":
@@ -16,14 +14,13 @@ try:
         from .pipes_unix import readPipe, writePipe
 except ImportError:
     from library import *
-    import logging_
     from handleInput import handleInput
     # If Windows, else assume Unix.
     if os.name == "nt":
         from pipes_windows import readPipe, writePipe
     else:
         from pipes_unix import readPipe, writePipe
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 
 

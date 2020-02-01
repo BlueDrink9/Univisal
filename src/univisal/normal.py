@@ -1,7 +1,5 @@
-import logging
 try:
     from .library import *
-    from . import logging_
     from .model import Mode, getMode, setMode, isMode, getCapturedClipboard
     from . import model
     from . import config
@@ -11,7 +9,6 @@ try:
     from .keys import Keys
 except ImportError:
     from library import *
-    import logging_
     from model import Mode, getMode, setMode, isMode, getCapturedClipboard
     import model
     import config
@@ -19,8 +16,7 @@ except ImportError:
     from motion import Motion
     from vim_operator import Operator
     from remap import resolve_map
-logger = logging.getLogger(__name__)
-
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 # Reduce chance of a typo if returning nop
 nop = "nop"

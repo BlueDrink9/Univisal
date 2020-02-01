@@ -1,7 +1,5 @@
-import logging
 try:
     from .library import *
-    from . import logging_
     from .model import Mode, getMode, setMode, isMode
     from . import model
     from .normal import normalCommand
@@ -10,14 +8,13 @@ try:
     from .adapter_maps import getAdapterMap
 except ImportError:
     from library import *
-    import logging_
     from model import Mode, getMode, setMode, isMode
     import model
     from normal import normalCommand
     import command
     from handleKey import handleVimInputKey
     from adapter_maps import getAdapterMap
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 def handleInput(input_):
     logger.debug("handleInput input_: {}".format(input_))

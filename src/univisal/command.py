@@ -1,9 +1,7 @@
 
-import logging
 import pathlib
 try:
     from .library import *
-    from . import logging_
     from .normal import normalCommand
     from .import model
     from .model import setMode, getMode, Mode
@@ -13,7 +11,6 @@ try:
     from . import config
 except ImportError:
     from library import *
-    import logging_
     from normal import normalCommand
     import model
     from model import setMode, getMode, Mode
@@ -21,7 +18,7 @@ except ImportError:
     from vim_operator import Operator
     from handleKey import processOutput
     import config
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 def handle(cmd):
     if cmd == ":disable":

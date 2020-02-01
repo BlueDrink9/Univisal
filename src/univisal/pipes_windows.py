@@ -2,14 +2,11 @@
 import pywintypes, win32pipe, win32file
 import time
 import sys
-import logging
 try:
     from .library import *
-    from . import logging_
 except ImportError:
     from library import *
-    import logging_
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 def readPipe(pipename="univisal.in.fifo"):
     # Even in raw strings, backslashes escape quotes.
