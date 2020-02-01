@@ -65,7 +65,7 @@ def lookupAdapterMap(name):
 
 
 def getJoinChar():
-    lookup = Keys.multikey_join_char
+    lookup = Keys.multikey_join_char.value
     joinChar = getAdapterMap(lookup)
     # This happens if the adapter doesn't have a map for this.
     if joinChar == lookup:
