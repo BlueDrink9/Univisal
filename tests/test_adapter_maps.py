@@ -30,6 +30,8 @@ def mapPath(tmpdir):
 @pytest.mark.parametrize("mock_maps, key, expected, error_msg", [
     ({Keys.esc.value: "escape"}, Keys.esc.value, "escape",
      "adapter map isn't returned correctly"),
+    ({Keys.esc.value: "escape"}, Keys.esc, "escape",
+     "adapter map using enum isn't returned correctly"),
     ({"not a valid key": "non-valid"}, "unmapped key", "unmapped key",
      "unmapped adapter key isn't returned as original key"),
 ])
