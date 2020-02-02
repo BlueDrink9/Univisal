@@ -24,14 +24,16 @@ def normalCommand(key):
         # setMode(Mode.command)
         # addToOutput(Keys.nop)
     # elif key == "h":
-    if key == "h":
-        doMotionOrSelection(Motion.left)
-    elif key == "l":
-        doMotionOrSelection(Motion.right)
-    elif key == "j":
-        doMotionOrSelection(Motion.down)
-    elif key == "k":
-        doMotionOrSelection(Motion.up)
+    if key == "0":
+        # If repeat count in progress, adds to that. Otherwise, BoL.
+        if model.repeatInProgress():
+            model.increaseRepeatCount(int(key))
+            addToOutput(Keys.nop)
+        else:
+            doMotionOrSelection(Motion.goLineStart)
+    elif key in "123456789" and len(key) == 1:
+        model.increaseRepeatCount(int(key))
+        addToOutput(Keys.nop)
     elif key == "i":
         setMode(Mode.insert)
         addToOutput(Keys.nop)
@@ -44,6 +46,14 @@ def normalCommand(key):
     elif key == "A":
         setMode(Mode.insert)
         doMotionOrSelection(Motion.goLineEnd)
+    elif key == "h":
+        doMotionOrSelection(Motion.left)
+    elif key == "l":
+        doMotionOrSelection(Motion.right)
+    elif key == "j":
+        doMotionOrSelection(Motion.down)
+    elif key == "k":
+        doMotionOrSelection(Motion.up)
     elif key == "w":
         doMotionOrSelection(Motion.goWordNext)
     elif key == "b":
@@ -54,16 +64,6 @@ def normalCommand(key):
     #     doMotionOrSelection(Motion.goFileStart)
     elif key == "$":
         doMotionOrSelection(Motion.goLineEnd)
-    elif key == "0":
-        # If repeat count in progress, adds to that. Otherwise, BoL.
-        if model.repeatInProgress():
-            model.increaseRepeatCount(int(key))
-            addToOutput(Keys.nop)
-        else:
-            doMotionOrSelection(Motion.goLineStart)
-    elif key in "123456789" and len(key) == 1:
-        model.increaseRepeatCount(int(key))
-        addToOutput(Keys.nop)
     elif key == "^":
         doMotionOrSelection(Motion.goLineStart)
     elif key == "x":
