@@ -3,6 +3,7 @@ import pytest
 import unittest.mock
 
 import univisal
+from univisal import model
 from univisal.model import Mode, isMode, getMode, setMode
 from univisal import handleInput
 
@@ -13,7 +14,7 @@ def ret_arg(arg):
     return arg
 
 def setup_function():
-    univisal.model.init_model()
+    model.init_model()
 
 def test_handleInput_with_commandlike_input():
     inpt = ":commandlike"
@@ -40,7 +41,7 @@ def test_handleInput_while_expecting_searchletter():
         'univisal.handleInput.handleExpectedSearchLetter',
             return_value=expected):
         assert not handleInput.handleInput(inpt) == expected, "testing setup error"
-        univisal.model.expecting_search_letter = True
+        model.expecting_search_letter = True
         assert handleInput.handleInput(inpt) == expected, errMsg
 
 
@@ -69,3 +70,23 @@ def test_getFallbackOutput_returns_input_on_error():
         result = handleInput.getFallbackOutput(inpt)
         error_msg = "getFallbackOutput doesn't return input if error encountered while handling."
         assert result == inpt, error_msg
+
+
+def test_handleExpectedSearchLetter():
+    letter = ':'
+    expected = "pending motion"
+
+    with unittest.mock.patch('univisal.handleInput.normalCommand',
+                             side_effect=setOuputKeys), \
+            unittest.mock.patch('univisal.handleInput.model.getPendingMotion',
+                                return_value=expected):
+        result = handleInput.handleExpectedSearchLetter(letter)
+
+    assert model.getSearchLetter() == letter, \
+        "handleExpectedSearchLetter doesn't set searchLetter"
+
+    assert result == [expected], \
+        "handleExpectedSearchLetter doesn't return set output keys"
+
+def setOuputKeys(keys):
+    model.extendOutputKeys(keys)
