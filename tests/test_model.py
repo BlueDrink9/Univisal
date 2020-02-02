@@ -5,6 +5,7 @@ import unittest.mock
 import univisal
 import univisal.model as model
 from univisal.model import increaseRepeatCount
+from univisal.model import Mode, getMode, setMode
 
 @pytest.mark.parametrize("numbers", [1, 10, 15, 329, 991])
 def test_increaseRepeatCount(numbers):
@@ -18,10 +19,17 @@ def test_increaseRepeatCount(numbers):
         "Repeat count is incorrect after {}".format(numbers)
 
 
-allModes = [mode for mode in model.Mode]
+allModes = [mode for mode in Mode]
+
 @pytest.mark.parametrize("mode", allModes)
 def test_setMode(mode):
-    model.setMode(mode)
-    assert model.getMode() == mode
+    setMode(mode)
+    assert getMode() == mode
+
+
+def test_setMode_normal_clears_pending():
+    model._pending_motion = "l"
+    setMode(Mode.normal)
+    assert model._pending_motion == None
 
 
