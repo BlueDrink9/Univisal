@@ -51,7 +51,7 @@ def handleUnivisalCommand(input_):
 
 def handleExpectedSearchLetter(input_):
     model.setSearchLetter(input_)
-    normalCommand(model.pending_motion)
+    normalCommand(model.getPendingMotion())
     return model.popOutputKeys()
 
 def getFallbackOutput(input_):
