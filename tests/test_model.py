@@ -32,4 +32,12 @@ def test_setMode_normal_clears_pending():
     setMode(Mode.normal)
     assert model._pending_motion == None
 
+nonnormalModes = allModes.copy()
+nonnormalModes.remove(Mode.normal)
+@pytest.mark.parametrize("mode", nonnormalModes)
+def test_setMode_nonnormal_not_clears_pending(mode):
+    pending = "l"
+    model._pending_motion = pending
+    setMode(mode)
+    assert model._pending_motion == pending
 
