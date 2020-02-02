@@ -67,5 +67,5 @@ def tryHandle(key):
         Error: No key outputted. Output is not str. Returning input key instead.
         """)
         output = key
-    logger.debug("Output: " + output)
+    logger.debug("Output: {}".format(output))
     return output

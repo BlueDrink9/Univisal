@@ -4,7 +4,7 @@ import unittest.mock
 
 import univisal
 from univisal import message_interface
-from univisal.message_interface import process_input
+from univisal.message_interface import process_input, tryHandle
 
 def raiseError(e=KeyError):
     raise e
@@ -53,3 +53,22 @@ def test_process_input_returns_a_result(test):
         'univisal.message_interface.tryHandle',
             side_effect=ret_arg):
         assert process_input(test) == test, errmsg
+
+
+def test_tryHandle_with_exception():
+    test = "input"
+    with unittest.mock.patch(
+        'univisal.message_interface.handleInput',
+            side_effect=raiseError):
+        assert tryHandle(test) == test
+
+
+@pytest.mark.parametrize("output", [
+    ["output"], [], {}, 5,
+])
+def test_tryHandle_with_nonstr_output(output):
+    test = "input"
+    with unittest.mock.patch(
+        'univisal.message_interface.handleInput',
+            return_value=output):
+        assert tryHandle(test) == test
