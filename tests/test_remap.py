@@ -4,6 +4,7 @@ import unittest
 import logging
 
 import univisal
+from univisal import remap
 from univisal.remap import imap, nmap
 from univisal.model import Mode, isMode, setMode, getMode
 from univisal.motion import Motion
@@ -14,7 +15,10 @@ from tests.translate_output import translate_keys
 
 
 def setup_function():
-    univisal.remap.resetMapData()
+    remap.resetMapData()
+
+def teardown_function():
+    remap.resetMapData()
 
 
 @pytest.mark.parametrize("maps, test, expected, error_msg", [
@@ -101,6 +105,7 @@ def test_imap_to_esc_one_at_a_time(caplog):
     ])
 def test_map_with_joinchar(caplog, maps, test, expected, error_msg):
     caplog.set_level(logging.DEBUG)
+    univisal.adapter_maps.adapter_maps = {Keys.multikey_join_char.value: "+"}
     assert univisal.adapter_maps.getJoinChar() != ""
     setMode(Mode.insert)
     for m in maps:
