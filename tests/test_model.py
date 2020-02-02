@@ -18,6 +18,10 @@ def test_increaseRepeatCount(numbers):
     assert model.getRepeatCount() == numbers, \
         "Repeat count is incorrect after {}".format(numbers)
 
+def test_resetRepeatCount():
+    model.__repeat_count = 32847192734
+    model.resetRepeatCount()
+    assert model.__repeat_count == 0
 
 allModes = [mode for mode in Mode]
 
@@ -30,7 +34,7 @@ def test_setMode(mode):
 def test_setMode_normal_clears_pending():
     model._pending_motion = "l"
     setMode(Mode.normal)
-    assert model._pending_motion == None
+    assert model._pending_motion is None
 
 nonnormalModes = allModes.copy()
 nonnormalModes.remove(Mode.normal)
@@ -41,3 +45,23 @@ def test_setMode_nonnormal_not_clears_pending(mode):
     setMode(mode)
     assert model._pending_motion == pending
 
+
+def test_init_model():
+    model.init_model()
+    assert model.__outputKeys == []
+    assert getMode() == Mode.normal
+    # Just one test to make sure clear_pending was called.
+    assert not model.expecting_search_letter
+
+@pytest.mark.xfail("Not implemented yet, test unfinished")
+def test_init_registers():
+    registers = {
+    }
+    assert model._registers == registers
+
+def test_clear_pending():
+    assert not model.expecting_clipboard
+    assert not model.expecting_search_letter
+    assert model._pending_motion is None
+    assert model._captured_clipboard is None
+    assert model._search_letter is None
