@@ -70,6 +70,14 @@ def test_init_registers():
     assert model._registers == registers
 
 def test_clear_pending():
+    model.expecting_clipboard = True
+    model.expecting_search_letter = True
+    model._pending_motion = ""
+    model._captured_clipboard = ""
+    model._search_letter = ""
+
+    model.clear_pending()
+
     assert not model.expecting_clipboard
     assert not model.expecting_search_letter
     assert model._pending_motion is None
@@ -90,7 +98,10 @@ def test_popOuputKeys():
 ])
 def test_extendOutputKeys(keys):
     model.extendOutputKeys(keys)
+    model.extendOutputKeys(keys)
     errmsg = "extendOutputKeys fails with keys '{}'".format(keys)
     if not isinstance(keys, list):
-        keys = [keys]
+        keys = [keys] * 2
+    else:
+        keys = keys * 2
     assert model.popOutputKeys() == keys, errmsg
