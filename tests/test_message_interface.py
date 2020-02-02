@@ -45,7 +45,7 @@ def test_process_input_returns_on_HUP():
 
 
 @pytest.mark.parametrize("test", [
-    "l", "multichar",
+    "l", "multichar", " ",
 ])
 def test_process_input_returns_a_result(test):
     errmsg = "process input returns wrong value with input '{}'".format(test)
@@ -56,7 +56,7 @@ def test_process_input_returns_a_result(test):
 
 
 @pytest.mark.parametrize("test", [
-    "output",
+    "output", "", " ",
 ])
 def test_tryHandle_calls_handle(test):
     with unittest.mock.patch(
