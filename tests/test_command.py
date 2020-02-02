@@ -3,6 +3,8 @@ import pytest
 import unittest.mock
 
 import univisal
+from univisal import command
+from univisal import model
 from univisal.model import Mode, isMode, getMode, setMode
 from univisal.handleInput import handleInput
 from univisal.keys import Keys
@@ -38,3 +40,15 @@ def test_getMode():
 def test_getConfigDir():
     from univisal.config import getConfigDir
     assert handleInput(':getConfigDir') == getConfigDir(), "getConfigDir doesn't return path"
+
+
+# Have to mock the function as it is within the scope called.
+@unittest.mock.patch('univisal.command.normalCommand')
+@unittest.mock.patch('univisal.command.processOutput')
+def test_handlePendingClipboard_strips_correct_text(mock1, mock2):
+    clipboard = " copied text::"
+    cmd = ":clipboard:" + clipboard
+
+    command.handlePendingClipboard(cmd)
+
+    assert model.captured_clipboard == clipboard
