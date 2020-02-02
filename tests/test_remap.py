@@ -21,6 +21,25 @@ def teardown_function():
     remap.resetMapData()
 
 
+def test_resetMapData():
+    remap.resetMapData()
+    assert remap.maps == {
+        Mode.insert: {},
+        Mode.normal: {},
+        Mode.visual: {},
+        Mode.command: {},
+    }
+    assert remap.current_mode is None
+    assert remap.current_maps is None
+    assert remap.maps_in_progress == {}
+
+
+def test_remap():
+    k, v = "sequence", "result"
+    remap.remap(remap.maps[Mode.normal], k, v)
+    assert remap.maps[Mode.normal] == {k: v}
+
+
 @pytest.mark.parametrize("maps, test, expected, error_msg", [
     ({"map": "pam"},
         "complimacated",
