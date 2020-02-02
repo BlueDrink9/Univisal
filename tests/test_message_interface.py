@@ -4,6 +4,7 @@ import unittest.mock
 
 import univisal
 from univisal import message_interface
+from univisal.message_interface import process_input
 
 def raiseError(e=KeyError):
     raise e
@@ -33,3 +34,22 @@ def test_readMessagesLoop(mock_read, mock_write):
             side_effect=ret_arg):
         message_interface.readMessagesLoop()
     assert message_output == expected, errMsg
+
+
+def test_process_input_returns_blank_with_no_input():
+    assert process_input('') == ''
+
+
+def test_process_input_returns_on_HUP():
+    assert process_input('HUP') == None
+
+
+@pytest.mark.parametrize("test", [
+    "l", "multichar",
+])
+def test_process_input_returns_a_result(test):
+    errmsg = "process input returns wrong value with input '{}'".format(test)
+    with unittest.mock.patch(
+        'univisal.message_interface.tryHandle',
+            side_effect=ret_arg):
+        assert process_input(test) == test, errmsg
