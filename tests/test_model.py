@@ -6,6 +6,7 @@ import univisal
 import univisal.model as model
 from univisal.model import increaseRepeatCount
 from univisal.model import Mode, getMode, setMode
+from univisal.keys import Keys
 
 @pytest.mark.parametrize("numbers", [1, 10, 15, 329, 991])
 def test_increaseRepeatCount(numbers):
@@ -95,6 +96,7 @@ def test_popOuputKeys():
     ["key1", "key2"],
     ["key"],
     "key",
+    Keys.esc,
     "l",
 ])
 def test_extendOutputKeysSingleCall(keys):
@@ -109,6 +111,7 @@ def test_extendOutputKeysSingleCall(keys):
 @pytest.mark.parametrize("keys", [
     ["key1", "key2"],
     ["key"],
+    Keys.esc,
     "key",
     "l",
 ])

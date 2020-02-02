@@ -1,5 +1,6 @@
 # enum from py >= 3.4
 from enum import Enum, auto
+from collections.abc import Iterable
 import string
 try:
     pass
@@ -136,12 +137,11 @@ def popOutputKeys():
     return tmp
 
 def extendOutputKeys(*keys):
-    if isinstance(*keys, str):
+    if isinstance(*keys, str) or not isinstance(*keys, Iterable):
         extend = [keys]
     else:
         extend = keys
     __outputKeys.extend(*extend)
-    print(__outputKeys)
 
 def repeatOutputKeys():
     global __outputKeys
