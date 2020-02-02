@@ -18,7 +18,7 @@ def loadAdapterMaps(adapter):
     # Can dump a dict in python with `json.dumps(dict, sort_keys=True, indent=2)`
     adapter_maps_path = getMappingPath(adapter)
     try:
-        adapter_maps = loadAdapterMapsFromPath(adapter)
+        adapter_maps = loadAdapterMapsFromPath(adapter_maps_path)
     except (IOError, json.JSONDecodeError) as e:
         logAdapterError(e, adapter_maps_path)
         adapter_maps = {}
