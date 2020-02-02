@@ -16,33 +16,39 @@ class Mode(Enum):
     disabled  = auto()
     operator_pending  = auto()
 
-_current_mode = None
+__outputKeys = None
 _registers = None
-_search_letter = None
-_pending_motion = None
-_captured_clipboard = None
+_current_mode = None
+
+__repeat_count = None
 expecting_clipboard = None
 expecting_search_letter = None
-__repeat_count = None
-__outputKeys = None
+_pending_motion = None
+_captured_clipboard = None
+_search_letter = None
 
 # Declare globals within a function to access them.
 def init_model():
-    global _registers, __outputKeys
-    setMode(Mode.normal)
-    registers = {}
-    for l in string.ascii_letters:
-        registers[l] = ""
-    clear_pending()
+    global __outputKeys
     __outputKeys = []
+    setMode(Mode.normal)
+    init_registers()
+    clear_pending()
+
+def init_registers():
+    global _registers
+    _registers = {}
+    for l in string.ascii_letters:
+        _registers[l] = ""
 
 def clear_pending():
     global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter
+    resetRepeatCount()
     expecting_clipboard = False
     expecting_search_letter = False
     _pending_motion = None
     _captured_clipboard = None
-    resetRepeatCount()
+    _search_letter = None
 
 
 insertlike_modes = [
