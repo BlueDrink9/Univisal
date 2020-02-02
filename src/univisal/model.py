@@ -42,7 +42,7 @@ def init_registers():
         _registers[l] = ""
 
 def clear_pending():
-    global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter
+    global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter, _search_letter
     resetRepeatCount()
     expecting_clipboard = False
     expecting_search_letter = False
@@ -141,6 +141,7 @@ def extendOutputKeys(*keys):
     else:
         extend = keys
     __outputKeys.extend(*extend)
+    print(__outputKeys)
 
 def repeatOutputKeys():
     global __outputKeys
