@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import pytest
 import unittest.mock
+from univisal.model import Mode, isMode, getMode, setMode
 
 from univisal import handleInput
 
@@ -13,10 +14,19 @@ def ret_arg(arg):
 def test_handleInput_with_commandlike_input():
     inpt = ":commandlike"
     expected = "command called"
+    errMsg = "commandlike inputs don't call command handler"
     with unittest.mock.patch(
         'univisal.handleInput.handleUnivisalCommand',
             return_value=expected):
-        assert handleInput.handleInput(inpt) == expected
+        assert handleInput.handleInput(inpt) == expected, errMsg
+
+
+def test_handleInput_while_disabled():
+    test = "input key"
+    errMsg = "HandleInput doesn't return input when univisal disabled"
+    setMode(Mode.disabled)
+    assert handleInput.handleInput(test) == test, errMsg
+
 
 @unittest.mock.patch('univisal.handleInput.getFallbackOutput',
                      return_value="fallback")
