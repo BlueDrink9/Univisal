@@ -60,6 +60,14 @@ def test_set_current_maps_for_mode(mode):
     assert remap.current_maps == remap.maps[mode]
 
 
+@pytest.mark.parametrize("mode", allMappedModes)
+def test_updateCurrentMode(mode):
+    setMode(mode)
+    remap.updateCurrentMode()
+    assert remap.current_mode == mode
+
+
+
 
 @pytest.mark.parametrize("maps, test, expected, error_msg", [
     ({"map": "pam"},
