@@ -39,6 +39,12 @@ def test_remap():
     remap.remap(remap.maps[Mode.normal], k, v)
     assert remap.maps[Mode.normal] == {k: v}
 
+def test_remap_from_dict():
+    maps = {"sequence": "result"}
+    remap.addMapsFromDict(Mode.normal, maps)
+    assert remap.maps[Mode.normal] == maps
+
+
 
 @pytest.mark.parametrize("maps, test, expected, error_msg", [
     ({"map": "pam"},
