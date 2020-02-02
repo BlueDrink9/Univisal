@@ -23,8 +23,15 @@ def test_resetRepeatCount():
     model.resetRepeatCount()
     assert model.__repeat_count == 0
 
-def test_repeatOutputKeys():
-    assert False
+
+@pytest.mark.parametrize("count", [1, 5])
+def test_repeatOutputKeys(count):
+    model.__repeat_count = count
+    key = "<esc>"
+    model.__outputKeys = [key]
+    model.repeatOutputKeys()
+    assert model.__outputKeys == [key] * count, \
+        "repeatOutputKeys doesn't change outputKey count correctly"
 
 allModes = [mode for mode in Mode]
 
