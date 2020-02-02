@@ -26,6 +26,24 @@ expecting_search_letter = None
 __repeat_count = None
 __outputKeys = None
 
+# Declare globals within a function to access them.
+def init_model():
+    global _registers, __outputKeys
+    setMode(Mode.normal)
+    registers = {}
+    for l in string.ascii_letters:
+        registers[l] = ""
+    clear_pending()
+    __outputKeys = []
+
+def clear_pending():
+    global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter
+    expecting_clipboard = False
+    expecting_search_letter = False
+    _pending_motion = None
+    _captured_clipboard = None
+    resetRepeatCount()
+
 
 insertlike_modes = [
         Mode.insert,
@@ -53,24 +71,6 @@ def isMode(m):
 def checkValidMode(m):
     if not isinstance(m, Mode):
         logger.error("Not a valid mode: '{}'".format(m))
-
-# Declare globals within a function to access them.
-def init_model():
-    global _registers, __outputKeys
-    setMode(Mode.normal)
-    registers = {}
-    for l in string.ascii_letters:
-        registers[l] = ""
-    clear_pending()
-    __outputKeys = []
-
-def clear_pending():
-    global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter
-    expecting_clipboard = False
-    expecting_search_letter = False
-    _pending_motion = None
-    _captured_clipboard = None
-    resetRepeatCount()
 
 def resetRepeatCount():
     global __repeat_count
