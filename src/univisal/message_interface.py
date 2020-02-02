@@ -47,7 +47,14 @@ def readMessagesLoop():
 def process_input(data):
     if len(data) == 0:
         return ""
-    key = data.rstrip()
+    # I can't remember why I was stripping whitespace.
+    # stripped_data = data.rstrip()
+    # if len(stripped_data) > 0:
+    #     key = stripped_data
+    # else:
+    #     # Key may have been a space or tab.
+    #     key = data
+    key = data
     logger.debug("Key: " + key)
     if key == "HUP":
         logger.info("HUP. End reading.")
