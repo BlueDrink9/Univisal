@@ -79,9 +79,9 @@ def normalCommand(key):
     elif key == "T":
         doMotionOrSelection(seekLetter(key, backwards=True, stopBeforeLetter=True))
     elif key == "u":
-        doOperator(Operator.undo)
+        doVimOperator(Operator.undo)
     elif key == "<ctrl>r":
-        doOperator(Operator.redo)
+        doVimOperator(Operator.redo)
     elif key == "J":
         doAction([Motion.goEndOfLine,
                     Keys.delete,
@@ -106,7 +106,7 @@ def doMotionOrSelection(motion):
 def doAction(action):
     addToOutput(action)
 
-def doOperator(op):
+def doVimOperator(op):
     addToOutput(op)
 
 def addToOutput(*keys):
