@@ -18,14 +18,11 @@ except ImportError:
     from remap import resolve_map
 logger = __import__("univisal.logger").logger.get_logger(__name__)
 
-# Reduce chance of a typo if returning nop
-nop = "nop"
-
 def normalCommand(key):
     # Command mode does nothing atm, so don't handle this key.
     # if key == ":":
         # setMode(Mode.command)
-        # addToOutput(nop)
+        # addToOutput(Keys.nop)
     # elif key == "h":
     if key == "h":
         doMotionOrSelection(Motion.left)
@@ -37,7 +34,7 @@ def normalCommand(key):
         doMotionOrSelection(Motion.up)
     elif key == "i":
         setMode(Mode.insert)
-        addToOutput(nop)
+        addToOutput(Keys.nop)
     elif key == "a":
         setMode(Mode.insert)
         doMotionOrSelection(Motion.right)
@@ -61,12 +58,12 @@ def normalCommand(key):
         # If repeat count in progress, adds to that. Otherwise, BoL.
         if model.repeatInProgress():
             model.increaseRepeatCount(int(key))
-            addToOutput(nop)
+            addToOutput(Keys.nop)
         else:
             doMotionOrSelection(Motion.goLineStart)
     elif key in "123456789" and len(key) == 1:
         model.increaseRepeatCount(int(key))
-        addToOutput(nop)
+        addToOutput(Keys.nop)
     elif key == "^":
         doMotionOrSelection(Motion.goLineStart)
     elif key == "x":
@@ -129,7 +126,7 @@ def seekLetter(key, backwards=False, stopBeforeLetter=False):
         # Haven't specified which char to search for yet.
         model._pending_motion = key
         model.expecting_search_letter = True
-        return nop
+        return Keys.nop
     else:
         if not model.expecting_clipboard:
             # Request clipboard and return.

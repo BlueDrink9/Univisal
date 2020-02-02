@@ -2,8 +2,6 @@ import univisal
 from univisal.keys import Keys
 from univisal.handleInput import handleInput
 
-nop="nop"
-
 def translate_keys(keys):
     """
     Pass in a string if no special keys, else pass in a list.
@@ -23,6 +21,8 @@ def translate_keys(keys):
     return ''.join(out)
 
 def trimNop(out):
+    # Use value because at this stage, has been translated.
+    nop = Keys.nop.value
     while nop in out:
         out.remove(nop)
     return out

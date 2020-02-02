@@ -26,8 +26,6 @@ except ImportError:
     import adapter_maps
 logger = __import__("univisal.logger").logger.get_logger(__name__)
 
-# Reduce chance of a typo if returning nop
-nop = "nop"
 def handleVimInputKey(inputKey):
     mappedKeys = preprocessKey(inputKey)
     # a map may turn one key into many, which we need to handle
@@ -39,7 +37,7 @@ def handleVimInputKey(inputKey):
         # esc regardless of mode, for now. (Still permits mappings.)
         if isEsc(key):
             setMode(Mode.normal)
-            addToOutput(nop)
+            addToOutput(Keys.nop)
             continue
 
         if isMode(Mode.insert):
@@ -85,6 +83,7 @@ def convertOuputEnumsToStrings(output):
 
 def stripNoOp(output):
     # Only need nop if it's the only thing being returned, and only need one.
+    nop = Keys.nop
     while output.count(nop) > 1:
         output.remove(nop)
     if len(output) > 1:
