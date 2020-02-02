@@ -52,7 +52,7 @@ def test_escape():
     assert getMode() == Mode.insert
     result = handleInput(Keys.esc.value)
     assert getMode() == Mode.normal
-    assert result == "nop"
+    assert result == Keys.nop.value
 
 @pytest.mark.xfail(reason = 'unfinished test implementation')
 def test_f():
