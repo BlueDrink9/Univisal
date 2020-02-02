@@ -62,10 +62,10 @@ def tryHandle(key):
     except:
         logger.critical("Unhandled exception", exc_info=True)
         output = key
-    logger.debug("Output: " + output)
     if not isinstance(output, str):
         logger.error("""
         Error: No key outputted. Output is not str. Returning input key instead.
         """)
         output = key
+    logger.debug("Output: " + output)
     return output
