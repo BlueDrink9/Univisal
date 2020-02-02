@@ -55,6 +55,16 @@ def test_process_input_returns_a_result(test):
         assert process_input(test) == test, errmsg
 
 
+@pytest.mark.parametrize("test", [
+    "output",
+])
+def test_tryHandle_calls_handle(test):
+    with unittest.mock.patch(
+        'univisal.message_interface.handleInput',
+            return_value=test+"salt"):
+        assert tryHandle(test) == test+"salt"
+
+
 def test_tryHandle_with_exception():
     test = "input"
     with unittest.mock.patch(
