@@ -1,4 +1,3 @@
-import logging
 try:
     from .library import *
     from . import logger
@@ -25,7 +24,7 @@ except ImportError:
     from remap import resolve_map
     from adapter_maps import getAdapterMap
     import adapter_maps
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 # Reduce chance of a typo if returning nop
 nop = "nop"
