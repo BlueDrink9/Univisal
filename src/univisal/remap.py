@@ -18,17 +18,21 @@ current_maps = None
 maps_in_progress = {}
 
 def resetMapData():
-    global maps, current_mode, current_maps
+    global current_mode, current_maps
+    init_maps()
+
+    current_mode = None
+    current_maps = None
+    resetMapsInProgress()
+
+def init_maps():
+    global maps
     maps = {
         Mode.insert: {},
         Mode.normal: {},
         Mode.visual: {},
         Mode.command: {},
     }
-
-    current_mode = None
-    current_maps = None
-    resetMapsInProgress()
 
 def resetMapsInProgress():
     global maps_in_progress
