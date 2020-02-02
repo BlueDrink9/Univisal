@@ -26,15 +26,14 @@ def handleInput(input_):
         return getFallbackOutput(input_)
 
 def handleInputUnsafe(input_):
-    if len(input_) > 1 and input_[0] == ":":
+    inputIsCommandlike = len(input_) > 1 and input_[0] == ":"
+    if inputIsCommandlike:
         # For specific commands sent from adapter, e.g. `:disable`.
         # These should be handled specially, before other logic.
         return handleUnivisalCommand(input_)
-
     # Disabled: always return input key.
     if isMode(Mode.disabled):
         return input_
-
     if model.expecting_search_letter:
         return handleExpectedSearchLetter(input_)
 
