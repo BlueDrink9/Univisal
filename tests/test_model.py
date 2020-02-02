@@ -23,6 +23,9 @@ def test_resetRepeatCount():
     model.resetRepeatCount()
     assert model.__repeat_count == 0
 
+def test_repeatOutputKeys():
+    assert False
+
 allModes = [mode for mode in Mode]
 
 @pytest.mark.parametrize("mode", allModes)
@@ -53,7 +56,7 @@ def test_init_model():
     # Just one test to make sure clear_pending was called.
     assert not model.expecting_search_letter
 
-@pytest.mark.xfail("Not implemented yet, test unfinished")
+@pytest.mark.xfail(reason="Not implemented yet, test unfinished")
 def test_init_registers():
     registers = {
     }
@@ -65,3 +68,22 @@ def test_clear_pending():
     assert model._pending_motion is None
     assert model._captured_clipboard is None
     assert model._search_letter is None
+
+
+def test_popOuputKeys():
+    test = ["key1", "key2"]
+    model.__outputKeys = test.copy()
+    assert model.popOutputKeys() == test, "popOutputKeys doesn't output keys"
+    assert model.__outputKeys == [], "popOutputKeys doesn't reset keys"
+
+@pytest.mark.parametrize("keys", [
+    ["key1", "key2"],
+    ["key"],
+    "key",
+])
+def test_extendOutputKeys(keys):
+    model.extendOutputKeys(keys)
+    errmsg = "extendOutputKeys fails with keys '{}'".format(keys)
+    if not isinstance(keys, list):
+        keys = [keys]
+    assert model.popOutputKeys() == keys, errmsg

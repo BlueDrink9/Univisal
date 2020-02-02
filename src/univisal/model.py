@@ -136,7 +136,11 @@ def popOutputKeys():
     return tmp
 
 def extendOutputKeys(*keys):
-    __outputKeys.extend(list(keys))
+    if isinstance(*keys, str):
+        extend = [keys]
+    else:
+        extend = keys
+    __outputKeys.extend(*extend)
 
 def repeatOutputKeys():
     global __outputKeys
