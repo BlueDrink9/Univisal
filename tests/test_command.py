@@ -30,12 +30,15 @@ def test_enable():
     handleInput(":enable")
     assert handleInput('l') == Motion.right.value, "re-enabled univisal does not return motion"
 
-def test_getMode():
-    assert handleInput(':getMode') == "normal", "getMode doesn't return mode"
-    setMode(Mode.insert)
-    assert handleInput(':getMode') == "insert", "getMode doesn't return mode in insert mode"
-    setMode(Mode.disabled)
-    assert handleInput(':getMode') == "disabled", "getMode doesn't return mode when disabled"
+
+@pytest.mark.parametrize("mode, expected", [
+    (Mode.normal, "normal"),
+    (Mode.insert, "insert"),
+    (Mode.disabled, "disabled"),
+    ])
+def test_getMode(mode, expected):
+    setMode(mode)
+    error_msg = "getMode doesn't return mode in {} mode".format(expected)
 
 def test_getConfigDir():
     from univisal.config import getConfigDir
