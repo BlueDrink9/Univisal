@@ -49,7 +49,7 @@ def verifyPendingClipboard(cmd):
     if not model.expecting_clipboard:
         logger.warning("Received command ':clipboard', \
                 but not expecding it.  cmd: '{}'".format(cmd))
-    if model.pending_motion is None:
+    if model.getPendingMotion() is None:
         logger.warning("Received command ':clipboard', \
                 but no pending motion.  cmd: '{}'".format(cmd))
 
