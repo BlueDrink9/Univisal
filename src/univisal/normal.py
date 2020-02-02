@@ -87,6 +87,13 @@ def normalCommand(key):
                     Keys.delete,
                     Keys.space,
                     ])
+    elif key == "d":
+        doVimOperator(Operator.delete)
+    elif key == "y":
+        doVimOperator(Operator.yank)
+    elif key == "c":
+        doVimOperator(Operator.delete)
+        setMode(Mode.insert)
     # elif key == "ZZ":
     #     out.extend([operator.save,
     #         operator.quit])
