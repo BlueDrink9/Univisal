@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import pytest
 import unittest.mock
-from univisal.model import Mode, isMode, getMode, setMode
 
+import univisal
+from univisal.model import Mode, isMode, getMode, setMode
 from univisal import handleInput
 
 def raiseError(e=KeyError):
@@ -10,6 +11,9 @@ def raiseError(e=KeyError):
 
 def ret_arg(arg):
     return arg
+
+def setup_function():
+    univisal.model.init_model()
 
 def test_handleInput_with_commandlike_input():
     inpt = ":commandlike"
@@ -26,6 +30,18 @@ def test_handleInput_while_disabled():
     errMsg = "HandleInput doesn't return input when univisal disabled"
     setMode(Mode.disabled)
     assert handleInput.handleInput(test) == test, errMsg
+
+
+def test_handleInput_while_expecting_searchletter():
+    inpt = "letter to search for"
+    expected = "handle search letter"
+    errMsg = "handleInput doesn't handle search letter when expecting one"
+    with unittest.mock.patch(
+        'univisal.handleInput.handleExpectedSearchLetter',
+            return_value=expected):
+        assert not handleInput.handleInput(inpt) == expected, "testing setup error"
+        univisal.model.expecting_search_letter = True
+        assert handleInput.handleInput(inpt) == expected, errMsg
 
 
 @unittest.mock.patch('univisal.handleInput.getFallbackOutput',
