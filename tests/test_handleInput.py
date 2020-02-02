@@ -7,6 +7,17 @@ from univisal import handleInput
 def raiseError(e=KeyError):
     raise e
 
+def ret_arg(arg):
+    return arg
+
+def test_handleInput_with_commandlike_input():
+    inpt = ":commandlike"
+    expected = "command called"
+    with unittest.mock.patch(
+        'univisal.handleInput.handleUnivisalCommand',
+            return_value=expected):
+        assert handleInput.handleInput(inpt) == expected
+
 @unittest.mock.patch('univisal.handleInput.getFallbackOutput',
                      return_value="fallback")
 def test_handleInput_gets_fallback(fallbackMock):
