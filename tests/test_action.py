@@ -6,6 +6,7 @@ import univisal
 from univisal.model import Mode, isMode, getMode, setMode
 from univisal.handleInput import handleInput
 from univisal.keys import Keys
+from univisal.vim_operator import Operator
 from univisal.motion import Motion
 from tests.mock_setup import init_univisal
 from tests.translate_output import translate_keys
@@ -13,6 +14,20 @@ from tests.translate_output import translate_keys
 @pytest.fixture(autouse=True)
 def setUp():
     init_univisal()
+
+
+def handleSequence(keys):
+    for key in keys:
+        result = handleInput(key)
+    return result
+
+
+def test_escape():
+    setMode(Mode.insert)
+    assert getMode() == Mode.insert
+    result = handleInput(Keys.esc.value)
+    assert getMode() == Mode.normal
+    assert result == Keys.nop.value
 
 
 @pytest.mark.parametrize("motion, expected", [
@@ -47,12 +62,39 @@ def test_basic_motion_with_count(count):
     print("current repeat count: {}".format(univisal.model.getRepeatCount()))
     assert result == expected, "motion with count {} returns wrong thing".format(count)
 
-def test_escape():
-    setMode(Mode.insert)
-    assert getMode() == Mode.insert
-    result = handleInput(Keys.esc.value)
-    assert getMode() == Mode.normal
-    assert result == Keys.nop.value
+@pytest.mark.xfail(reason = 'unfinished implementation')
+def test_basic_delete_motion():
+    setMode(Mode.normal)
+    result = handleSequence("dw")
+    expected = Operator.visualStart + Motion.goWordNext + \
+        Operator.visualPause + Operator.delete
+    assert result == expected, "basic delete with motion fails (dw)"
+
+
+@pytest.mark.xfail(reason = 'unfinished implementation')
+def test_repeat_delete_motion():
+    setMode(Mode.normal)
+    result = handleSequence("3dw")
+    expected = 3 * (Operator.visualStart + Motion.goWordNext + \
+                Operator.visualPause + Operator.delete)
+    assert result == expected, "repeated delete with motion fails (3dw)"
+
+@pytest.mark.xfail(reason = 'unfinished implementation')
+def test_delete_repeat_motion():
+    setMode(Mode.normal)
+    result = handleSequence("d3w")
+    expected = 3 * (Operator.visualStart + Motion.goWordNext + \
+                Operator.visualPause + Operator.delete)
+    assert result == expected, "delete with repeated motion fails (d3w)"
+
+@pytest.mark.xfail(reason = 'unfinished implementation')
+def test_repeat_delete_repeat_motion():
+    setMode(Mode.normal)
+    result = handleSequence("3d3w")
+    expected = 9 * (Operator.visualStart + Motion.goWordNext + \
+                Operator.visualPause + Operator.delete)
+    assert result == expected, "repeated delete with repeated motion fails (3d3w)"
+
 
 @pytest.mark.xfail(reason = 'unfinished test implementation')
 def test_f():
