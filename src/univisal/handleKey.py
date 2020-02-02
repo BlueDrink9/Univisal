@@ -69,8 +69,11 @@ def getOutputForAdapter():
 def processOutput(output):
     # Only need nop if it's the only thing being returned.
     output = stripNoOp(output)
-    # Convert enums like operator, motion, key into str.
+    # Convert enums like operators, motions, keys into str.
     output = convertOuputEnumsToStrings(output)
+    return joinForAdapter(output)
+
+def joinForAdapter(output):
     return adapter_maps.getJoinChar().join(output)
 
 def convertOuputEnumsToStrings(output):
