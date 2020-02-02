@@ -16,3 +16,12 @@ def test_increaseRepeatCount(numbers):
     # This time using numbers as int, as all digits.
     assert model.getRepeatCount() == numbers, \
         "Repeat count is incorrect after {}".format(numbers)
+
+
+allModes = [mode for mode in model.Mode]
+@pytest.mark.parametrize("mode", allModes)
+def test_setMode(mode):
+    model.setMode(mode)
+    assert model.getMode() == mode
+
+
