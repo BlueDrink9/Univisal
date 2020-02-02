@@ -17,9 +17,10 @@ def setUp():
 
 
 def test_disable():
-    assert getMode() == Mode.normal, "Univisal not set up"
+    assert getMode() == Mode.normal, "Univisal not set up for test"
     handleInput(":disable")
     assert getMode() == Mode.disabled, "Disable does not change mode"
+    # TODO: Move mode tests like this to separte test.
     assert handleInput('l') == 'l', "Disabled univisal does not return normal key"
     assert handleInput(Keys.esc.value) == ("<esc>"), \
         "Disabled univisal does not return special keys"
@@ -28,6 +29,7 @@ def test_enable():
     handleInput(":disable")
     assert getMode() == Mode.disabled, "Disable does not change mode"
     handleInput(":enable")
+    assert getMode() == Mode.normal, "Enable does not change mode to normal"
     assert handleInput('l') == Motion.right.value, "re-enabled univisal does not return motion"
 
 
