@@ -20,6 +20,8 @@ def setup_function():
 def teardown_function():
     remap.resetMapData()
 
+allMappedModes = [Mode.insert, Mode.normal, Mode.visual, Mode.command]
+
 
 def test_resetMapData():
     remap.resetMapData()
@@ -43,6 +45,19 @@ def test_remap_from_dict():
     maps = {"sequence": "result"}
     remap.addMapsFromDict(Mode.normal, maps)
     assert remap.maps[Mode.normal] == maps
+
+
+@pytest.mark.parametrize("mode", allMappedModes)
+def test_set_current_maps_for_mode(mode):
+    remap.maps = {
+        Mode.insert: {'ins': 'ert'},
+        Mode.normal: {'nor': 'mal'},
+        Mode.visual: {'vis': 'ual'},
+        Mode.command: {'com': 'mand'},
+    }
+    setMode(mode)
+    remap.set_current_maps_for_mode()
+    assert remap.current_maps == remap.maps[mode]
 
 
 
