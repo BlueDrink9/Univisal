@@ -94,7 +94,7 @@ def normalCommand(key):
     elif key == "c":
         # TODO: this isn't correct. For double C, should only set insert on the
         # second c. Also, with a motion this will never work.
-        doVimOperator(Operator.delete)
+        doVimOperator(Operator.change)
         setMode(Mode.insert)
     # elif key == "ZZ":
     #     out.extend([operator.save,
