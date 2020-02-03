@@ -7,7 +7,7 @@ try:
     from .model import setMode, getMode, Mode
     from .motion import Motion
     from .vim_operator import Operator
-    from .handleKey import processOutput
+    from .handleKey import formatOutputForAdapter
     from . import config
 except ImportError:
     from library import *
@@ -16,7 +16,7 @@ except ImportError:
     from model import setMode, getMode, Mode
     from motion import Motion
     from vim_operator import Operator
-    from handleKey import processOutput
+    from handleKey import formatOutputForAdapter
     import config
 logger = __import__("univisal.logger").logger.get_logger(__name__)
 
@@ -43,7 +43,7 @@ def handlePendingClipboard(cmd):
     cmd = cmd[l:]
     model.captured_clipboard = cmd
     commandOut = normalCommand(model.getPendingMotion())
-    return processOutput(commandOut)
+    return formatOutputForAdapter(commandOut)
 
 def verifyPendingClipboard(cmd):
     if not model.expecting_clipboard:

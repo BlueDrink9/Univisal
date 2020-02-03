@@ -37,7 +37,7 @@ def handleInputUnsafe(input_):
     if model.expecting_search_letter:
         return handleExpectedSearchLetter(input_)
 
-    # The default responce
+    # The default response
     return handleVimInputKey(input_)
 
 def handleUnivisalCommand(input_):

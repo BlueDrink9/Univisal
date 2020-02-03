@@ -49,7 +49,7 @@ def test_getConfigDir():
 
 # Have to mock the function as it is within the scope called.
 @unittest.mock.patch('univisal.command.normalCommand')
-@unittest.mock.patch('univisal.command.processOutput')
+@unittest.mock.patch('univisal.command.formatOutputForAdapter')
 def test_handlePendingClipboard_strips_correct_text(mock1, mock2):
     clipboard = " copied text::"
     cmd = ":clipboard:" + clipboard

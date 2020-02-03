@@ -47,7 +47,9 @@ def handleVimInputKey(inputKey):
         else:
             addToOutput(key)
 
-    return getOutputForAdapter()
+    applyPendingVimModifications()
+    formattedOut = formatOutputForAdapter(model.popOutputKeys())
+    return formattedOut
 
 def preprocessKey(key):
     logger.debug("handleSingleInputKey key_: {}".format(key))
@@ -61,10 +63,10 @@ def addToOutput(*keys):
 def isEsc(key):
     return key.lower() == Keys.esc.value
 
-def getOutputForAdapter():
-    return processOutput(model.popOutputKeys())
+def applyPendingVimModifications():
+    pass
 
-def processOutput(output):
+def formatOutputForAdapter(output):
     # Only need nop if it's the only thing being returned.
     output = stripNoOp(output)
     # Convert enums like operators, motions, keys into str.
