@@ -92,6 +92,8 @@ def normalCommand(key):
     elif key == "y":
         doVimOperator(Operator.yank)
     elif key == "c":
+        # TODO: this isn't correct. For double C, should only set insert on the
+        # second c. Also, with a motion this will never work.
         doVimOperator(Operator.delete)
         setMode(Mode.insert)
     # elif key == "ZZ":
@@ -146,7 +148,8 @@ def unfoundKeyFallback(key):
 
 
 def selectCurrentLine():
-    addToOutput(Motion.selectCurrentLine)
+    addToOutput([Motion.goLineStart, Operator.visualStart,
+                 Motion.goLineEnd, Operator.visualPause])
 
 
 def seekLetter(key, backwards=False, stopBeforeLetter=False):
