@@ -66,39 +66,20 @@ def test_basic_motion_with_count(count):
     assert result == expected, "motion with count {} returns wrong thing".format(count)
 
 
+@pytest.mark.parametrize("sequence, count, errmsg", [
+    ("dw", 1, "basic delete with motion fails (dw)"),
+    ("3dw", 3, "repeated delete with motion fails (3dw)"),
+    ("d3w", 3, "delete with repeated motion fails (d3w)"),
+    ("3d3w", 9, "repeated delete with repeated motion fails (3d3w)"),
+])
 @unittest.mock.patch("univisal.handleKey.formatOutputForAdapter",
                      side_effect=ret_arg)
-def test_basic_delete_motion(mock):
+def test_delete_motion(mock, sequence, count, errmsg):
     setMode(Mode.normal)
-    result = handleSequence("dw")
-    expected = [Operator.visualStart, Motion.goWordNext, \
-        Operator.visualPause, Operator.delete]
-    assert result == expected, "basic delete with motion fails (dw)"
-
-
-@pytest.mark.xfail(reason = 'unfinished implementation')
-def test_repeat_delete_motion():
-    setMode(Mode.normal)
-    result = handleSequence("3dw")
-    expected = 3 * ([Operator.visualStart, Motion.goWordNext, \
-        Operator.visualPause, Operator.delete])
-    assert result == expected, "repeated delete with motion fails (3dw)"
-
-@pytest.mark.xfail(reason = 'unfinished implementation')
-def test_delete_repeat_motion():
-    setMode(Mode.normal)
-    result = handleSequence("d3w")
-    expected = 3 * ([Operator.visualStart, Motion.goWordNext, \
-        Operator.visualPause, Operator.delete])
-    assert result == expected, "delete with repeated motion fails (d3w)"
-
-@pytest.mark.xfail(reason = 'unfinished implementation')
-def test_repeat_delete_repeat_motion():
-    setMode(Mode.normal)
-    result = handleSequence("3d3w")
-    expected = 9 * ([Operator.visualStart, Motion.goWordNext, \
-        Operator.visualPause, Operator.delete])
-    assert result == expected, "repeated delete with repeated motion fails (3d3w)"
+    result = handleSequence(sequence)
+    expected = [Operator.visualStart] + count * [Motion.goWordNext] + \
+        [Operator.visualPause, Operator.delete]
+    assert result == expected, errmsg
 
 
 @pytest.mark.xfail(reason = 'unfinished test implementation')
