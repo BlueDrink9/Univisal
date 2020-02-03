@@ -137,9 +137,10 @@ def popOutputKeys():
     __outputKeys = []
     return tmp
 
+# This function is tricky because it has to support lots of different types
+# for the args. See the tests for examples.
 def extendOutputKeys(*keys):
-    if isinstance(keys, tuple):
-        keys = list(keys)
+    keys = expandArgsTuple(keys)
     if isNonStrIterable(keys):
         extend = keys
         if isinstance(keys[0], list):
@@ -149,11 +150,11 @@ def extendOutputKeys(*keys):
         extend = [keys]
     __outputKeys.extend(extend)
 
-def getArgsType(args):
+def expandArgsTuple(args):
     if isinstance(args, tuple):
-        return type(args[0])
+        return list(args)
     else:
-        return type(args)
+        return args
 
 def isNonStrIterable(type_):
     return not isinstance(type_, str) and isinstance(type_, Iterable)

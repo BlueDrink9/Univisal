@@ -114,9 +114,9 @@ def test_extendOutputKeysSingleCall(keys):
 @pytest.mark.parametrize("keys", extendOutputKeysTests)
 def test_extendOutputKeysMultipleCall(keys):
     count = 5
-    for i in range(count):
+    for _ in range(count):
         model.extendOutputKeys(keys)
-    errmsg = "extendOutputKeys fails with keys '{}'".format(keys)
+    errmsg = "extendOutputKeys fails with {} times keys '{}'".format(count, keys)
     if not isinstance(keys, list):
         keys = [keys]
     else:
@@ -145,7 +145,7 @@ def test_extendOutputKeysMultipleCallMultiArgs(keys):
     count = 5
     for _ in range(count):
         model.extendOutputKeys(*keys)
-    errmsg = "extendOutputKeys fails with keys '{}'".format(keys)
+    errmsg = "extendOutputKeys fails with {} times keys '{}'".format(count, keys)
     if not isinstance(keys, list):
         keys = [keys]
     else:
