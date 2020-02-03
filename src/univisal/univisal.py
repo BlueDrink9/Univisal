@@ -2,25 +2,22 @@
 # -*- coding: iso-8859-15 -*-
 
 import sys
-import logging
 # Available since 3.1
 # import importlib
 
 try:
     from .message_interface import readMessagesLoop
     from .library import *
-    from .adapter_maps import load_adapter_maps
+    from .adapter_maps import loadAdapterMaps
     from . import model
     from . import config
-    from . import logging_
 except ImportError:
     from message_interface import readMessagesLoop
     from library import *
-    from adapter_maps import load_adapter_maps
+    from adapter_maps import loadAdapterMaps
     import model
     import config
-    import logging_
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 def main(args=sys.argv):
     checkArgs(args)
@@ -41,7 +38,7 @@ def checkArgs(args):
 
 def univisal_init(adapter):
     config.init_config()
-    load_adapter_maps(adapter)
+    loadAdapterMaps(adapter)
     model.init_model()
     readMessagesLoop()
 

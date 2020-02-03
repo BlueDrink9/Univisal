@@ -1,12 +1,12 @@
 # enum from py >= 3.4
 from enum import Enum, auto
+from collections.abc import Iterable
 import string
-import logging
 try:
-    from . import logging_
+    pass
 except ImportError:
-    import logging_
-logger = logging.getLogger(__name__)
+    pass
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 # Not using terms "edit" or "Ex" because they are less familiar.
 class Mode(Enum):
@@ -15,16 +15,45 @@ class Mode(Enum):
     visual  = auto()
     normal  = auto()
     disabled  = auto()
-    operator_pending  = auto()
 
-_current_mode = None
+__outputKeys = None
 _registers = None
-_search_letter = None
-_pending_motion = None
-_captured_clipboard = None
+_current_mode = None
+
+__repeat_count = None
 expecting_clipboard = None
 expecting_search_letter = None
-__repeat_count = None
+_pending_motion = None
+pending_operator = None
+apply_pending_operator = None
+_captured_clipboard = None
+_search_letter = None
+
+# Declare globals within a function to access them.
+def init_model():
+    global __outputKeys
+    __outputKeys = []
+    setMode(Mode.normal)
+    init_registers()
+    clear_pending()
+
+def init_registers():
+    global _registers
+    _registers = {}
+    for l in string.ascii_letters:
+        _registers[l] = ""
+
+def clear_pending():
+    global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter, _search_letter, pending_operator
+    resetRepeatCount()
+    expecting_clipboard = False
+    expecting_search_letter = False
+    _pending_motion = None
+    _captured_clipboard = None
+    _search_letter = None
+    pending_operator = None
+    apply_pending_operator = False
+
 
 insertlike_modes = [
         Mode.insert,
@@ -38,7 +67,9 @@ def setMode(m):
     checkValidMode(m)
     _current_mode = m
     if isMode(Mode.normal):
+        # This is a hidden behavior. Should it really be here?
         clear_pending()
+    logger.info("Mode set to '{}'".format(m))
 
 def getMode():
     return _current_mode
@@ -50,23 +81,6 @@ def isMode(m):
 def checkValidMode(m):
     if not isinstance(m, Mode):
         logger.error("Not a valid mode: '{}'".format(m))
-
-# Declare globals within a function to access them.
-def init_model():
-    global _registers
-    setMode(Mode.normal)
-    registers = {}
-    for l in string.ascii_letters:
-        registers[l] = ""
-    clear_pending()
-
-def clear_pending():
-    global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter
-    expecting_clipboard = False
-    expecting_search_letter = False
-    _pending_motion = None
-    _captured_clipboard = None
-    resetRepeatCount()
 
 def resetRepeatCount():
     global __repeat_count
@@ -118,3 +132,45 @@ def increaseRepeatCount(count):
         __repeat_count = 10*__repeat_count + count
     else:
         __repeat_count = count
+
+def popOutputKeys():
+    global __outputKeys
+    tmp = __outputKeys
+    __outputKeys = []
+    return tmp
+
+# This function is tricky because it has to support lots of different types
+# for the args. See the tests for examples.
+def extendOutputKeys(*keys):
+    keys = expandArgsTuple(keys)
+    if isNonStrIterable(keys):
+        extend = keys
+        if isinstance(keys[0], list):
+            __outputKeys.extend(*extend)
+            return
+    else:
+        extend = [keys]
+    __outputKeys.extend(extend)
+
+def expandArgsTuple(args):
+    if isinstance(args, tuple):
+        return list(args)
+    else:
+        return args
+
+def isNonStrIterable(type_):
+    return not isinstance(type_, str) and isinstance(type_, Iterable)
+
+def repeatOutputKeys():
+    global __outputKeys
+    __outputKeys *= getRepeatCount()
+
+
+def applyPendingOperator():
+    global apply_pending_operator, pending_operator
+    if apply_pending_operator:
+        extendOutputKeys(pending_operator)
+        pending_operator = None
+        apply_pending_operator = False
+    else:
+        return

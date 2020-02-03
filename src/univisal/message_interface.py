@@ -3,11 +3,9 @@
 """
 Handles sending and receiving messages from adapters via a univi client
 """
-import logging
 import os
 try:
     from .library import *
-    from . import logging_
     from .handleInput import handleInput
     # If Windows, else assume Unix.
     if os.name == "nt":
@@ -16,14 +14,13 @@ try:
         from .pipes_unix import readPipe, writePipe
 except ImportError:
     from library import *
-    import logging_
     from handleInput import handleInput
     # If Windows, else assume Unix.
     if os.name == "nt":
         from pipes_windows import readPipe, writePipe
     else:
         from pipes_unix import readPipe, writePipe
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 
 
@@ -50,7 +47,14 @@ def readMessagesLoop():
 def process_input(data):
     if len(data) == 0:
         return ""
-    key = data.rstrip()
+    # I can't remember why I was stripping whitespace.
+    # stripped_data = data.rstrip()
+    # if len(stripped_data) > 0:
+    #     key = stripped_data
+    # else:
+    #     # Key may have been a space or tab.
+    #     key = data
+    key = data
     logger.debug("Key: " + key)
     if key == "HUP":
         logger.info("HUP. End reading.")
@@ -65,10 +69,10 @@ def tryHandle(key):
     except:
         logger.critical("Unhandled exception", exc_info=True)
         output = key
-    logger.debug("Output: " + output)
     if not isinstance(output, str):
         logger.error("""
         Error: No key outputted. Output is not str. Returning input key instead.
         """)
         output = key
+    logger.debug("Output: {}".format(output))
     return output

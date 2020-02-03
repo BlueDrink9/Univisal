@@ -7,12 +7,12 @@ import sys
 import codecs
 try:
     from .library import *
-    from . import logging_
+    from . import logger
     from .adapter_maps import *
     from . import motion, operation
 except ImportError:
     from library import *
-    import logging_
+    import logger
     from adapter_maps import *
     import motion, operation
 
@@ -39,7 +39,7 @@ if len(sys.argv) != 3:
 
 adapter = expand_escapes(str(sys.argv[1]))
 cmdformat = expand_escapes(str(sys.argv[2]))
-adapter_maps = load_adapter_maps(adapter)
+adapter_maps = loadAdapterMaps(adapter)
 
 generated_file=open(get_script_path() + \
                     "/../../adapters/{}/bindings.{}".format(adapter, adapter), "w")

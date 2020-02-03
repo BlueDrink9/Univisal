@@ -1,7 +1,6 @@
-import logging
 try:
     from .library import *
-    from . import logging_
+    from . import logger
     from .model import Mode, getMode, setMode, isMode
     from . import model
     from .normal import normalCommand
@@ -14,7 +13,7 @@ try:
     from . import adapter_maps
 except ImportError:
     from library import *
-    import logging_
+    import logger
     from model import Mode, getMode, setMode, isMode
     import model
     from normal import normalCommand
@@ -25,33 +24,33 @@ except ImportError:
     from remap import resolve_map
     from adapter_maps import getAdapterMap
     import adapter_maps
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
-# Reduce chance of a typo if returning nop
-nop = "nop"
-def handleSingleInputKey(key_):
-    keys = preprocessKey(key_)
+def handleVimInputKey(inputKey):
+    mappedKeys = preprocessKey(inputKey)
     # a map may turn one key into many, which we need to handle
     # individually.
-    out = []
-    for key in keys:
+    for key in mappedKeys:
         if not isinstance(key, str):
             logger.warning("Error, handled key is not a string: '{}'".format(key))
 
         # esc regardless of mode, for now. (Still permits mappings.)
-        if key.lower() == Keys.esc.value:
+        if isEsc(key):
             setMode(Mode.normal)
-            out.append(nop)
+            addToOutput(Keys.nop)
             continue
 
         if isMode(Mode.insert):
-            out.append(key)
+            addToOutput(key)
         elif isMode(Mode.normal):
-            out = normalCommand(out, key)
+            normalCommand(key)
         else:
-            out.append(key)
+            addToOutput(key)
 
-    return processOutput(out)
+    applyPendingVimModifications()
+    keysForOutput = model.popOutputKeys()
+    formattedOut = formatOutputForAdapter(keysForOutput)
+    return formattedOut
 
 def preprocessKey(key):
     logger.debug("handleSingleInputKey key_: {}".format(key))
@@ -59,12 +58,24 @@ def preprocessKey(key):
     logger.debug("handleSingleInputKey keys after mapping: {}".format(keys))
     return keys
 
+def addToOutput(*keys):
+    model.extendOutputKeys(*keys)
 
-def processOutput(output):
+def isEsc(key):
+    return key.lower() == Keys.esc.value
+
+def applyPendingVimModifications():
+    model.repeatOutputKeys()
+    model.applyPendingOperator()
+
+def formatOutputForAdapter(output):
     # Only need nop if it's the only thing being returned.
     output = stripNoOp(output)
-    # Convert enums like operator, motion, key into str.
+    # Convert enums like operators, motions, keys into str.
     output = convertOuputEnumsToStrings(output)
+    return joinForAdapter(output)
+
+def joinForAdapter(output):
     return adapter_maps.getJoinChar().join(output)
 
 def convertOuputEnumsToStrings(output):
@@ -76,6 +87,7 @@ def convertOuputEnumsToStrings(output):
 
 def stripNoOp(output):
     # Only need nop if it's the only thing being returned, and only need one.
+    nop = Keys.nop
     while output.count(nop) > 1:
         output.remove(nop)
     if len(output) > 1:

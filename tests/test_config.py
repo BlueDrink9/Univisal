@@ -1,18 +1,27 @@
 #!/usr/bin/env python
-import os
 import pytest
 import unittest.mock
-import sys
-# Add src dir to the python path so we can import.
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
-from univisal.remap import *
+import logging
+
+from univisal import remap
+from univisal.model import Mode, getMode, setMode, isMode
 from univisal import config
+from univisal.keys import Keys
 from univisal.config import *
 
 
 @pytest.fixture(scope="function", autouse=True)
 def clear_config():
     config.configStore = {}
+
+@pytest.fixture(scope="function", autouse=True)
+def setup(caplog, tmpdir):
+    caplog.set_level(logging.DEBUG)
+    config.configStore = {}
+    # with unittest.mock.patch('univisal.config.getConfigPath',
+    #                          return_value=tmpdir / "univisal" / "config.json"):
+    #     init_config()
+    remap.resetMapData()
 
 
 @pytest.mark.parametrize("test_opt, expected, error_msg", [
@@ -45,9 +54,6 @@ def test_defaults(caplog, tmpdir, test_opt, expected, error_msg):
 ])
 def test_config(caplog, tmpdir, conf, test_opt, expected, error_msg):
     caplog.set_level(logging.DEBUG)
-    with unittest.mock.patch('univisal.config.getConfigPath',
-                             return_value=tmpdir / "univisal" / "config.json"):
-        init_config()
     config.configStore = conf
     assert getConfigOption(test_opt) == expected, error_msg
 
@@ -66,6 +72,41 @@ def test_additional_config(caplog, tmpdir):
             json.dump(test, outfile, indent=2, ensure_ascii=False)
         init_config()
     assert getConfigOption("imaps") == expected, error_msg
+
+@pytest.mark.parametrize("mapConfEntry, error_msg", [
+    ({"imaps": {"jk": "<esc>"}}, "configured imaps did not expand"),
+    ({"nmaps": {"j": "<left>"}}, "configured nmaps did not expand"),
+    ({"nmaps": {"j": "<left>", "k": "<right>"}},
+    "configured nmaps did not expand when multiple are configured"),
+])
+def test_config_setMaps(mapConfEntry, error_msg):
+    config.configStore = mapConfEntry
+    config.setMaps()
+    for mapModeType, maps in mapConfEntry.items():
+        setCorrectModeForMap(mapModeType)
+        assertMapsExpandCorrectly(maps, error_msg)
+
+def setCorrectModeForMap(mapModeType):
+    mode = getMapMode(mapModeType)
+    model.setMode(mode)
+
+def assertMapsExpandCorrectly(maps, error_msg):
+    for sequence, expansion in maps.items():
+        result = expandMap(sequence)
+        assert result == [expansion], error_msg
+
+def expandMap(sequence):
+    for char in sequence:
+        # Deliberately overwrite, we only want the last result (the
+        # expansion).
+        result = remap.resolve_map(char)
+    removeBackspaces(result)
+    return result
+
+def removeBackspaces(lst):
+    bs = Keys.backspace.value
+    lst.remove(bs) if (bs in lst) else ''
+
 
 @pytest.mark.parametrize("level, expected", [
     ("debug", logging.DEBUG),
@@ -92,13 +133,13 @@ def test_log_level(level, expected):
 def test_swallow_unused_normal(opt, expected, msg):
     from tests.mock_setup import init_univisal
     from univisal.handleInput import handleInput
-    from univisal.handleKey import handleSingleInputKey
+    from univisal.handleKey import handleVimInputKey
 
     init_univisal()
     config.configStore={"swallow_unused_normal_keys": opt}
     setMode(Mode.normal)
     # Test handling the single key, then the whole input to confirm.
-    result = handleSingleInputKey("m")
+    result = handleVimInputKey("m")
     assert result == expected, msg + " after handleSingleInputKey"
     result = handleInput("m")
     assert result == expected, msg + " after handleInput"

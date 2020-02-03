@@ -1,34 +1,33 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-15 -*-
 import json
-import logging
 import enum
 import os
 try:
     from .library import *
-    from . import logging_
     from .keys import Keys
 except ImportError:
     from library import *
-    import logging_
     from keys import Keys
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 adapter_maps = None
 
-def load_adapter_maps(adapter):
+def loadAdapterMaps(adapter):
     global adapter_maps
     # Can dump a dict in python with `json.dumps(dict, sort_keys=True, indent=2)`
+    adapter_maps_path = getMappingPath(adapter)
     try:
-        adapter_maps_path = getMappingPath(adapter)
-        with open(adapter_maps_path, "r") as adapter_maps_file:
-            adapter_maps = json.load(adapter_maps_file)
-
-        logger.info("Loaded adapter map file {}".format(adapter_maps_path))
-
+        adapter_maps = loadAdapterMapsFromPath(adapter_maps_path)
     except (IOError, json.JSONDecodeError) as e:
         logAdapterError(e, adapter_maps_path)
         adapter_maps = {}
+    return adapter_maps
+
+def loadAdapterMapsFromPath(adapter_maps_path):
+    with open(adapter_maps_path, "r") as adapter_maps_file:
+        adapter_maps = json.load(adapter_maps_file)
+    logger.info("Loaded adapter map file {}".format(adapter_maps_path))
     return adapter_maps
 
 def getMappingPath(adapter):
@@ -66,7 +65,7 @@ def lookupAdapterMap(name):
 
 
 def getJoinChar():
-    lookup = Keys.multikey_join_char
+    lookup = Keys.multikey_join_char.value
     joinChar = getAdapterMap(lookup)
     # This happens if the adapter doesn't have a map for this.
     if joinChar == lookup:

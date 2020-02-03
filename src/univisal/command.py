@@ -1,27 +1,24 @@
 
-import logging
 import pathlib
 try:
     from .library import *
-    from . import logging_
     from .normal import normalCommand
     from .import model
     from .model import setMode, getMode, Mode
     from .motion import Motion
     from .vim_operator import Operator
-    from .handleKey import processOutput
+    from .handleKey import formatOutputForAdapter
     from . import config
 except ImportError:
     from library import *
-    import logging_
     from normal import normalCommand
     import model
     from model import setMode, getMode, Mode
     from motion import Motion
     from vim_operator import Operator
-    from handleKey import processOutput
+    from handleKey import formatOutputForAdapter
     import config
-logger = logging.getLogger(__name__)
+logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 def handle(cmd):
     if cmd == ":disable":
@@ -36,6 +33,7 @@ def handle(cmd):
         return handlePendingClipboard(cmd)
     else:
         logger.error("Not a valid command: {cmd}".format(cmd))
+        # TODO: Raise InvalidCommandError and catch in caller.
     return None
 
 
@@ -44,14 +42,14 @@ def handlePendingClipboard(cmd):
     l = len(":clipboard:")
     cmd = cmd[l:]
     model.captured_clipboard = cmd
-    commandOut = normalCommand([], model.getPendingMotion())
-    return processOutput(commandOut)
+    commandOut = normalCommand(model.getPendingMotion())
+    return formatOutputForAdapter(commandOut)
 
 def verifyPendingClipboard(cmd):
     if not model.expecting_clipboard:
         logger.warning("Received command ':clipboard', \
                 but not expecding it.  cmd: '{}'".format(cmd))
-    if model.pending_motion is None:
+    if model.getPendingMotion() is None:
         logger.warning("Received command ':clipboard', \
                 but no pending motion.  cmd: '{}'".format(cmd))
 

@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-import os
 import pytest
 import unittest.mock
 import sys
-# Add src dir to the python path so we can import.
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
+
 import univisal
 from univisal.model import Mode, isMode, getMode, setMode
 from univisal.handleInput import handleInput
@@ -27,7 +25,7 @@ def init_univisal(with_interface=False):
     mockargs=['1', '2']
     interfaceInit = "univisal.message_interface.readMessagesLoop"
     with unittest.mock.patch('sys.argv', mockargs), \
-            unittest.mock.patch("univisal.adapter_maps.load_adapter_maps",
+            unittest.mock.patch("univisal.adapter_maps.loadAdapterMaps",
                                 side_effect=mock_adapter_maps), \
             unittest.mock.patch("univisal.adapter_maps.getAdapterMap",
                                 side_effect=ret_arg), \
@@ -45,7 +43,4 @@ def init_univisal(with_interface=False):
     clear_maps()
 
 def clear_maps():
-    imaps = {}
-    nmaps = {}
-    vmaps = {}
-    cmaps = {}
+    univisal.remap.resetMapData()

@@ -1,16 +1,16 @@
 # enum from py >= 3.4
 from enum import Enum, auto
-def delete():
-    pass
 
+# TODO: enums with the same value are aliased to the same thing. Consider
+# looking for a better way to store this. `Aenum`?
 class Operator(Enum):
     delete = "<delete>"
-    change = "<change>"
+    change = "<delete>"
     yank = "<yank>"
     # Start: hold shift down. Pause: release shift. End: deselect. Note that ending
     # may be done directionally instead.
     visualStart = "<visualStart>"
-    visualPause = "<visualStart>"
+    visualPause = "<visualPause>"
     # visualEnd = "<visualEnd>"
     # Always end visual as if it had extended to the right.
     # I can't think of an easy way to tell if it extended right or left, at least

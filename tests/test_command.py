@@ -1,11 +1,10 @@
 #!/usr/bin/env python
-import os
 import pytest
 import unittest.mock
-import sys
-# Add src dir to the python path so we can import.
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
+
 import univisal
+from univisal import command
+from univisal import model
 from univisal.model import Mode, isMode, getMode, setMode
 from univisal.handleInput import handleInput
 from univisal.keys import Keys
@@ -18,9 +17,10 @@ def setUp():
 
 
 def test_disable():
-    assert getMode() == Mode.normal, "Univisal not set up"
+    assert getMode() == Mode.normal, "Univisal not set up for test"
     handleInput(":disable")
     assert getMode() == Mode.disabled, "Disable does not change mode"
+    # TODO: Move mode tests like this to separte test.
     assert handleInput('l') == 'l', "Disabled univisal does not return normal key"
     assert handleInput(Keys.esc.value) == ("<esc>"), \
         "Disabled univisal does not return special keys"
@@ -29,15 +29,31 @@ def test_enable():
     handleInput(":disable")
     assert getMode() == Mode.disabled, "Disable does not change mode"
     handleInput(":enable")
+    assert getMode() == Mode.normal, "Enable does not change mode to normal"
     assert handleInput('l') == Motion.right.value, "re-enabled univisal does not return motion"
 
-def test_getMode():
-    assert handleInput(':getMode') == "normal", "getMode doesn't return mode"
-    setMode(Mode.insert)
-    assert handleInput(':getMode') == "insert", "getMode doesn't return mode in insert mode"
-    setMode(Mode.disabled)
-    assert handleInput(':getMode') == "disabled", "getMode doesn't return mode when disabled"
+
+@pytest.mark.parametrize("mode, expected", [
+    (Mode.normal, "normal"),
+    (Mode.insert, "insert"),
+    (Mode.disabled, "disabled"),
+    ])
+def test_getMode(mode, expected):
+    setMode(mode)
+    error_msg = "getMode doesn't return mode in {} mode".format(expected)
 
 def test_getConfigDir():
     from univisal.config import getConfigDir
     assert handleInput(':getConfigDir') == getConfigDir(), "getConfigDir doesn't return path"
+
+
+# Have to mock the function as it is within the scope called.
+@unittest.mock.patch('univisal.command.normalCommand')
+@unittest.mock.patch('univisal.command.formatOutputForAdapter')
+def test_handlePendingClipboard_strips_correct_text(mock1, mock2):
+    clipboard = " copied text::"
+    cmd = ":clipboard:" + clipboard
+
+    command.handlePendingClipboard(cmd)
+
+    assert model.captured_clipboard == clipboard
