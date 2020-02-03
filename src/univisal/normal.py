@@ -103,16 +103,33 @@ def normalCommand(key):
     return
 
 def doMotionOrSelection(motion):
-    if isMode(Mode.operator_pending):
-        addToOutput(Operator.visualStart, motion, Operator.visualPause)
+    if model.pending_operator:
+        addToOutput(*doSelection(motion))
+        model.apply_pending_operator=True
     else:
         addToOutput(motion)
+
+def doSelection(motion):
+    return Operator.visualStart, motion, Operator.visualPause
 
 def doAction(action):
     addToOutput(action)
 
 def doVimOperator(op):
-    addToOutput(op)
+    if isMode(Mode.visual):
+        addToOutput(op)
+        setMode(Mode.normal)
+        return
+    elif model.pending_operator:
+        if op == model.pending_operator:
+            addToOutput(Motion.selectCurrentLine)
+        else:
+            setMode(Mode.normal)
+        addToOutput(op)
+        return
+    else:
+        addToOutput(Keys.nop)
+        model.pending_operator = op
 
 def addToOutput(*keys):
     model.extendOutputKeys(*keys)
