@@ -15,7 +15,6 @@ class Mode(Enum):
     visual  = auto()
     normal  = auto()
     disabled  = auto()
-    operator_pending  = auto()
 
 __outputKeys = None
 _registers = None
@@ -139,11 +138,25 @@ def popOutputKeys():
     return tmp
 
 def extendOutputKeys(*keys):
-    if isinstance(*keys, str) or not isinstance(*keys, Iterable):
-        extend = [keys]
-    else:
+    if isinstance(keys, tuple):
+        keys = list(keys)
+    if isNonStrIterable(keys):
         extend = keys
-    __outputKeys.extend(*extend)
+        if isinstance(keys[0], list):
+            __outputKeys.extend(*extend)
+            return
+    else:
+        extend = [keys]
+    __outputKeys.extend(extend)
+
+def getArgsType(args):
+    if isinstance(args, tuple):
+        return type(args[0])
+    else:
+        return type(args)
+
+def isNonStrIterable(type_):
+    return not isinstance(type_, str) and isinstance(type_, Iterable)
 
 def repeatOutputKeys():
     global __outputKeys
