@@ -25,6 +25,7 @@ expecting_clipboard = None
 expecting_search_letter = None
 _pending_motion = None
 pending_operator = None
+apply_pending_operator = None
 _captured_clipboard = None
 _search_letter = None
 
@@ -51,6 +52,7 @@ def clear_pending():
     _captured_clipboard = None
     _search_letter = None
     pending_operator = None
+    apply_pending_operator = False
 
 
 insertlike_modes = [
@@ -162,3 +164,12 @@ def isNonStrIterable(type_):
 def repeatOutputKeys():
     global __outputKeys
     __outputKeys *= getRepeatCount()
+
+
+def applyPendingOperator():
+    global apply_pending_operator
+    if apply_pending_operator:
+        extendOutputKeys(pending_operator)
+        apply_pending_operator = False
+    else:
+        return
