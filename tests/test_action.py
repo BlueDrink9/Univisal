@@ -88,7 +88,9 @@ def test_delete_motion(mock, sequence, count, errmsg):
     ("d", Operator.delete),
     ("c", Operator.delete),
 ])
-def test_double_operator(key, operator):
+@unittest.mock.patch("univisal.handleKey.formatOutputForAdapter",
+                     side_effect=ret_arg)
+def test_double_operator(mock, key, operator):
     setMode(Mode.normal)
     result = handleSequence(key*2)
     expected = [Motion.goLineStart,
