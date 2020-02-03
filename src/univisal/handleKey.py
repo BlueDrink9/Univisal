@@ -49,7 +49,6 @@ def handleVimInputKey(inputKey):
 
     applyPendingVimModifications()
     keysForOutput = model.popOutputKeys()
-    print('kfo', keysForOutput)
     formattedOut = formatOutputForAdapter(keysForOutput)
     return formattedOut
 
