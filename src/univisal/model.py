@@ -167,9 +167,10 @@ def repeatOutputKeys():
 
 
 def applyPendingOperator():
-    global apply_pending_operator
+    global apply_pending_operator, pending_operator
     if apply_pending_operator:
         extendOutputKeys(pending_operator)
+        pending_operator = None
         apply_pending_operator = False
     else:
         return
