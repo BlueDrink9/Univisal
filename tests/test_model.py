@@ -93,13 +93,15 @@ def test_popOuputKeys():
     assert model.popOutputKeys() == test, "popOutputKeys doesn't output keys"
     assert model.__outputKeys == [], "popOutputKeys doesn't reset keys"
 
-@pytest.mark.parametrize("keys", [
+extendOutputKeysTests = [
     ["key1", "key2"],
     ["key"],
     "key",
+    [Keys.esc, Keys.space],
     Keys.esc,
     "l",
-])
+]
+@pytest.mark.parametrize("keys", extendOutputKeysTests)
 def test_extendOutputKeysSingleCall(keys):
     model.extendOutputKeys(keys)
     errmsg = "extendOutputKeys fails with keys '{}'".format(keys)
@@ -109,13 +111,7 @@ def test_extendOutputKeysSingleCall(keys):
         keys = keys
     assert model.popOutputKeys() == keys, errmsg
 
-@pytest.mark.parametrize("keys", [
-    ["key1", "key2"],
-    ["key"],
-    Keys.esc,
-    "key",
-    "l",
-])
+@pytest.mark.parametrize("keys", extendOutputKeysTests)
 def test_extendOutputKeysMultipleCall(keys):
     count = 5
     for i in range(count):
