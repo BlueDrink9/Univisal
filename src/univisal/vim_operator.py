@@ -1,7 +1,5 @@
 # enum from py >= 3.4
 from enum import Enum, auto
-def delete():
-    pass
 
 class Operator(Enum):
     delete = "<delete>"
