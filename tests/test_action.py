@@ -67,10 +67,29 @@ def test_basic_motion_with_count(count):
 
 
 @pytest.mark.parametrize("sequence, count, errmsg", [
-    ("dw", 1, "basic delete with motion fails (dw)"),
-    ("3dw", 3, "repeated delete with motion fails (3dw)"),
-    ("d3w", 3, "delete with repeated motion fails (d3w)"),
-    pytest.param("3d3w", 9, "repeated delete with repeated motion fails (3d3w)", marks=pytest.mark.xfail),
+    ("dw", 1, "basic delete with motion fails"),
+    ("3dw", 3, "repeated delete with motion fails"),
+    ("d3w", 3, "delete with repeated motion fails"),
+    pytest.param("3d3w", 9, "repeated delete with repeated motion fails", marks=pytest.mark.xfail),
+])
+@unittest.mock.patch("univisal.handleKey.formatOutputForAdapter",
+                     side_effect=ret_arg)
+def test_delete_motion(mock, sequence, count, errmsg):
+    setMode(Mode.normal)
+    result = handleSequence(sequence)
+    # Left as plus to make it easier to move the count.
+    expected = count * ([Operator.visualStart] + [Motion.goWordNext] + \
+        [Operator.visualPause]) + [Operator.change]
+    assert result == expected, errmsg + " ({})".format(sequence)
+    assert isMode(Mode.insert)
+
+
+@pytest.mark.xfail(reason="change not implemented")
+@pytest.mark.parametrize("sequence, count, errmsg", [
+    ("cw", 1, "basic change with motion fails"),
+    ("3cw", 3, "repeated change with motion fails"),
+    ("c3w", 3, "change with repeated motion fails"),
+    pytest.param("3c3w", 9, "repeated change with repeated motion fails", marks=pytest.mark.xfail),
 ])
 @unittest.mock.patch("univisal.handleKey.formatOutputForAdapter",
                      side_effect=ret_arg)
@@ -80,13 +99,15 @@ def test_delete_motion(mock, sequence, count, errmsg):
     # Left as plus to make it easier to move the count.
     expected = count * ([Operator.visualStart] + [Motion.goWordNext] + \
         [Operator.visualPause]) + [Operator.delete]
-    assert result == expected, errmsg
+    assert result == expected, errmsg + " ({})".format(sequence)
+
+
 
 
 @pytest.mark.parametrize("key, operator", [
     ("y", Operator.yank),
     ("d", Operator.delete),
-    ("c", Operator.delete),
+    pytest.param("c", Operator.change, marks=pytest.mark.xfail),
 ])
 @unittest.mock.patch("univisal.handleKey.formatOutputForAdapter",
                      side_effect=ret_arg)
