@@ -77,8 +77,9 @@ def test_basic_motion_with_count(count):
 def test_delete_motion(mock, sequence, count, errmsg):
     setMode(Mode.normal)
     result = handleSequence(sequence)
-    expected = [Operator.visualStart] + count * [Motion.goWordNext] + \
-        [Operator.visualPause, Operator.delete]
+    # Left as plus to make it easier to move the count.
+    expected = count * ([Operator.visualStart] + [Motion.goWordNext] + \
+        [Operator.visualPause]) + [Operator.delete]
     assert result == expected, errmsg
 
 
