@@ -64,7 +64,7 @@ def isEsc(key):
     return key.lower() == Keys.esc.value
 
 def applyPendingVimModifications():
-    pass
+    model.repeatOutputKeys()
 
 def formatOutputForAdapter(output):
     # Only need nop if it's the only thing being returned.

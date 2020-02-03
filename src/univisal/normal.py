@@ -100,8 +100,6 @@ def normalCommand(key):
 
     else:
         addToOutput(unfoundKeyFallback(key))
-
-    model.repeatOutputKeys()
     return
 
 def doMotionOrSelection(motion):
