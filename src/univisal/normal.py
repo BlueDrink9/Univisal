@@ -102,6 +102,11 @@ def normalCommand(key):
         addToOutput(unfoundKeyFallback(key))
     return
 
+
+def addToOutput(*keys):
+    model.extendOutputKeys(*keys)
+
+
 def doMotionOrSelection(motion):
     if model.pending_operator:
         addToOutput(*doSelection(motion))
@@ -122,7 +127,7 @@ def doVimOperator(op):
         return
     elif model.pending_operator:
         if op == model.pending_operator:
-            addToOutput(Motion.selectCurrentLine)
+            selectCurrentLine()
         else:
             setMode(Mode.normal)
         addToOutput(op)
@@ -131,8 +136,6 @@ def doVimOperator(op):
         addToOutput(Keys.nop)
         model.pending_operator = op
 
-def addToOutput(*keys):
-    model.extendOutputKeys(*keys)
 
 def unfoundKeyFallback(key):
     logger.info("Normal command not found: {}".format(key))
@@ -140,6 +143,10 @@ def unfoundKeyFallback(key):
         return ""
     else:
         return key
+
+
+def selectCurrentLine():
+    addToOutput(Motion.selectCurrentLine)
 
 
 def seekLetter(key, backwards=False, stopBeforeLetter=False):
