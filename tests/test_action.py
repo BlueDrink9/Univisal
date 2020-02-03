@@ -21,6 +21,9 @@ def handleSequence(keys):
         result = handleInput(key)
     return result
 
+def ret_arg(arg):
+    return arg
+
 
 def test_escape():
     setMode(Mode.insert)
@@ -62,8 +65,10 @@ def test_basic_motion_with_count(count):
     print("current repeat count: {}".format(univisal.model.getRepeatCount()))
     assert result == expected, "motion with count {} returns wrong thing".format(count)
 
-# @pytest.mark.xfail(reason = 'unfinished implementation')
-def test_basic_delete_motion():
+
+@unittest.mock.patch("univisal.handleKey.formatOutputForAdapter",
+                     side_effect=ret_arg)
+def test_basic_delete_motion(mock):
     setMode(Mode.normal)
     result = handleSequence("dw")
     expected = [Operator.visualStart, Motion.goWordNext, \
