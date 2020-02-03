@@ -84,6 +84,7 @@ def test_clear_pending():
     assert model._pending_motion is None
     assert model._captured_clipboard is None
     assert model._search_letter is None
+    assert model.pending_operator is None
 
 
 def test_popOuputKeys():

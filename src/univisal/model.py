@@ -25,6 +25,7 @@ __repeat_count = None
 expecting_clipboard = None
 expecting_search_letter = None
 _pending_motion = None
+pending_operator = None
 _captured_clipboard = None
 _search_letter = None
 
@@ -43,13 +44,14 @@ def init_registers():
         _registers[l] = ""
 
 def clear_pending():
-    global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter, _search_letter
+    global expecting_clipboard, _pending_motion, _captured_clipboard, expecting_search_letter, _search_letter, pending_operator
     resetRepeatCount()
     expecting_clipboard = False
     expecting_search_letter = False
     _pending_motion = None
     _captured_clipboard = None
     _search_letter = None
+    pending_operator = None
 
 
 insertlike_modes = [
