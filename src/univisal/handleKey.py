@@ -48,7 +48,9 @@ def handleVimInputKey(inputKey):
             addToOutput(key)
 
     applyPendingVimModifications()
-    formattedOut = formatOutputForAdapter(model.popOutputKeys())
+    keysForOutput = model.popOutputKeys()
+    print('kfo', keysForOutput)
+    formattedOut = formatOutputForAdapter(keysForOutput)
     return formattedOut
 
 def preprocessKey(key):
@@ -65,6 +67,7 @@ def isEsc(key):
 
 def applyPendingVimModifications():
     model.repeatOutputKeys()
+    model.applyPendingOperator()
 
 def formatOutputForAdapter(output):
     # Only need nop if it's the only thing being returned.
