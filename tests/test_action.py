@@ -83,6 +83,22 @@ def test_delete_motion(mock, sequence, count, errmsg):
     assert result == expected, errmsg
 
 
+@pytest.mark.parametrize("key, operator", [
+    ("y", Operator.yank),
+    ("d", Operator.delete),
+    ("c", Operator.delete),
+])
+def test_double_operator(key, operator):
+    setMode(Mode.normal)
+    result = handleSequence(key*2)
+    expected = [Motion.goLineStart,
+                Operator.visualStart,
+                Motion.goLineEnd,
+                Operator.visualPause] + [operator]
+    assert result == expected, "double {} fails".format(key)
+    # TODO test and handle dd yy cc with a count
+
+
 @pytest.mark.xfail(reason = 'unfinished test implementation')
 def test_f():
     assert Keys.requestSelectedText.value in translate_keys("fm")
