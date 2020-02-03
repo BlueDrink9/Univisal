@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import pytest
 import unittest.mock
+import logging
 
 import univisal
 import univisal.model as model
@@ -55,6 +56,13 @@ def test_setMode_nonnormal_not_clears_pending(mode):
     model._pending_motion = pending
     setMode(mode)
     assert model._pending_motion == pending
+
+def test_checkValidMode(caplog):
+    caplog.set_level(logging.ERROR)
+    model.checkValidMode(Mode.normal)
+    model.checkValidMode(Keys.esc)
+    errors = [record for record in caplog.records if record.levelno >= logging.ERROR]
+    assert errors[0].msg == "Not a valid mode: 'Keys.esc'"
 
 
 def test_init_model():
