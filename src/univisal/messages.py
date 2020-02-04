@@ -17,6 +17,11 @@ except ImportError:
     else:
         from pipes_unix import readPipe, writePipe
 
+#TODO: Consider using threading for message waiting.
+# https://blog.miguelgrinberg.com/post/how-to-make-python-wait
+# Alternatively, maybe use an asyncio queue? Yeah, that could be
+# elegant...
+
 def read_message():
     return readPipe()
 
