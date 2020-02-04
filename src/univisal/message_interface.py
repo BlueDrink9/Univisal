@@ -1,26 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-15 -*-
 """
-Handles sending and receiving messages from adapters via a univi client
+Handles sending and receiving messages from adapters via a univi client.
+Messages are abstracted.
 """
 import time
-import os
 try:
     from .library import *
     from .handleInput import handleInput
-    # If Windows, else assume Unix.
-    if os.name == "nt":
-        from .pipes_windows import readPipe, writePipe
-    else:
-        from .pipes_unix import readPipe, writePipe
+    from .messages import read_message, write_message
 except ImportError:
     from library import *
     from handleInput import handleInput
-    # If Windows, else assume Unix.
-    if os.name == "nt":
-        from pipes_windows import readPipe, writePipe
-    else:
-        from pipes_unix import readPipe, writePipe
+    from messages import read_message, write_message
 logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 # Time to sleep between handling keypresses.
@@ -39,22 +31,14 @@ logger = __import__("univisal.logger").logger.get_logger(__name__)
 INPUT_RATE_DETECTION_GAP_MS=30
 
 
-
-def outpt_write(key):
-    writePipe(key)
-
-def inpt_read():
-    return readPipe()
-
-
 def readMessagesLoop():
     while True:
-        data = inpt_read()
+        data = read_message()
         logger.debug("data :'{}'".format(data))
         # logger.debug("Data: " + data)
         output = process_input(data)
         if output:
-            outpt_write(output)
+            write_message(output)
         else:
             # If processing returns None, was HUP. End processing.
             break

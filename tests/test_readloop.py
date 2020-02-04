@@ -37,9 +37,9 @@ def mock_read():
 
 def init_loop():
     # caplog.set_level(logging.DEBUG)
-    with unittest.mock.patch("univisal.message_interface.outpt_write",
+    with unittest.mock.patch("univisal.message_interface.write_message",
                      side_effect=mock_write), \
-            unittest.mock.patch("univisal.message_interface.inpt_read",
+            unittest.mock.patch("univisal.message_interface.read_message",
                                 side_effect=mock_read):
         init_univisal(with_interface=True)
 

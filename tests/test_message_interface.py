@@ -17,9 +17,9 @@ def mock_read():
     return mock_messages.pop(0)
 def mock_write(key):
     message_output.append(key)
-@unittest.mock.patch('univisal.message_interface.inpt_read',
+@unittest.mock.patch('univisal.message_interface.read_message',
                      side_effect=mock_read)
-@unittest.mock.patch('univisal.message_interface.outpt_write',
+@unittest.mock.patch('univisal.message_interface.write_message',
                      side_effect=mock_write)
 def test_readMessagesLoop(mock_read, mock_write):
     global mock_messages, message_output
