@@ -51,3 +51,5 @@ def readPipe():
             return data
             # if not process_input(data):
             #     break
+            #
+            # TODO: Does the unix readpipe loop need a sleep?
