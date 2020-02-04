@@ -3,6 +3,7 @@
 """
 Handles sending and receiving messages from adapters via a univi client
 """
+import time
 import os
 try:
     from .library import *
@@ -21,6 +22,21 @@ except ImportError:
     else:
         from pipes_unix import readPipe, writePipe
 logger = __import__("univisal.logger").logger.get_logger(__name__)
+
+# Time to sleep between handling keypresses.
+# Answers here suggest ~100 ms is the minimum latency time for most people
+# to consciously percieve.
+# https://stackoverflow.com/questions/4098678/average-inter-keypress-time-when-typing
+# A 60 WPM average typist has a ~170 ms gap, but top programmers will be
+# faster.
+# Of course, univisal's delay is added to all the other delays involved in
+# human-computer IO, so we can't use up the whole 100 ms.
+# https://pavelfatin.com/typing-with-pleasure/
+# Also, there is evidence cited in Fatin's article to suggest even tiny
+# amounts of latency matter.
+# For these reasons, I'm keeping this fairly low.
+# TODO: Allow configuration.
+INPUT_RATE_DETECTION_GAP_MS=30
 
 
 
@@ -42,6 +58,8 @@ def readMessagesLoop():
         else:
             # If processing returns None, was HUP. End processing.
             break
+        # Reduce busywaiting.
+        time.sleep(INPUT_RATE_DETECTION_GAP_MS/1000)
 
 
 def process_input(data):
