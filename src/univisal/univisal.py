@@ -42,4 +42,5 @@ def univisal_init(adapter):
     model.init_model()
     readMessagesLoop()
 
-main()
+if __name__ == "__main__":
+    main()
