@@ -10,11 +10,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #inputlevel 1
 global srcDir
 srcDir=%A_ScriptDir%\..\..\src
-; Initialisation of lock to false, sets to true when creating writepipe.
-; Set these variable from file.
-useWSL=0
-univisalWSLPath=/unset_var/univisal
-WSLCmd=bash.exe
 #include %A_ScriptDir%\WSLSettings.ahk
 univisalWSLCmd=python3 %univisalWSLPath%/src/univisal/univisal.py autohotkey
 
@@ -23,15 +18,6 @@ univiResultFromKey(key){
     global useWSL
     global univisalWSLPath
     global WSLCmd
-    ; The problem here is that when using hotkeys, which spawn new threads each
-    ; time, you may get a new call to write when the previous one hasn't
-    ; finished.
-    ; This lock aims to solve that.
-    ; Need to wait for write to finish, and read to return, before writing
-    ; anything else. Otherwise, AHK's main thread locks waiting for a read to
-    ; happen on .in.fifo. The problem arises when a hotkey spawns another
-    ; thread that requests a write, while univisal is writing to .out and
-    ; waiting for a read from the original?
 
     ; Set threads to uninterruptable.
     Thread, Interrupt, -1
