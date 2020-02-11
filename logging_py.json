@@ -17,7 +17,7 @@
     },
 
     "debug_file_handler": {
-      "class": "logging_.myLogHandler",
+      "class": "logger.myLogHandler",
       "level": "DEBUG",
       "formatter": "simple",
       "filename": "debug.log",
@@ -27,7 +27,7 @@
     },
 
     "info_file_handler": {
-      "class": "logging_.myLogHandler",
+      "class": "logger.myLogHandler",
       "level": "INFO",
       "formatter": "simple",
       "filename": "info.log",
@@ -37,7 +37,7 @@
     },
 
     "error_file_handler": {
-      "class": "logging_.myLogHandler",
+      "class": "logger.myLogHandler",
       "level": "ERROR",
       "formatter": "simple",
       "filename": "errors.log",
@@ -47,7 +47,7 @@
     },
 
     "critical_file_handler": {
-      "class": "logging_.myLogHandler",
+      "class": "logger.myLogHandler",
       "level": "CRITICAL",
       "formatter": "simple",
       "filename": "CRITICAL.log",

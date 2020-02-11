@@ -12,6 +12,9 @@ except ImportError:
 # Usage:
 # logger = __import__("univisal.logger").logger.get_logger(__name__)
 
+def init():
+    setup_logging(os.path.join(get_script_path(), '..', '..', 'logging_py.json'), logging.DEBUG)
+
 class myLogHandler(logging.handlers.RotatingFileHandler):
     def __init__(self,filename,maxBytes,backupCount,encoding):
         path = os.path.join(gettempdir(), "univisal_logs")
@@ -46,6 +49,7 @@ def setup_logging(
 # Any unhandled exceptions will be logged.
 def handle_unhandled_exception(exc_type, exc_value, exc_traceback):
     """Handler for unhandled exceptions that will write to the logs"""
+    logger = get_logger(__name__)
     if issubclass(exc_type, KeyboardInterrupt):
         # call the default excepthook saved at __excepthook__
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
@@ -56,11 +60,5 @@ sys.excepthook = handle_unhandled_exception
 
 def get_logger(moduleName):
     return logging.getLogger(moduleName)
-# logger = logging.getLogger(__name__)
-# logger.config.filename(
 
-# setup_logging(os.path.join(get_script_path(), '..', 'loggerpy.json'), logging.DEBUG)
-# logPath = os.path.join(gettempdir(), "univisal.log")
-
-# setup_logging(os.path.join(get_script_path(), 'loggerpy.json'), logging.DEBUG)
-setup_logging(os.path.join(get_script_path(), '..', '..', 'loggerpy.json'), logging.DEBUG)
+init()
