@@ -75,7 +75,7 @@ def getConfigDir():
     # OSX to be treated ike unix.
     if os.name == "nt":
         # Windows
-        config_dir = pathlib.Path(os.getenv("APPDATA") / "univisal")
+        config_dir = pathlib.Path(os.getenv("APPDATA")) / "univisal"
     else:
         config_dir = pathlib.Path(os.getenv("XDG_CONFIG_HOME", "~/.config")) / "univisal"
     return config_dir
