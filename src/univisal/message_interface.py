@@ -5,14 +5,9 @@ Handles sending and receiving messages from adapters via a univi client.
 Messages are abstracted.
 """
 import time
-try:
-    from .library import *
-    from .handleInput import handleInput
-    from .messages import read_message, write_message
-except ImportError:
-    from library import *
-    from handleInput import handleInput
-    from messages import read_message, write_message
+from .library import *
+from .handleInput import handleInput
+from .messages import read_message, write_message
 logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 # Time to sleep between handling keypresses.

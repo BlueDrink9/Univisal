@@ -2,16 +2,11 @@ import json
 import logging
 import os
 import pathlib
-try:
-    from .library import *
-    from . import model
-    from .model import Mode
-    from . import remap
-except ImportError:
-    from library import *
-    import model
-    from model import Mode
-    import remap
+
+from .library import *
+from . import model
+from .model import Mode
+from . import remap
 logger = __import__("univisal.logger").logger.get_logger(__name__)
 
 # All valid options must have a default.
