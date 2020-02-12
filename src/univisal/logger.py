@@ -63,7 +63,8 @@ def makeHandler(handler):
     backupCount = handler["backupCount"]
     handler = myLogHandler(filename, MAX_LOG_SIZE, backupCount)
     handler.setLevel(level)
-    handler.setFormatter(LOG_FORMAT)
+    formatter = logging.Formatter(LOG_FORMAT)
+    handler.setFormatter(formatter)
 
     return handler
 
