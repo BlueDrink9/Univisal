@@ -14,9 +14,9 @@ SetTitleMatchMode 2 ; window title functions will match by containing the match 
 ; Only affects sendevent, used for sending the test one key at a time.
 ; Gives the vim script time to interpret it, also useful to increase when
 ; debugging failures.
-; SetKeyDelay, 70
-SetKeyDelay, 70
 ; (gives vim script time to react).
+; We don't use it for sending to vim, only for sending to notepad via ahk.
+SetKeyDelay, 70
 DetectHiddenWindows, on
 
 ; Contains clipboard related functions, among others.
@@ -48,7 +48,7 @@ WaitForWindowToActivate("ahk_class Vim") ; Wait for vim to start
 WinMaximize,ahk_class Vim
 SetWorkingDir %A_ScriptDir%
 
-send :imap jj <esc>{return} ; Prepare vim with custom mappings.
+; send :imap jj <esc>{return} ; Prepare vim with custom mappings.
 ; So newlines are handled correctly between both notepad and vim
 send :imap ^q`r^q`n ^q{return 2}
 
@@ -148,6 +148,14 @@ SendTestToNotepadAndReturnResult(test){
     ; Make sure we at start of text.
     sleep, 50
     send ^{home}
+    sendTest(test)
+    output := getTestResult()
+    ; Delete text ready for next test
+    send {backspace}
+    return output
+}
+
+sendTest(test){
     ; Enable vim emulation.
     send {F12}
     sleep, 250
@@ -159,13 +167,14 @@ SendTestToNotepadAndReturnResult(test){
     ; Disable vim emulation.
     send {F12}
     sleep, 150
+}
+
+getTestResult(){
     ; Ensure we select all of the inserted text.
     send {esc}
     sleep, 50
     send ^a
     output := GetSelectedText()
-    ; Delete text ready for next test
-    send {backspace}
     return output
 }
 
