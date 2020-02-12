@@ -12,7 +12,7 @@ from . import library
 
 MAX_LOG_SIZE = 5 * 2**20  # 5 megabytes
 MAX_LOG_COUNT = 3
-LOG_FORMAT = "%(asctime)s %(levelname)s - %(name)s - %(message)s"
+LOG_FORMAT = '%(asctime)s %(levelname)8s - %(name)22s | %(message)s'
 LOG_FILE = os.path.join(gettempdir(), "univisal_logs")
 
 handlers = {
@@ -24,7 +24,7 @@ handlers = {
         "info_file_handler": {
             "level": "INFO",
             "filename": "info.log",
-            "backupCount": 10,
+            "backupCount": 5,
             },
         "error_file_handler": {
             "level": "ERROR",
