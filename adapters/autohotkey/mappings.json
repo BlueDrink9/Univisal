@@ -6,6 +6,7 @@
     "goWordPrevious": "^{left}",
     "goWordNext": "^{right}",
     "visualStart": "{shift down}",
+    "visualPause": "{shift up}",
     "visualEnd": "{shift up}",
     "<up>": "{up}",
     "<down>": "{down}",
