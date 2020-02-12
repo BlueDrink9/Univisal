@@ -129,30 +129,30 @@ SwitchToNotepad(){
 }
 
 SendTestToNotepadAndReturnResult(test){
-    Global SampleText
     SwitchToNotepad()
     sleep, 50
-    ; Make sure at start of body of notepad, and it's empty.
-    send {esc}
-    sleep, 50
-    send i^a^a{delete}
-    sleep, 20
-    ; Paste sample text. Faster, more reliable.
-    SaveClipboard()
-    Clipboard :=""
-    Clipboard := SampleText
-    Clipwait
-    send ^v ; Paste
-    RestoreClipboard()
-    sleep,50
+    clearNotepadBody()
+    pasteSampleText()
     ; Make sure we at start of text.
     sleep, 50
     send ^{home}
     sendTest(test)
     output := getTestResult()
-    ; Delete text ready for next test
-    send {backspace}
+    clearNotepadBody()
     return output
+}
+
+clearNotepadBody(){
+    ; Make sure at start of body of notepad, and it's empty.
+    send {esc}
+    sleep, 50
+    send i^a^a{delete}
+    sleep, 20
+}
+
+pasteSampleText(){
+    Global SampleText
+    PasteText(SampleText)
 }
 
 sendTest(test){
@@ -246,30 +246,50 @@ CompareStrings(NotepadOutput, VIMOutput, CurrentTest){
 
 ; Tidy up, close programs.
 EndTesting(){
+    quitNotepad()
+    quitVim()
+    informUserOfTestResults()
+}
+
+informUserOfTestResults(){
     Global TestsFailed
-    Global LogFileName
+    if (TestsFailed == True)
+    {
+        alertTestsFailed()
+        EndScript(1)
+    }else{
+        alertTestsPassed()
+        EndScript(0)
+    }
+}
+
+quitNotepad(){
     SwitchToNotepad()
     send !{f4}
     send n
+}
+
+; This would be a useful function for people that accidentally start vim :p
+quitVim(){
     SwitchToVim()
-    send :q{!}
-    send {return} ; Exit vim.
-   
-    if (TestsFailed == True)
-    {
-        if not isQuiet() {
-            msgbox,4,,At least one test has failed!`nResults are in %LogFileName%`nOpen log?
-            IfMsgBox Yes
-            {
-                run %LogFileName%
-            }
+    send {esc}:q{!}
+    send {return}
+}
+
+alertTestsFailed(){
+    Global LogFileName
+    if not isQuiet() {
+        msgbox,4,,At least one test has failed!`nResults are in %LogFileName%`nOpen log?
+        IfMsgBox Yes
+        {
+            run %LogFileName%
         }
-        EndScript(1)
-    }else{
-        if not isQuiet() {
-            msgbox, All tests pass!
-        }
-        EndScript(0)
+    }
+}
+
+alertTestsPassed(){
+    if not isQuiet() {
+        msgbox, All tests pass!
     }
 }
 

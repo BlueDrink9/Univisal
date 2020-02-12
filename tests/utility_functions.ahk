@@ -56,7 +56,7 @@ RestoreClipboard(){
         return
     }
     ; empty clip so clipwait works
-    Clipboard :=
+    ClearClipboard()
     ;restore original clipboard
     Clipboard := ClipSaved
     ClipWait
