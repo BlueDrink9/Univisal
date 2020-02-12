@@ -14,7 +14,7 @@ setup(
     #     "univisal-autokey": "adapters/autokey/...",
     # },
     entry_points = {
-        'console_scripts': ['univisal=src.univisal.univisal:main'],
+        'console_scripts': ['univisal=src.univisal.__main__:main'],
     },
     keywords="vi-emulator vi emulator windows Xorg linux X11 OSX Mac",
     long_description=long_description,

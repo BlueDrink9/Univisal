@@ -32,12 +32,12 @@ def init_univisal(with_interface=False):
             unittest.mock.patch("univisal.adapter_maps.getJoinChar",
                                 side_effect=ret_joinChar):
         if with_interface:
-            from univisal.univisal import main
+            from univisal.__main__ import main
             main()
             univisal.message_interface.readMessagesLoop()
         else:
             with unittest.mock.patch(interfaceInit, create=True):
-                from univisal.univisal import main
+                from univisal.__main__ import main
                 main()
     univisal.config.configStore = {}
     clear_maps()
