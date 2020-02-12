@@ -71,6 +71,8 @@ def applyPendingVimModifications():
 def formatOutputForAdapter(output):
     # Only need nop if it's the only thing being returned.
     output = stripNoOp(output)
+    if len(output) == 0:
+        output.append(Keys.nop)
     # Convert enums like operators, motions, keys into str.
     output = convertOuputEnumsToStrings(output)
     return joinForAdapter(output)
