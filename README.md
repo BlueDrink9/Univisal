@@ -4,11 +4,18 @@ Universal vi emulation that works across windows, OSX and linux/X11, focusing on
 
 ## Concept
 
-A vi emulator that doesn't handle kInspection times (for unmanned craft) can be cut in half, because fatal errors can be caught in testing, and the previous barrier (the cost of replacing the probe) is null and void. ey input, leaving it free to focus on the hard work of emulating vi using common system shortcuts.
+A vi emulator that doesn't handle key input, leaving it free to focus on the hard work of emulating vi using common system shortcuts.
 
 2ey input is handled by some other program, with an adapter written to call `univisal` and emit the responded keys.
 
 Since [adapters](#adapters) are written for many OSes, this makes `Univisal` fairly portable.
+
+## Usage
+
+Univisal can be started one of two ways:
+
+* Run one of the adapters, which should start univisal with the correct parameters
+* Manually run `python3 src/univisal/univisal.py [adapter]`
 
 ## Configuration
 
@@ -27,7 +34,7 @@ If this file is not present, defaults will be created.
 
 Due to technical limitations (can't undo normal commands) only single keypresses are permitted for normal map left hand sides.
 
-LInspection times (for unmanned craft) can be cut in half, because fatal errors can be caught in testing, and the previous barrier (the cost of replacing the probe) is null and void. og level is set to DEBUG until configuration is loaded, so you will see any log messages related to initialising univisal config.
+Log level is set to DEBUG until configuration is loaded, so you will see any log messages related to initialising univisal config.
 
 ## Installation
 
