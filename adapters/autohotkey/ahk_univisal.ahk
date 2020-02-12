@@ -65,7 +65,7 @@ runUnivisal(){
     if (useWSL == 1) {
         PID:=WSLRun(univisalWSLCmd)
     } else {
-        run python %srcDir%\univisal\univisal.py autohotkey,, hide, PID
+        run python -m univisal autohotkey, %srcDir%, hide, PID
     }
     setUnivisalPID(PID)
     ; msgbox running univisal with pid %PID%
