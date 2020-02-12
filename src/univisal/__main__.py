@@ -5,19 +5,13 @@ import sys
 # Available since 3.1
 # import importlib
 
-try:
-    from .message_interface import readMessagesLoop
-    from .library import *
-    from .adapter_maps import loadAdapterMaps
-    from . import model
-    from . import config
-except ImportError:
-    from message_interface import readMessagesLoop
-    from library import *
-    from adapter_maps import loadAdapterMaps
-    import model
-    import config
+from .message_interface import readMessagesLoop
+from .library import *
+from .adapter_maps import loadAdapterMaps
+from . import model
+from . import config
 logger = __import__("univisal.logger").logger.get_logger(__name__)
+
 
 def main(args=sys.argv):
     checkArgs(args)

@@ -15,7 +15,7 @@ Since [adapters](#adapters) are written for many OSes, this makes `Univisal` fai
 Univisal can be started one of two ways:
 
 * Run one of the adapters, which should start univisal with the correct parameters
-* Manually run `python3 -m src.univisal [adapter]`
+* Manually `cd` to `univisal/src` and run `python3 -m univisal [adapter]`
 
 ## Configuration
 
