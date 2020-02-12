@@ -210,38 +210,65 @@ TestAndCompareOutput(test){
     global Log
     NotepadOutput := SendTestToNotepadAndReturnResult(test)
     VimOutput := SendTestToVimAndReturnResult(test)
-    CompareStrings(NotepadOutput, VimOutput, test)
+    LogTestDiff(NotepadOutput, VimOutput, test)
 }
 
 ; Use a diff, then log the result in temp files
-CompareStrings(NotepadOutput, VIMOutput, CurrentTest){
-    Global LogFileName
-    Global TestsFailed
+LogTestDiff(NotepadOutput, VimOutput, CurrentTest){
+    DiffResult := compareStrings(NotepadOutput, VimOutput)
+    if (DiffResult != ""){
+        logFailedTest(CurrentTest, DiffResult)
+    }
+    FileDelete, _.sw*
+}
+
+compareStrings(NotepadOutput, VimOutput){
     ; Store files in separate dir.
     SetWorkingDir %A_ScriptDir%\TestingLogs
+    writeComparisonFiles(NotepadOutput, VimOutput)
+    diff := compareFiles("NotepadOutput", "VIMOutput")
+    FileDelete, NotepadOutput
+    FileDelete, VIMOutput
+    return diff
+}
+
+writeComparisonFiles(NotepadOutput, VimOutput){
     file1 := FileOpen("NotepadOutput", "w")
     file2 := FileOpen("VIMOutput", "w")
     file1.write(NotepadOutput)
     file2.write(VIMOutput)
     file1.close()
     file2.close()
+}
 
-    ; This line runs the DOS fc (file compare) program and enters the reults in a file.
+compareFiles(file1, file2){
+    ; This line runs the DOS fc (file compare) program
+    cmd = cmd.exe /q /c fc.exe /LB2 /N %file1% %file2%
+    DiffResult := getCmdOutput(cmd)
     ; Could also consider using comp.exe /AL instead, to compare individual characters. Possibly more useful.
     ; Comp sucks. Wow. Using fc, but only shows two lines: the different one and the one after. Hard to see, but it'll do for now.
-    DiffResult := ComObjCreate("WScript.Shell").Exec("cmd.exe /q /c fc.exe /LB2 /N NotepadOutput VIMOutput").StdOut.ReadAll()
     IfNotInString,DiffResult, FC: no differences encountered
-    {
-        TestsFailed := True
-        LogFile := FileOpen(LogFileName, "a")
-        LogEntry := "Test = """
-        LogEntry = Test = "%CurrentTest%"`n%DiffResult%`n`n
-        LogFile.Write(LogEntry) ; "Test = ""%CurrentTest%""`n%DiffResult%`n`n")
-        LogFile.Close()
-    }
-    FileDelete, NotepadOutput
-    FileDelete, VIMOutput
-    FileDelete, _.sw*
+        return DiffResult
+    return ""
+}
+
+GetCmdOutput(cmd){
+    return ComObjCreate("WScript.Shell").Exec(cmd).StdOut.ReadAll()
+}
+
+logFailedTest(CurrentTest, DiffResult){
+    Global TestsFailed
+    Global LogFileName
+    ; Store files in separate dir.
+    SetWorkingDir %A_ScriptDir%\TestingLogs
+    TestsFailed := True
+    LogFile := FileOpen(LogFileName, "a")
+    LogEntry := "Test = """
+    ; Literal string after first =
+    LogEntry = Test = "%CurrentTest%"`n%DiffResult%`n`n
+    ; "Test = ""%CurrentTest%""`n%DiffResult%`n`n")
+    LogFile.Write(LogEntry)
+    LogFile.Close()
 }
 
 ; Tidy up, close programs.
