@@ -5,15 +5,15 @@ import json
 import logging
 import logging.config
 from tempfile import gettempdir
-try:
-    from .library import *
-except ImportError:
-    from library import *
+
+from . import library
 # Usage:
 # logger = __import__("univisal.logger").logger.get_logger(__name__)
 
+
 def init():
-    setup_logging(os.path.join(get_script_path(), '..', '..', 'logging_py.json'), logging.DEBUG)
+    logConfigPath=os.path.join(library.get_script_path(), '..', '..', 'logging_py.json')
+    setup_logging(logConfigPath, logging.DEBUG)
 
 class myLogHandler(logging.handlers.RotatingFileHandler):
     def __init__(self,filename,maxBytes,backupCount,encoding):
@@ -35,9 +35,12 @@ def setup_logging(
     value = os.getenv(env_key, None)
     if value:
         path = value
+
     if os.path.exists(path):
-        with open(path, 'rt') as f:
-            config = json.load(f)
+        config = loadDictFromJson(path)
+        logHandlerConcreteClass = myLogHandler.__module__ + ".myLogHandler"
+        config = replaceClassValuesWithClass(config, logHandlerConcreteClass)
+        print(config)
         logging.config.dictConfig(config)
     else:
         logging.error("Couldn't find logging config json at path '" + path + "'")
@@ -45,16 +48,24 @@ def setup_logging(
 
     # logging.config.filename
 
+def loadDictFromJson(path):
+    with open(path, 'rt') as f:
+        return json.load(f)
+
+def replaceClassValuesWithClass(dict_, new_class):
+    for handlerName, handler in dict_['handlers'].items():
+        handler['class'] = new_class
+    return dict_
 
 # Any unhandled exceptions will be logged.
 def handle_unhandled_exception(exc_type, exc_value, exc_traceback):
     """Handler for unhandled exceptions that will write to the logs"""
-    logger = get_logger(__name__)
+    # logger = get_logger(__name__)
     if issubclass(exc_type, KeyboardInterrupt):
         # call the default excepthook saved at __excepthook__
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
-    logger.critical("Unhandled exception", exc_info=(exc_type, exc_value, exc_traceback))
+    logging.critical("Unhandled exception", exc_info=(exc_type, exc_value, exc_traceback))
 
 sys.excepthook = handle_unhandled_exception
 
