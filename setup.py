@@ -29,6 +29,9 @@ setup(
     package_dir={'': 'src'},
     include_package_data=True,
     setup_requires=["pytest-runner"],
+    # install_requires=[
+    #     'Enum',
+    #     ],
     tests_require=[
         "pytest",
     ],
