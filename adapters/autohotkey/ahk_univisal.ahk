@@ -45,10 +45,18 @@ setUnivisalPID(pid){
     univisalPID := pid
 }
 
-WSLRun(cmd){
-    global WSLCmd
-    run %WSLCmd% -c %cmd%,, hide, pid
-    return pid
+toggleUnivisal(){
+    if (univisalRunning()) {
+        ; process, Close, %univisalPID%
+        exitFunc()
+    } else {
+        runUnivisal()
+        sleep, 100
+        if (!univisalRunning()){
+            msgbox univisal failed to load. Exiting.
+            exitapp
+        }
+    }
 }
 
 runUnivisal(){
@@ -66,6 +74,7 @@ runUnivisal(){
     ; latency.
     Process, Priority, %univisalPID%, H
 }
+
 exitFunc(){
     global useWSL
     global univisalWSLCmd
@@ -78,6 +87,16 @@ exitFunc(){
 }
 OnExit("exitFunc")
 
+WSLRun(cmd){
+    global WSLCmd
+    run %WSLCmd% -c %cmd%,, hide, pid
+    return pid
+}
+
+univisalRunning(){
+    return pidExists(getUnivisalPID())
+}
+
 pidExists(pid){
     Process, Exist, %pid%
     exists := ErrorLevel
@@ -86,23 +105,6 @@ pidExists(pid){
         return False
     } else {
         return True
-    }
-}
-
-univisalRunning(){
-    return pidExists(getUnivisalPID())
-}
-
-toggleUnivisal(){
-    if (univisalRunning()) {
-        ; process, Close, %univisalPID%
-        exitFunc()
-    } else {
-        runUnivisal()
-        if (!univisalRunning()){
-            msgbox univisal failed to load. Exiting.
-            exitapp
-        }
     }
 }
 
