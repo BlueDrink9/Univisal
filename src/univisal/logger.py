@@ -10,52 +10,71 @@ from . import library
 # Usage:
 # logger = __import__("univisal.logger").logger.get_logger(__name__)
 
+MAX_LOG_SIZE = 5 * 2**20  # 5 megabytes
+MAX_LOG_COUNT = 3
+LOG_FORMAT = "%(asctime)s %(levelname)s - %(name)s - %(message)s"
+LOG_FILE = os.path.join(gettempdir(), "univisal_logs")
+
+handlers = {
+        "debug_file_handler": {
+            "level": "DEBUG",
+            "filename": "debug.log",
+            "backupCount": 2,
+            },
+        "info_file_handler": {
+            "level": "INFO",
+            "filename": "info.log",
+            "backupCount": 10,
+            },
+        "error_file_handler": {
+            "level": "ERROR",
+            "filename": "errors.log",
+            "backupCount": 10,
+            },
+        "critical_file_handler": {
+            "level": "CRITICAL",
+            "filename": "CRITICAL.log",
+            "backupCount": 10,
+            },
+        }
+
 
 def init():
-    logConfigPath=os.path.join(library.get_script_path(), '..', '..', 'logging_py.json')
-    setup_logging(logConfigPath, logging.DEBUG)
+    # Log root to console as well.
+    # logger.addHandler(logging.StreamHandler(sys.stdout))
+    logging.basicConfig(level=logging.DEBUG,
+            format=LOG_FORMAT,
+            handlers=[logging.StreamHandler()])
+
+
+def make_logger(moduleName):
+    """Setup logging configuration"""
+    logger = logging.getLogger(moduleName)
+    logger.setLevel(logging.DEBUG)
+    for _, handler in handlers.items():
+        logger.addHandler(makeHandler(handler))
+    # logging.basicConfig(level=logging.DEBUG)
+    return logger
+
+
+def makeHandler(handler):
+    filename = handler["filename"]
+    level = handler["level"]
+    backupCount = handler["backupCount"]
+    handler = myLogHandler(filename, MAX_LOG_SIZE, backupCount)
+    handler.setLevel(level)
+    handler.setFormatter(LOG_FORMAT)
+
+    return handler
+
 
 class myLogHandler(logging.handlers.RotatingFileHandler):
-    def __init__(self,filename,maxBytes,backupCount,encoding):
-        path = os.path.join(gettempdir(), "univisal_logs")
+    def __init__(self,filename,maxBytes,backupCount):
+        path = LOG_FILE
         if not os.path.isdir(path):
             os.mkdir(path)
-        super(myLogHandler,self).__init__(os.path.join(path,filename),'a',maxBytes,backupCount,encoding)
+        super(myLogHandler,self).__init__(os.path.join(path,filename),'a',maxBytes,backupCount)
 
-# LOG_CFG=path is an env variable, uses `path` as config.
-def setup_logging(
-    default_path='logging.json',
-    default_level=logging.INFO,
-    env_key='LOG_CFG'
-):
-    """Setup logging configuration
-
-    """
-    path = default_path
-    value = os.getenv(env_key, None)
-    if value:
-        path = value
-
-    if os.path.exists(path):
-        config = loadDictFromJson(path)
-        logHandlerConcreteClass = myLogHandler.__module__ + ".myLogHandler"
-        config = replaceClassValuesWithClass(config, logHandlerConcreteClass)
-        print(config)
-        logging.config.dictConfig(config)
-    else:
-        logging.error("Couldn't find logging config json at path '" + path + "'")
-        logging.basicConfig(level=default_level)
-
-    # logging.config.filename
-
-def loadDictFromJson(path):
-    with open(path, 'rt') as f:
-        return json.load(f)
-
-def replaceClassValuesWithClass(dict_, new_class):
-    for handlerName, handler in dict_['handlers'].items():
-        handler['class'] = new_class
-    return dict_
 
 # Any unhandled exceptions will be logged.
 def handle_unhandled_exception(exc_type, exc_value, exc_traceback):
@@ -70,6 +89,6 @@ def handle_unhandled_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_unhandled_exception
 
 def get_logger(moduleName):
-    return logging.getLogger(moduleName)
+    return make_logger(moduleName)
 
 init()
