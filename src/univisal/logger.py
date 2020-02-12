@@ -41,7 +41,6 @@ handlers = {
 
 def init():
     # Log root to console as well.
-    # logger.addHandler(logging.StreamHandler(sys.stdout))
     logging.basicConfig(level=logging.DEBUG,
             format=LOG_FORMAT,
             handlers=[logging.StreamHandler()])
@@ -53,7 +52,6 @@ def make_logger(moduleName):
     logger.setLevel(logging.DEBUG)
     for _, handler in handlers.items():
         logger.addHandler(makeHandler(handler))
-    # logging.basicConfig(level=logging.DEBUG)
     return logger
 
 
@@ -80,12 +78,12 @@ class myLogHandler(logging.handlers.RotatingFileHandler):
 # Any unhandled exceptions will be logged.
 def handle_unhandled_exception(exc_type, exc_value, exc_traceback):
     """Handler for unhandled exceptions that will write to the logs"""
-    # logger = get_logger(__name__)
+    logger = get_logger(__name__)
     if issubclass(exc_type, KeyboardInterrupt):
         # call the default excepthook saved at __excepthook__
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
-    logging.critical("Unhandled exception", exc_info=(exc_type, exc_value, exc_traceback))
+    logger.critical("Unhandled exception", exc_info=(exc_type, exc_value, exc_traceback))
 
 sys.excepthook = handle_unhandled_exception
 
