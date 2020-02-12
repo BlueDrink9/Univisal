@@ -65,7 +65,7 @@ runUnivisal(){
     if (useWSL == 1) {
         PID:=WSLRun(univisalWSLCmd)
     } else {
-        run python -m univisal autohotkey, %srcDir%, hide, PID
+        run cmd /c python.exe -m univisal autohotkey, %srcDir%, hide, PID
     }
     setUnivisalPID(PID)
     ; msgbox running univisal with pid %PID%
@@ -79,7 +79,9 @@ exitFunc(){
     global useWSL
     global univisalWSLCmd
     univisalPID := getUnivisalPID()
-    process, Close, %univisalPID%
+    ; process, Close, %univisalPID%
+    ; /T kills child processes, which univisal is.
+    run cmd /c taskkill /pid %univisalPID% /T /F,, hide
     if (useWSL == 1) {
         cmd=pkill -9 -f '%univisalWSLCmd%'
         WSLRun(cmd)
