@@ -8,8 +8,6 @@ import time
 if not sys.platform.startswith("win"):
         pytest.skip("skipping windows-only tests", allow_module_level=True)
 
-# Add src dir to the python path so we can import.
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 from univisal.pipes_windows import readPipe, writePipe
 
 def round_trip_msg(msg, pipe=None):
