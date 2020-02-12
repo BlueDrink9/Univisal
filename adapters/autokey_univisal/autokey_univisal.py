@@ -21,6 +21,7 @@ def get_script_dir():
 univi_script_path=get_script_dir() + "/univi.py"
 univisal_path= os.path.join(get_script_dir(), "..", "..", "src",
         "univisal", "univisal.py")
+# TODO import to use python -m
 subprocess.Popen(["python3", univisal_path,"autokey_univisal"])
 
 def bind(keypress, univi_key):
