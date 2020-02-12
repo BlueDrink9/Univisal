@@ -9,12 +9,16 @@ IsLastkey(key)
 }
 
 SaveClipboard(){
+    global ClipSaved := ""
+    while (ClipSaved != "")
+        sleep, 5
     ; push clipboard to variable
-    global ClipSaved := ClipboardAll
-    ; Sleep to give time for saving
-    sleep, 20
+    ClipSaved := ClipboardAll
+    ; Give time for saving
+    while (ClipSaved = "")
+        sleep, 5
     ; Clear clipboard to avoid errors
-    Clipboard :=
+    ClearClipboard()
 }
 
 Copy(){
@@ -30,7 +34,19 @@ Cut(){
 }
 
 Paste(){
+    PasteBySend()
+}
+PasteBySend(){
     Send %Clipboard%
+    RestoreClipboard()
+}
+
+PasteText(text){
+    SaveClipboard()
+    ClearClipboard()
+    Clipboard := text
+    Clipwait
+    send ^v ; Paste
     RestoreClipboard()
 }
 
@@ -45,6 +61,12 @@ RestoreClipboard(){
     Clipboard := ClipSaved
     ClipWait
     ClipSaved := ; free memory
+}
+
+ClearClipboard(){
+    Clipboard := ""
+    While (Clipboard != "")
+        Sleep, 5
 }
 
 GetSelectedText(){
