@@ -6,7 +6,7 @@ Universal vi emulation that works across windows, OSX and linux/X11, focusing on
 
 A vi emulator that doesn't handle key input, leaving it free to focus on the hard work of emulating vi using common system shortcuts.
 
-2ey input is handled by some other program, with an adapter written to call `univisal` and emit the responded keys.
+Key input is handled by some other program, with an adapter written to call `univisal` and emit the responded keys.
 
 Since [adapters](#adapters) are written for many OSes, this makes `Univisal` fairly portable.
 
