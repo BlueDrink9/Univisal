@@ -15,8 +15,10 @@ SaveClipboard(){
     ; push clipboard to variable
     ClipSaved := ClipboardAll
     ; Give time for saving
-    while (ClipSaved = "")
-        sleep, 5
+    if (ClipBoardAll != ""){
+        while (ClipSaved = "")
+            sleep, 5
+    }
     ; Clear clipboard to avoid errors
     ClearClipboard()
 }
