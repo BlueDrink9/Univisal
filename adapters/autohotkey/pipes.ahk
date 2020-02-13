@@ -40,6 +40,7 @@ writePipe(msg, name="univisal.in.fifo"){
        MsgBox CreateNamedPipe failed.
        ExitApp
        }
+   ; Seems to fail often here.
    DllCall("ConnectNamedPipe", ptr, pipe, ptr, 0)
 
    ; Standard AHK needs a UTF-8 BOM to work via pipe.  If we're running on
