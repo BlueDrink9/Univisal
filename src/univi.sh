@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # This is just a thin CLI tool to interact with univisal.py.
-# Usage: univi.py [key]
+# Usage: univi.sh [key]
 # Takes only a single argument.
 
 TMP="${TMP:-/tmp}"
 
 univi(){
   if [ "$#" -ne 1 ]; then
-    echo "Usage: univi.py [key]"
+    echo "Usage: univi.sh [key]"
     exit 1
   fi
 
