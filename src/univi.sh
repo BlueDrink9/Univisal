@@ -1,35 +1,36 @@
 #!/usr/bin/env bash
 # This is just a thin CLI tool to interact with univisal.py.
-# Usage: univi.sh [key]
+# Usage: univi.sh [msg]
 # Takes only a single argument.
 
 TMP="${TMP:-/tmp}"
 
 univi(){
   if [ "$#" -ne 1 ]; then
-    echo "Usage: univi.sh [key]"
+    echo "Usage: univi.sh [msg]"
     exit 1
   fi
+  msg="$1"
 
   if [ ! -p "$TMP/univisal.in.fifo" ]; then
-    errmsg="ERROR: No input pipe found. Returning '$1'"
+    errmsg="ERROR: No msg pipe found. Returning '$msg'"
     logMsg "$errmsg"
-    printf "${1}"
+    printf "${msg}"
     return
   fi
 
-  sendKey "$1"
-  result="$(readKey)"
+  sendMsg "$msg"
+  result="$(readMsg)"
   if [ ! "${result}" == "nop" ]; then
     printf "${result}"
   fi
 }
 
-sendKey(){
-  key="$1"
-  printf "${key}" > "$TMP/univisal.in.fifo"
+sendMsg(){
+  msg="$1"
+  printf "${msg}" > "$TMP/univisal.in.fifo"
 }
-readKey(){
+readMsg(){
   cat "$TMP/univisal.out.fifo"
 }
 
