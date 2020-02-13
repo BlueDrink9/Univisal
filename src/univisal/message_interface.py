@@ -44,14 +44,12 @@ def readMessagesLoop():
 def process_input(data):
     if len(data) == 0:
         return ""
-    # I can't remember why I was stripping whitespace.
-    # stripped_data = data.rstrip()
-    # if len(stripped_data) > 0:
-    #     key = stripped_data
-    # else:
-    #     # Key may have been a space or tab.
-    #     key = data
-    key = data
+    # Messages may be read as if linewise, which adds annoying newlines.
+    stripped_data = stripNewlines(data)
+    if len(stripped_data) > 0:
+        key = stripped_data
+    else:
+        key = ""
     logger.debug("Key: " + key)
     if key == "HUP":
         logger.info("HUP. End reading.")
@@ -59,6 +57,10 @@ def process_input(data):
     output = tryHandle(key)
     return output
 
+def stripNewlines(string):
+    string = string.rstrip("\n")
+    string = string.rstrip("\r")
+    return string
 
 def tryHandle(key):
     try:
