@@ -1,8 +1,34 @@
 # This is just a thin CLI tool to interact with univisal.py.
 # Usage: univi.ps1 [key]
 # Takes only a single argument.
+$usage="Usage: univi.ps1 [key]"
 
-function writePipe($pipename, $msg){
+if ($args.count -ne 1){
+    echom "$usage"
+    exit 1
+}
+$msg = $args[0]
+
+function univi($msg){
+    ## Can we check that the pipe exists? Not sure. XXX
+    # if !pipeExists(){
+    #     errmsg="ERROR: No msg pipe found. Returning '$msg'"
+    #     logMsg "$errmsg"
+    #     printf "${msg}"
+    #     return
+    # }
+
+    sendMsg "$msg"
+    $result="$(readMsg)"
+    if ("$result" -ne "nop"){
+        echom "$result"
+    } else {
+        echom ""
+    }
+}
+
+function sendMsg($msg){
+    $pipename="univisal.in.fifo"
     $pipe = new-object System.IO.Pipes.NamedPipeServerStream "$pipename",'Out'
     $pipe.WaitForConnection()
     $sw = new-object System.IO.StreamWriter $pipe
@@ -12,7 +38,8 @@ function writePipe($pipename, $msg){
     $pipe.Dispose()
 }
 
-function readPipe($pipename){
+function readMsg(){
+    $pipename="univisal.out.fifo"
     $pipe = new-object System.IO.Pipes.NamedPipeClientStream '.',"$pipename",'In'
     $pipe.Connect()
     $sr = new-object System.IO.StreamReader $pipe
@@ -20,5 +47,9 @@ function readPipe($pipename){
     $sr.Dispose()
     $pipe.Dispose()
 }
-writePipe "univisal.in.fifo" "l"
-readPipe("univisal.out.fifo")
+
+function echom($text){
+    write-output($text)
+}
+
+univi $msg
