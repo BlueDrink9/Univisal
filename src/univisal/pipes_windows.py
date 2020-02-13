@@ -74,7 +74,7 @@ def writePipe(msg, pipename="univisal.out.fifo"):
     # for named pipe code loops that don't fully close it.
     pipe = makeWritePipe(pipename)
     try:
-        logger.info("Waiting for pipe to be read")
+        logger.info("Waiting for output pipe to be read")
         win32pipe.ConnectNamedPipe(pipe, None)
         logger.info("Got pipe client")
         # count = 0
