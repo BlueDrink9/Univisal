@@ -18,6 +18,9 @@ SetTitleMatchMode 2 ; window title functions will match by containing the match 
 SetKeyDelay, 70
 DetectHiddenWindows, on
 
+; Set threads to uninterruptable. Less flakey testing?
+Thread, Interrupt, -1
+
 ; Contains clipboard related functions, among others.
 #include %A_ScriptDir%\utility_functions.ahk
 
@@ -314,7 +317,6 @@ alertTestsPassed(){
         msgbox, All tests pass!
     }
 }
-
 
 
 
