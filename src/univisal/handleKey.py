@@ -36,12 +36,8 @@ def handleVimInputKey(inputKey):
 
         # esc regardless of mode, for now. (Still permits mappings.)
         if isEsc(key):
-            # When entering normal from insert mode, cursor moves one to the
-            # left to be 'on' the right key. In visual, just ends the
-            # selection.
-            if not isMode(Mode.normal):
-                addToOutput(Motion.left)
             setMode(Mode.normal)
+            addToOutput(Keys.nop)
             continue
 
         if isMode(Mode.insert):
