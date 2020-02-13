@@ -32,7 +32,7 @@ def readMessagesLoop():
         logger.debug("data :'{}'".format(data))
         # logger.debug("Data: " + data)
         output = process_input(data)
-        if output:
+        if output is not None:
             write_message(output)
         else:
             # If processing returns None, was HUP. End processing.
@@ -50,7 +50,7 @@ def process_input(data):
         key = stripped_data
     else:
         key = ""
-    logger.debug("Key: " + key)
+    logger.debug("Message input key: " + key)
     if key == "HUP":
         logger.info("HUP. End reading.")
         return None
