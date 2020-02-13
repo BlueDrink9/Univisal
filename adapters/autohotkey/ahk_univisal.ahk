@@ -1,5 +1,3 @@
-#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-#Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; #NoTrayIcon
@@ -38,6 +36,9 @@ univiResultFromKey(key){
 getMessageResult(key){
     writePipe(key)
     result := readPipe()
+    ; Can't get this to work the way I want it to. Too slow anyway.
+    ; univiCMD = powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '%srcDir%\univi.ps1' "%key%"
+    ; result := StdoutToVar_CreateProcess(univiCMD)
     return result
 }
 
@@ -92,6 +93,8 @@ exitFunc(){
         cmd=pkill -9 -f '%univisalWSLCmd%'
         WSLRun(cmd)
     }
+    ; Give time to kill children.
+    sleep, 50
 }
 OnExit("exitFunc")
 

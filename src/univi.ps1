@@ -3,8 +3,11 @@
 # Takes only a single argument.
 $usage="Usage: univi.ps1 [key]"
 
+# Note: Powershell scripts are probably too slow to startup to be useful here.
+# VBS should be better if I can get pipes working.
+
 if ($args.count -ne 1){
-    echom "$usage"
+    echo "$usage"
     exit 1
 }
 $msg = $args[0]
