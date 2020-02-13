@@ -28,12 +28,17 @@ univiResultFromKey(key){
         send %result%
         return
     } else {
-        writePipe(key)
-        result := readPipe()
+        result := getMessageResult(key)
         if (result != "nop"){
             send %result%
         }
     }
+}
+
+getMessageResult(key){
+    writePipe(key)
+    result := readPipe()
+    return result
 }
 
 global univisalPID = 0
