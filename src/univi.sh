@@ -12,11 +12,9 @@ univi(){
   fi
 
   if [ ! -p "$TMP/univisal.in.fifo" ]; then
-    printf "${1}"
     errmsg="ERROR: No input pipe found. Returning '$1'"
-    printf "$errmsg" >> "$TMP/univisal_logs/error.log"
-    printf "$errmsg" >> "$TMP/univisal_logs/debug.log"
-    printf "$errmsg" >> "$TMP/univisal_logs/info.log"
+    logMsg "$errmsg"
+    printf "${1}"
     return
   fi
 
@@ -33,6 +31,14 @@ sendKey(){
 }
 readKey(){
   cat "$TMP/univisal.out.fifo"
+}
+
+logMsg(){
+  errmsg="$1"
+  # Logging by default at ERROR level. Currently unchangable
+  printf "$errmsg" >> "$TMP/univisal_logs/error.log"
+  printf "$errmsg" >> "$TMP/univisal_logs/debug.log"
+  printf "$errmsg" >> "$TMP/univisal_logs/info.log"
 }
 
 univi "$@"
