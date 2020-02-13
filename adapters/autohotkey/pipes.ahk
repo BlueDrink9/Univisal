@@ -1,10 +1,10 @@
 readPipe(name="univisal.out.fifo"){
     pipe_name := "\\.\pipe\"name
-    While !DllCall("WaitNamedPipe", "Str", pipe_name, "UInt", 0xffffffff){
+    While !WaitForPipeConnection(pipe_name){
     ; Hoping that it should connect right away, and won't need this sleep.
-        Sleep, 50
+        Sleep, 10
     }
-    ; Assume only one line, so return after first.
+    ; Assume only one line in the pipe, so return the first one.
     Loop, read, %pipe_name%
     {
         result := A_LoopReadLine
@@ -12,8 +12,14 @@ readPipe(name="univisal.out.fifo"){
         ; tooltip,%len%
         if strlen(result) != 0 {
             return result
+        }else{
+            return ""
         }
     }
+}
+
+WaitForPipeConnection(pipe_name){
+    return DllCall("WaitNamedPipe", "Str", pipe_name, "UInt", 0xffffffff)
 }
 
 ; 3 = duplex.
