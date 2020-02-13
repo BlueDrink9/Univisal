@@ -6,7 +6,6 @@
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance Force
 #warn
 sendlevel, 2 ; So vim commands get triggered by this script
@@ -223,8 +222,6 @@ LogTestDiff(NotepadOutput, VimOutput, CurrentTest){
 }
 
 compareStrings(NotepadOutput, VimOutput){
-    ; Store files in separate dir.
-    SetWorkingDir %A_ScriptDir%\TestingLogs
     writeComparisonFiles(NotepadOutput, VimOutput)
     diff := compareFiles("NotepadOutput", "VIMOutput")
     FileDelete, NotepadOutput
@@ -259,8 +256,6 @@ GetCmdOutput(cmd){
 logFailedTest(CurrentTest, DiffResult){
     Global TestsFailed
     Global LogFileName
-    ; Store files in separate dir.
-    SetWorkingDir %A_ScriptDir%\TestingLogs
     TestsFailed := True
     LogFile := FileOpen(LogFileName, "a")
     LogEntry := "Test = """
