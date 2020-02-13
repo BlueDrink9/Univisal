@@ -18,6 +18,8 @@ def main(args=sys.argv):
     logger.info("Starting univisal")
     adapter = args[1]
     univisal_init(adapter)
+    readMessagesLoop()
+    logger.info("Ending univisal")
 
 def checkArgs(args):
     if len(args) != 2:
@@ -34,7 +36,6 @@ def univisal_init(adapter):
     config.init_config()
     loadAdapterMaps(adapter)
     model.init_model()
-    readMessagesLoop()
 
 if __name__ == "__main__":
     main()
