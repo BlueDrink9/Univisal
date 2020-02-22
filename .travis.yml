@@ -11,6 +11,9 @@ before_install:
   - pip install coverage
 install:
   - pip install ".[test]" . # install package + test dependencies
-script: pytest # run tests
+script:
+  - pytest
+  - coverage run -m pytest
 after_success:
   - codecov # submit coverage
+  - bash <(curl -s https://codecov.io/bash)
