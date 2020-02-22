@@ -9,6 +9,7 @@ before_install:
   - pip install -U pip
   - pip install -U pytest
   - pip install codecov
+  - pip install coverage
 install:
   - pip install ".[test]" . # install package + test dependencies
 script: pytest # run tests
