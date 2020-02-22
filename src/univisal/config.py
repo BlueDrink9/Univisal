@@ -106,6 +106,13 @@ def init_config():
 
 def init_base_config():
     path = getConfigPath()
+    print(path)
+    print(path.exists())
+    f = []
+    for (dirpath, dirnames, filenames) in os.walk(path):
+        f.extend(filenames)
+        break
+    print(f)
     if path.exists():
         loadConfig(path)
     else:
