@@ -9,6 +9,10 @@ setup(
     version="0.0.1",
     author="bluedrink9",
     description="universal vi emulation",
+    install_requires=[
+        'enum34;python_version<"3.4"',
+        'aenum;python_version<"3.6"',
+    ],
     # entry_points={
     #
     #     "univisal-autokey": "adapters/autokey/...",
