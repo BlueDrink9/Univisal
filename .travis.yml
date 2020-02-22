@@ -13,8 +13,8 @@ install:
   # - pip install ".[test]" . # install package + test dependencies
   - pip install -e .
 script:
-  - pytest
-  - coverage run -m pytest
+  - setup.py test
+  - coverage run -m setup.py test
 after_success:
   - codecov # submit coverage
   - bash <(curl -s https://codecov.io/bash)
