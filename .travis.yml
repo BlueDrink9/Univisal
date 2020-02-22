@@ -10,7 +10,8 @@ before_install:
   - pip install codecov
   - pip install coverage
 install:
-  - pip install ".[test]" . # install package + test dependencies
+  # - pip install ".[test]" . # install package + test dependencies
+  - pip install -e .
 script:
   - pytest
   - coverage run -m pytest
