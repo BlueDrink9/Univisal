@@ -9,16 +9,10 @@ before_install:
   - pip install -U pip
   - pip install -U pytest
   - pip install -U pytest-cov
-  - pip install codecov
-  - pip install coverage
-  - pip install python-coveralls
 install:
-  # - pip install ".[test]" . # install package + test dependencies
   - pip install -e .
 script:
   - python3 setup.py test
-  # - coverage run setup.py test
 after_success:
-  - codecov # submit coverage
-  # - bash <(curl -s https://codecov.io/bash)
-  - coveralls # submit coverage
+  # submit coverage
+  - bash <(curl -s https://codecov.io/bash)
