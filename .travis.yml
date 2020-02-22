@@ -18,6 +18,7 @@ matrix:
           - pip3 install --upgrade pytest
           - pip3 install --upgrade pytest-cov
         env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        script: python setup.py test
 
 before_install:
   - python --version
