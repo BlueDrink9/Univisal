@@ -28,6 +28,7 @@ setup(
     setup_requires=["pytest-runner"],
     tests_require=[
         "pytest",
+        "pytest-cov",
     ],
     test_suite="pytest",
     python_requires='>=3',
