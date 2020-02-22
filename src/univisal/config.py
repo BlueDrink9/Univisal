@@ -107,7 +107,7 @@ def init_config():
 def init_base_config():
     path = getConfigPath()
     if path.exists():
-        loadConfig()
+        loadConfig(path)
     else:
         makeDefaults()
 

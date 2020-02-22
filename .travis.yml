@@ -1,0 +1,22 @@
+language: python
+python:
+  # 3.4 doesn't have enum.Enum.auto(). Re-enable it if we decide to use aenum instead.
+  # - 3.4
+  - 3.6
+  - 3.8
+before_install:
+  - python --version
+  - pip install -U pip
+  - pip install -U pytest
+  - pip install -U pytest-cov
+  - pip install codecov
+  - pip install coverage
+install:
+  # - pip install ".[test]" . # install package + test dependencies
+  - pip install -e .
+script:
+  - python3 setup.py test
+  - coverage run setup.py test
+after_success:
+  - codecov # submit coverage
+  - bash <(curl -s https://codecov.io/bash)
