@@ -111,7 +111,6 @@ def init_base_config():
     f = []
     for (dirpath, dirnames, filenames) in os.walk(path):
         f.extend(filenames)
-        break
     print(f)
     if path.exists():
         loadConfig(path)
