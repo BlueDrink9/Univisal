@@ -11,6 +11,7 @@ before_install:
   - pip install -U pytest-cov
   - pip install codecov
   - pip install coverage
+  - pip install python-coveralls
 install:
   # - pip install ".[test]" . # install package + test dependencies
   - pip install -e .
@@ -20,3 +21,4 @@ script:
 after_success:
   - codecov # submit coverage
   # - bash <(curl -s https://codecov.io/bash)
+  - coveralls # submit coverage
