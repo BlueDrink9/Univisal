@@ -21,6 +21,10 @@ def ret_joinChar():
     return "+"
 
 
+def use_default_config(_=None):
+    univisal.config.configStore = univisal.config.defaults
+
+
 def init_univisal(with_interface=False):
     mockargs=['1', '2']
     interfaceInit = "univisal.message_interface.readMessagesLoop"
@@ -29,6 +33,8 @@ def init_univisal(with_interface=False):
                                 side_effect=mock_adapter_maps), \
             unittest.mock.patch("univisal.adapter_maps.getAdapterMap",
                                 side_effect=ret_arg), \
+            unittest.mock.patch("univisal.config.loadConfig",
+                                side_effect=use_default_config), \
             unittest.mock.patch("univisal.adapter_maps.getJoinChar",
                                 side_effect=ret_joinChar):
         if with_interface:
