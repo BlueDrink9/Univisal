@@ -1,5 +1,9 @@
 # Univisal
 
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![Build Status](https://travis-ci.com/BlueDrink9/Univisal.svg?branch=master)](https://travis-ci.com/BlueDrink9/Univisal)
+[![codecov](https://codecov.io/gh/BlueDrink9/Univisal/branch/master/graph/badge.svg)](https://codecov.io/gh/BlueDrink9/Univisal)
+
 Universal vi emulation that works across windows, OSX and linux/X11, focusing on linux and portability.
 
 ## Concept
