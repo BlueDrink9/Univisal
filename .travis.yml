@@ -17,6 +17,7 @@ matrix:
           - python -m pip install --upgrade pip
           - pip3 install --upgrade pytest
           - pip3 install --upgrade pytest-cov
+          - pip3 install pywin32
         env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
         script: python setup.py test
 
