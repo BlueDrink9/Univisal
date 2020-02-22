@@ -3,3 +3,5 @@ dist/
 testLogs/
 .pytest_cache/
 .eggs/
+coverage.*
+test_coverage*
