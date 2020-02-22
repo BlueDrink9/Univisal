@@ -4,6 +4,23 @@ python:
   # - 3.4
   - 3.6
   - 3.8
+
+# Windows setup
+matrix:
+  include:
+      - name: "Python 3.7.4 on Windows"
+        os: windows           # Windows 10.0.17134 N/A Build 17134
+        language: shell       # 'language: python' is an error on Travis CI Windows
+        before_install:
+          - choco install python --version 3.7.4
+          - python --version
+          - python -m pip install --upgrade pip
+          - pip3 install --upgrade pytest
+          - pip3 install --upgrade pytest-cov
+          - pip3 install pywin32
+        env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        script: python setup.py test
+
 before_install:
   - python --version
   - pip install -U pip

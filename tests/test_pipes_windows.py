@@ -46,6 +46,8 @@ def test_multi_msg():
             "Many characters, multiple times quickly through the pipe"
 
 
+@pytest.mark.skipif("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+        reason="Skipping this test on Travis CI.")
 def test_pipe_latency():
     pipe = "pipe_test"
     pretime = time.time()
